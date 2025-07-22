@@ -1,0 +1,76 @@
+--- dlls/user32/tests/win.c	2025-06-27 14:21:15.000000000 -0700
++++ dlls/user32/tests/win.c	2025-07-20 22:58:44.163535000 -0700
+@@ -61,7 +61,6 @@ static HICON (WINAPI *pInternalGetWindowIcon)(HWND win
+ static BOOL (WINAPI *pAdjustWindowRectExForDpi)(LPRECT,DWORD,BOOL,DWORD,UINT);
+ static BOOL (WINAPI *pSystemParametersInfoForDpi)(UINT,UINT,void*,UINT,UINT);
+ static HICON (WINAPI *pInternalGetWindowIcon)(HWND window, UINT type);
+-static BOOL (WINAPI *pSetProcessLaunchForegroundPolicy)(DWORD,DWORD);
+ 
+ static BOOL test_lbuttondown_flag;
+ static DWORD num_gettext_msgs;
+@@ -13569,22 +13568,6 @@ static void test_ReleaseCapture(void)
+     UnregisterClassA(cls.lpszClassName, GetModuleHandleA(0));
+ }
+ 
+-static void test_SetProcessLaunchForegroundPolicy(void)
+-{
+-    BOOL ret;
+-    DWORD pid = GetCurrentProcessId();
+-
+-    if (!pSetProcessLaunchForegroundPolicy)
+-    {
+-        win_skip("SetProcessLaunchForegroundPolicy is not available\n");
+-        return;
+-    }
+-
+-    SetLastError(0xcafecafe);
+-    ret = pSetProcessLaunchForegroundPolicy(pid, 4);
+-    ok(!ret && (GetLastError() == ERROR_ACCESS_DENIED), "SetProcessLaunchForegroundPolicy failed: %d error %lu\n", ret, GetLastError());
+-}
+-
+ START_TEST(win)
+ {
+     char **argv;
+@@ -13609,7 +13592,6 @@ START_TEST(win)
+     pAdjustWindowRectExForDpi = (void *)GetProcAddress( user32, "AdjustWindowRectExForDpi" );
+     pSystemParametersInfoForDpi = (void *)GetProcAddress( user32, "SystemParametersInfoForDpi" );
+     pInternalGetWindowIcon = (void *)GetProcAddress( user32, "InternalGetWindowIcon" );
+-    pSetProcessLaunchForegroundPolicy = (void*)GetProcAddress( user32, "SetProcessLaunchForegroundPolicy" );
+ 
+     if (argc == 4)
+     {
+@@ -13770,7 +13752,6 @@ START_TEST(win)
+     test_DragDetect();
+     test_WM_NCCALCSIZE();
+     test_ReleaseCapture();
+-    test_SetProcessLaunchForegroundPolicy();
+ 
+     /* add the tests above this line */
+     if (hhook) UnhookWindowsHookEx(hhook);
+--- dlls/user32/user32.spec	2025-06-27 14:21:15.000000000 -0700
++++ dlls/user32/user32.spec	2025-07-20 23:00:04.008823000 -0700
+@@ -1074,7 +1074,7 @@
+ @ stdcall SetProcessDefaultLayout(long) NtUserSetProcessDefaultLayout
+ @ stdcall SetProcessDpiAwarenessContext(long)
+ @ stdcall SetProcessDpiAwarenessInternal(long)
+-@ stdcall SetProcessLaunchForegroundPolicy(long long)
++# @ stub SetProcessLaunchForegroundPolicy
+ # @ stub SetProcessRestrictionExemption
+ @ stdcall SetProcessWindowStation(long) NtUserSetProcessWindowStation
+ @ stdcall SetProgmanWindow(long) NtUserSetProgmanWindow
+--- dlls/user32/win.c	2025-06-27 14:21:15.000000000 -0700
++++ dlls/user32/win.c	2025-07-20 23:01:35.652187000 -0700
+@@ -1645,13 +1645,3 @@ BOOL WINAPI SetWindowCompositionAttribute(HWND hwnd, v
+     SetLastError(ERROR_CALL_NOT_IMPLEMENTED);
+     return FALSE;
+ }
+-
+-/**********************************************************************
+- *              SetProcessLaunchForegroundPolicy (USER32.@)
+- */
+-BOOL WINAPI SetProcessLaunchForegroundPolicy(DWORD pid, DWORD flags)
+-{
+-    FIXME("(%lu %lu): stub\n", pid, flags);
+-    SetLastError(ERROR_ACCESS_DENIED);
+-    return FALSE;
+-}
