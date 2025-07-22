@@ -1,12 +1,12 @@
 PORTNAME=	wine
-DISTVERSION=	10.12
+DISTVERSION=	10.11
 PORTEPOCH=	1
 CATEGORIES=	emulators
 MASTER_SITES=	https://dl.winehq.org/wine/source/10.x/
 PKGNAMESUFFIX=	-tkg-devel
 
 MAINTAINER=	tmp386@live.com
-COMMENT=	Microsoft Windows compatibility environment w/ TkG patches
+COMMENT=	Microsoft Windows compatibility environment w/ select TkG patches & revert for Steam in Wine
 WWW=		https://www.winehq.org
 
 LICENSE=	LGPL21 LGPL3
@@ -26,7 +26,7 @@ USE_SDL=	sdl2
 
 CPE_VENDOR=	winehq
 
-CONFLICTS_INSTALL=	wine
+CONFLICTS_INSTALL=	wine wine-devel
 
 GNU_CONFIGURE=	yes
 CONFIGURE_ARGS+=--verbose \
