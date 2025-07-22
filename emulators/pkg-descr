@@ -1,4 +1,4 @@
-Wine is a Microsoft Windows compatibility layer (or program loader)
+Wine TkG is a Microsoft Windows compatibility layer (or program loader)
 capable of running Windows applications on i386 and compatible CPUs.
 Windows programs running in Wine act as native programs would, running
 without the performance or memory usage penalties of an emulator, with
