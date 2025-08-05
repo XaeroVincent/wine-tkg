@@ -1,0 +1,28 @@
+--- configure.ac	2025-07-11 13:05:52.000000000 -0700
++++ configure.ac	2025-07-14 15:01:54.357696000 -0700
+@@ -45,7 +45,7 @@ AC_ARG_WITH(opencl,    AS_HELP_STRING([--without-openc
+ AC_ARG_WITH(mingw,     AS_HELP_STRING([--without-mingw],[do not use the MinGW cross-compiler]))
+ AC_ARG_WITH(netapi,    AS_HELP_STRING([--without-netapi],[do not use the Samba NetAPI library]))
+ AC_ARG_WITH(opencl,    AS_HELP_STRING([--without-opencl],[do not use OpenCL]),
+-            [if test "x$withval" = "xno"; then ac_cv_header_CL_cl_h=no; ac_cv_header_OpenCL_opencl_h=no; fi])
++            [if test "x$withval" = "xno"; then ac_cv_header_CL_cl_h=no; ac_cv_header_CL_opencl_h=no; fi])
+ AC_ARG_WITH(opengl,    AS_HELP_STRING([--without-opengl],[do not use OpenGL]))
+ AC_ARG_WITH(oss,       AS_HELP_STRING([--without-oss],[do not use the OSS sound support]))
+ AC_ARG_WITH(pcap,      AS_HELP_STRING([--without-pcap],[do not use the Packet Capture library]),
+@@ -664,7 +664,6 @@ AC_CHECK_HEADERS(\
+ 
+ AC_CHECK_HEADERS(\
+ 	CL/cl.h \
+-	OpenCL/opencl.h \
+ 	arpa/inet.h \
+ 	arpa/nameser.h \
+ 	asm/termbits.h \
+@@ -970,7 +969,7 @@ case $host_os in
+         AC_SUBST(COREAUDIO_LIBS,"-framework CoreFoundation -framework CoreAudio -framework AudioUnit -framework AudioToolbox -framework CoreMIDI")
+         enable_winecoreaudio_drv=${enable_winecoreaudio_drv:-yes}
+     fi
+-    if test "$ac_cv_header_OpenCL_opencl_h" = "yes"
++    if test "$ac_cv_header_CL_opencl_h" = "yes"
+     then
+         AC_SUBST(OPENCL_LIBS,"-framework OpenCL")
+         ac_cv_lib_OpenCL_clGetPlatformInfo=yes
