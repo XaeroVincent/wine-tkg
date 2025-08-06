@@ -1,4 +1,4 @@
---- dlls/user32/Makefile.in
+--- dlls/user32/Makefile.in.orig
 +++ dlls/user32/Makefile.in
 @@ -4,6 +4,7 @@ IMPORTLIB = user32
  IMPORTS   = $(PNG_PE_LIBS) gdi32 sechost advapi32 kernelbase win32u uuid
