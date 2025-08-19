@@ -1,5 +1,5 @@
 PORTNAME=	wine
-DISTVERSION=	10.12
+DISTVERSION=	10.13
 PORTEPOCH=	1
 CATEGORIES=	emulators
 MASTER_SITES=	https://dl.winehq.org/wine/source/10.x/
@@ -20,7 +20,7 @@ BUILD_DEPENDS=	${LOCALBASE}/bin/flex:textproc/flex
 USE_GITHUB=	yes
 GH_ACCOUNT=	wine-mirror
 GH_PROJECT=	wine
-GH_TAGNAME=	9ecae7b571f87dbef641601e66793dbcd5b40530
+GH_TAGNAME=	75b9e1722d11d75c3d7745b39a03b73e9f9003ba
 
 # Only devel/llvm17 and later come with necessary include files - PR274542
 USES=		bison cpe desktop-file-utils gmake \
