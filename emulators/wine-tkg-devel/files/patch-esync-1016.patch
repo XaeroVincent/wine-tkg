@@ -1,6 +1,6 @@
-diff -ruN --show-c-function wine-git.orig/configure wine-git/configure
---- wine-git.orig/configure	2025-10-10 10:17:59.228002693 -0700
-+++ wine-git/configure	2025-10-10 10:22:24.825522383 -0700
+diff -ruN --show-c-function configure configure
+--- configure	2025-10-10 10:17:59.228002693 -0700
++++ configure	2025-10-10 10:22:24.825522383 -0700
 @@ -10004,12 +10004,6 @@ then :
    printf "%s\n" "#define HAVE_LINUX_MAJOR_H 1" >>confdefs.h
  
@@ -130,9 +130,9 @@ diff -ruN --show-c-function wine-git.orig/configure wine-git/configure
  programs/winetest/build.rc: dummy
  	@build=\"STRINGTABLE { 1 \\\"\`GIT_DIR=${wine_srcdir}.git git rev-parse HEAD 2>/dev/null\`\\\" }\" && (echo \$\$build | cmp -s - \$@) || echo \$\$build >\$@ || (rm -f \$@ && exit 1)
  dlls/wineandroid.drv/wine-debug.apk: dlls/wineandroid.drv/build.gradle ${wine_srcdir}dlls/wineandroid.drv/AndroidManifest.xml ${wine_srcdir}dlls/wineandroid.drv/WineActivity.java ${wine_srcdir}dlls/wineandroid.drv/wine.svg
-diff -ruN --show-c-function wine-git.orig/configure~ wine-git/configure~
---- wine-git.orig/configure~	2025-10-10 10:17:48.561774948 -0700
-+++ wine-git/configure~	2025-10-10 10:22:17.130365897 -0700
+diff -ruN --show-c-function configure~ configure~
+--- configure~	2025-10-10 10:17:48.561774948 -0700
++++ configure~	2025-10-10 10:22:17.130365897 -0700
 @@ -10002,12 +10002,6 @@ then :
    printf "%s\n" "#define HAVE_LINUX_MAJOR_H 1" >>confdefs.h
  
@@ -146,9 +146,9 @@ diff -ruN --show-c-function wine-git.orig/configure~ wine-git/configure~
  ac_fn_c_check_header_compile "$LINENO" "linux/param.h" "ac_cv_header_linux_param_h" "$ac_includes_default"
  if test "x$ac_cv_header_linux_param_h" = xyes
  then :
-diff -ruN --show-c-function wine-git.orig/configure.ac wine-git/configure.ac
---- wine-git.orig/configure.ac	2025-10-10 10:17:59.208239483 -0700
-+++ wine-git/configure.ac	2025-10-10 10:22:24.806803320 -0700
+diff -ruN --show-c-function configure.ac configure.ac
+--- configure.ac	2025-10-10 10:17:59.208239483 -0700
++++ configure.ac	2025-10-10 10:22:24.806803320 -0700
 @@ -682,7 +682,6 @@ AC_CHECK_HEADERS(\
  	linux/input.h \
  	linux/ioctl.h \
@@ -195,9 +195,9 @@ diff -ruN --show-c-function wine-git.orig/configure.ac wine-git/configure.ac
  programs/winetest/build.rc: dummy
  	@build=\"STRINGTABLE { 1 \\\"\`GIT_DIR=${wine_srcdir}.git git rev-parse HEAD 2>/dev/null\`\\\" }\" && (echo \$\$build | cmp -s - \$[@]) || echo \$\$build >\$[@] || (rm -f \$[@] && exit 1)
  dlls/wineandroid.drv/wine-debug.apk: dlls/wineandroid.drv/build.gradle ${wine_srcdir}dlls/wineandroid.drv/AndroidManifest.xml ${wine_srcdir}dlls/wineandroid.drv/WineActivity.java ${wine_srcdir}dlls/wineandroid.drv/wine.svg
-diff -ruN --show-c-function wine-git.orig/configure.orig wine-git/configure.orig
---- wine-git.orig/configure.orig	1969-12-31 16:00:00.000000000 -0800
-+++ wine-git/configure.orig	2025-10-10 10:22:13.447290938 -0700
+diff -ruN --show-c-function configure.orig configure.orig
+--- configure.orig	1969-12-31 16:00:00.000000000 -0800
++++ configure.orig	2025-10-10 10:22:13.447290938 -0700
 @@ -0,0 +1,24838 @@
 +#! /bin/sh
 +# Guess values for system-dependent variables and create Makefiles.
@@ -25037,9 +25037,9 @@ diff -ruN --show-c-function wine-git.orig/configure.orig wine-git/configure.orig
 +" >&6
 +
 +
-diff -ruN --show-c-function wine-git.orig/dlls/kernel32/tests/sync.c wine-git/dlls/kernel32/tests/sync.c
---- wine-git.orig/dlls/kernel32/tests/sync.c	2025-10-10 10:17:47.234746574 -0700
-+++ wine-git/dlls/kernel32/tests/sync.c	2025-10-10 10:22:17.168366670 -0700
+diff -ruN --show-c-function dlls/kernel32/tests/sync.c dlls/kernel32/tests/sync.c
+--- dlls/kernel32/tests/sync.c	2025-10-10 10:17:47.234746574 -0700
++++ dlls/kernel32/tests/sync.c	2025-10-10 10:22:17.168366670 -0700
 @@ -60,6 +60,7 @@ static DWORD (WINAPI *pQueueUserAPC2)(PA
  
  static NTSTATUS (WINAPI *pNtAllocateVirtualMemory)(HANDLE, PVOID *, ULONG_PTR, SIZE_T *, ULONG, ULONG);
@@ -25498,9 +25498,9 @@ diff -ruN --show-c-function wine-git.orig/dlls/kernel32/tests/sync.c wine-git/dl
 +    test_zigzag_event();
      test_crit_section();
  }
-diff -ruN --show-c-function wine-git.orig/dlls/kernel32/tests/sync.c.orig wine-git/dlls/kernel32/tests/sync.c.orig
---- wine-git.orig/dlls/kernel32/tests/sync.c.orig	1969-12-31 16:00:00.000000000 -0800
-+++ wine-git/dlls/kernel32/tests/sync.c.orig	2025-10-10 10:22:12.146264450 -0700
+diff -ruN --show-c-function dlls/kernel32/tests/sync.c.orig dlls/kernel32/tests/sync.c.orig
+--- dlls/kernel32/tests/sync.c.orig	1969-12-31 16:00:00.000000000 -0800
++++ dlls/kernel32/tests/sync.c.orig	2025-10-10 10:22:12.146264450 -0700
 @@ -0,0 +1,3067 @@
 +/*
 + * Synchronization tests
@@ -28569,9 +28569,9 @@ diff -ruN --show-c-function wine-git.orig/dlls/kernel32/tests/sync.c.orig wine-g
 +    test_apc_deadlock();
 +    test_crit_section();
 +}
-diff -ruN --show-c-function wine-git.orig/dlls/ntdll/Makefile.in wine-git/dlls/ntdll/Makefile.in
---- wine-git.orig/dlls/ntdll/Makefile.in	2025-10-10 10:17:59.214615660 -0700
-+++ wine-git/dlls/ntdll/Makefile.in	2025-10-10 10:22:24.812697385 -0700
+diff -ruN --show-c-function dlls/ntdll/Makefile.in dlls/ntdll/Makefile.in
+--- dlls/ntdll/Makefile.in	2025-10-10 10:17:59.214615660 -0700
++++ dlls/ntdll/Makefile.in	2025-10-10 10:22:24.812697385 -0700
 @@ -49,6 +49,7 @@ SOURCES = \
  	unix/cdrom.c \
  	unix/debug.c \
@@ -28580,9 +28580,9 @@ diff -ruN --show-c-function wine-git.orig/dlls/ntdll/Makefile.in wine-git/dlls/n
  	unix/file.c \
  	unix/loader.c \
  	unix/loadorder.c \
-diff -ruN --show-c-function wine-git.orig/dlls/ntdll/Makefile.in.orig wine-git/dlls/ntdll/Makefile.in.orig
---- wine-git.orig/dlls/ntdll/Makefile.in.orig	1969-12-31 16:00:00.000000000 -0800
-+++ wine-git/dlls/ntdll/Makefile.in.orig	2025-10-10 10:22:13.459291182 -0700
+diff -ruN --show-c-function dlls/ntdll/Makefile.in.orig dlls/ntdll/Makefile.in.orig
+--- dlls/ntdll/Makefile.in.orig	1969-12-31 16:00:00.000000000 -0800
++++ dlls/ntdll/Makefile.in.orig	2025-10-10 10:22:13.459291182 -0700
 @@ -0,0 +1,81 @@
 +EXTRADEFS = -D_NTSYSTEM_ -D_ACRTIMP= -DWINBASEAPI=
 +MODULE    = ntdll.dll
@@ -28665,9 +28665,9 @@ diff -ruN --show-c-function wine-git.orig/dlls/ntdll/Makefile.in.orig wine-git/d
 +	-DLIBDIR=\"${libdir}\" \
 +	-DDATADIR=\"${datadir}\" \
 +	-DSYSTEMDLLPATH=\"${system_dllpath}\"
-diff -ruN --show-c-function wine-git.orig/dlls/ntdll/unix/esync.c wine-git/dlls/ntdll/unix/esync.c
---- wine-git.orig/dlls/ntdll/unix/esync.c	1969-12-31 16:00:00.000000000 -0800
-+++ wine-git/dlls/ntdll/unix/esync.c	2025-10-10 10:22:17.174105897 -0700
+diff -ruN --show-c-function dlls/ntdll/unix/esync.c dlls/ntdll/unix/esync.c
+--- dlls/ntdll/unix/esync.c	1969-12-31 16:00:00.000000000 -0800
++++ dlls/ntdll/unix/esync.c	2025-10-10 10:22:17.174105897 -0700
 @@ -0,0 +1,1325 @@
 +/*
 + * eventfd-based synchronization objects
@@ -29994,9 +29994,9 @@ diff -ruN --show-c-function wine-git.orig/dlls/ntdll/unix/esync.c wine-git/dlls/
 +    shm_addrs = calloc( 128, sizeof(shm_addrs[0]) );
 +    shm_addrs_size = 128;
 +}
-diff -ruN --show-c-function wine-git.orig/dlls/ntdll/unix/esync.h wine-git/dlls/ntdll/unix/esync.h
---- wine-git.orig/dlls/ntdll/unix/esync.h	1969-12-31 16:00:00.000000000 -0800
-+++ wine-git/dlls/ntdll/unix/esync.h	2025-10-10 10:22:17.174256673 -0700
+diff -ruN --show-c-function dlls/ntdll/unix/esync.h dlls/ntdll/unix/esync.h
+--- dlls/ntdll/unix/esync.h	1969-12-31 16:00:00.000000000 -0800
++++ dlls/ntdll/unix/esync.h	2025-10-10 10:22:17.174256673 -0700
 @@ -0,0 +1,61 @@
 +/*
 + * eventfd-based synchronization objects
@@ -30059,9 +30059,9 @@ diff -ruN --show-c-function wine-git.orig/dlls/ntdll/unix/esync.h wine-git/dlls/
 +extern pthread_mutex_t fd_cache_mutex;
 +
 +extern int receive_fd( obj_handle_t *handle );
-diff -ruN --show-c-function wine-git.orig/dlls/ntdll/unix/loader.c wine-git/dlls/ntdll/unix/loader.c
---- wine-git.orig/dlls/ntdll/unix/loader.c	2025-10-10 10:17:48.573775205 -0700
-+++ wine-git/dlls/ntdll/unix/loader.c	2025-10-10 10:22:17.145276472 -0700
+diff -ruN --show-c-function dlls/ntdll/unix/loader.c dlls/ntdll/unix/loader.c
+--- dlls/ntdll/unix/loader.c	2025-10-10 10:17:48.573775205 -0700
++++ dlls/ntdll/unix/loader.c	2025-10-10 10:22:17.145276472 -0700
 @@ -90,6 +90,7 @@
  #include "winioctl.h"
  #include "winternl.h"
@@ -30078,9 +30078,9 @@ diff -ruN --show-c-function wine-git.orig/dlls/ntdll/unix/loader.c wine-git/dlls
      virtual_map_user_shared_data();
      init_cpu_info();
      init_files();
-diff -ruN --show-c-function wine-git.orig/dlls/ntdll/unix/loader.c.orig wine-git/dlls/ntdll/unix/loader.c.orig
---- wine-git.orig/dlls/ntdll/unix/loader.c.orig	1969-12-31 16:00:00.000000000 -0800
-+++ wine-git/dlls/ntdll/unix/loader.c.orig	2025-10-10 10:22:13.459291182 -0700
+diff -ruN --show-c-function dlls/ntdll/unix/loader.c.orig dlls/ntdll/unix/loader.c.orig
+--- dlls/ntdll/unix/loader.c.orig	1969-12-31 16:00:00.000000000 -0800
++++ dlls/ntdll/unix/loader.c.orig	2025-10-10 10:22:13.459291182 -0700
 @@ -0,0 +1,2292 @@
 +/*
 + * Unix interface for loader functions
@@ -32374,9 +32374,9 @@ diff -ruN --show-c-function wine-git.orig/dlls/ntdll/unix/loader.c.orig wine-git
 +#endif
 +    start_main_thread();
 +}
-diff -ruN --show-c-function wine-git.orig/dlls/ntdll/unix/server.c wine-git/dlls/ntdll/unix/server.c
---- wine-git.orig/dlls/ntdll/unix/server.c	2025-10-10 10:17:47.372819327 -0700
-+++ wine-git/dlls/ntdll/unix/server.c	2025-10-10 10:22:17.146955957 -0700
+diff -ruN --show-c-function dlls/ntdll/unix/server.c dlls/ntdll/unix/server.c
+--- dlls/ntdll/unix/server.c	2025-10-10 10:17:47.372819327 -0700
++++ dlls/ntdll/unix/server.c	2025-10-10 10:22:17.146955957 -0700
 @@ -79,6 +79,7 @@
  #include "wine/server.h"
  #include "wine/debug.h"
@@ -32515,9 +32515,9 @@ diff -ruN --show-c-function wine-git.orig/dlls/ntdll/unix/server.c wine-git/dlls
  
      SERVER_START_REQ( close_handle )
      {
-diff -ruN --show-c-function wine-git.orig/dlls/ntdll/unix/sync.c wine-git/dlls/ntdll/unix/sync.c
---- wine-git.orig/dlls/ntdll/unix/sync.c	2025-10-10 10:17:48.574775226 -0700
-+++ wine-git/dlls/ntdll/unix/sync.c	2025-10-10 10:22:17.172226112 -0700
+diff -ruN --show-c-function dlls/ntdll/unix/sync.c dlls/ntdll/unix/sync.c
+--- dlls/ntdll/unix/sync.c	2025-10-10 10:17:48.574775226 -0700
++++ dlls/ntdll/unix/sync.c	2025-10-10 10:22:17.172226112 -0700
 @@ -30,11 +30,9 @@
  #include <assert.h>
  #include <errno.h>
@@ -33539,9 +33539,9 @@ diff -ruN --show-c-function wine-git.orig/dlls/ntdll/unix/sync.c wine-git/dlls/n
      if (!handle) handle = keyed_event;
      if ((ULONG_PTR)key & 1) return STATUS_INVALID_PARAMETER_1;
      if (alertable) flags |= SELECT_ALERTABLE;
-diff -ruN --show-c-function wine-git.orig/dlls/ntdll/unix/thread.c wine-git/dlls/ntdll/unix/thread.c
---- wine-git.orig/dlls/ntdll/unix/thread.c	2025-10-10 10:17:47.374749568 -0700
-+++ wine-git/dlls/ntdll/unix/thread.c	2025-10-10 10:22:17.110048705 -0700
+diff -ruN --show-c-function dlls/ntdll/unix/thread.c dlls/ntdll/unix/thread.c
+--- dlls/ntdll/unix/thread.c	2025-10-10 10:17:47.374749568 -0700
++++ dlls/ntdll/unix/thread.c	2025-10-10 10:22:17.110048705 -0700
 @@ -1104,7 +1104,6 @@ static void contexts_from_server( CONTEX
   */
  static DECLSPEC_NORETURN void pthread_exit_wrapper( int status )
@@ -33580,9 +33580,9 @@ diff -ruN --show-c-function wine-git.orig/dlls/ntdll/unix/thread.c wine-git/dlls
      }
      if (!ret && count)
      {
-diff -ruN --show-c-function wine-git.orig/dlls/ntdll/unix/unix_private.h wine-git/dlls/ntdll/unix/unix_private.h
---- wine-git.orig/dlls/ntdll/unix/unix_private.h	2025-10-10 10:17:48.574775226 -0700
-+++ wine-git/dlls/ntdll/unix/unix_private.h	2025-10-10 10:22:17.165144485 -0700
+diff -ruN --show-c-function dlls/ntdll/unix/unix_private.h dlls/ntdll/unix/unix_private.h
+--- dlls/ntdll/unix/unix_private.h	2025-10-10 10:17:48.574775226 -0700
++++ dlls/ntdll/unix/unix_private.h	2025-10-10 10:22:17.165144485 -0700
 @@ -105,10 +105,10 @@ struct ntdll_thread_data
      SYSTEM_SERVICE_TABLE     *syscall_table; /* 214/0370 syscall table */
      struct syscall_frame     *syscall_frame; /* 218/0378 current syscall frame */
@@ -33631,9 +33631,9 @@ diff -ruN --show-c-function wine-git.orig/dlls/ntdll/unix/unix_private.h wine-gi
  #define SECS_1601_TO_1970  ((369 * 365 + 89) * (ULONGLONG)86400)
  
  static inline ULONGLONG ticks_from_time_t( time_t time )
-diff -ruN --show-c-function wine-git.orig/dlls/ntdll/unix/virtual.c wine-git/dlls/ntdll/unix/virtual.c
---- wine-git.orig/dlls/ntdll/unix/virtual.c	2025-10-10 10:17:48.575775247 -0700
-+++ wine-git/dlls/ntdll/unix/virtual.c	2025-10-10 10:22:17.165380342 -0700
+diff -ruN --show-c-function dlls/ntdll/unix/virtual.c dlls/ntdll/unix/virtual.c
+--- dlls/ntdll/unix/virtual.c	2025-10-10 10:17:48.575775247 -0700
++++ dlls/ntdll/unix/virtual.c	2025-10-10 10:22:17.165380342 -0700
 @@ -4022,11 +4022,11 @@ static TEB *init_teb( void *ptr, BOOL is
      teb->StaticUnicodeString.Buffer = teb->StaticUnicodeBuffer;
      teb->StaticUnicodeString.MaximumLength = sizeof(teb->StaticUnicodeBuffer);
@@ -33647,9 +33647,9 @@ diff -ruN --show-c-function wine-git.orig/dlls/ntdll/unix/virtual.c wine-git/dll
      list_add_head( &teb_list, &thread_data->entry );
      return teb;
  }
-diff -ruN --show-c-function wine-git.orig/dlls/rpcrt4/rpc_server.c wine-git/dlls/rpcrt4/rpc_server.c
---- wine-git.orig/dlls/rpcrt4/rpc_server.c	2025-10-10 10:17:47.419750531 -0700
-+++ wine-git/dlls/rpcrt4/rpc_server.c	2025-10-10 10:22:17.158610035 -0700
+diff -ruN --show-c-function dlls/rpcrt4/rpc_server.c dlls/rpcrt4/rpc_server.c
+--- dlls/rpcrt4/rpc_server.c	2025-10-10 10:17:47.419750531 -0700
++++ dlls/rpcrt4/rpc_server.c	2025-10-10 10:22:17.158610035 -0700
 @@ -701,10 +701,6 @@ static DWORD CALLBACK RPCRT4_server_thre
    }
    LeaveCriticalSection(&cps->cs);
@@ -33680,9 +33680,9 @@ diff -ruN --show-c-function wine-git.orig/dlls/rpcrt4/rpc_server.c wine-git/dlls
        EnterCriticalSection(&listen_cs);
    }
    if (listen_done_event == event)
-diff -ruN --show-c-function wine-git.orig/dlls/rpcrt4/rpc_server.c.orig wine-git/dlls/rpcrt4/rpc_server.c.orig
---- wine-git.orig/dlls/rpcrt4/rpc_server.c.orig	1969-12-31 16:00:00.000000000 -0800
-+++ wine-git/dlls/rpcrt4/rpc_server.c.orig	2025-10-10 10:22:12.330268196 -0700
+diff -ruN --show-c-function dlls/rpcrt4/rpc_server.c.orig dlls/rpcrt4/rpc_server.c.orig
+--- dlls/rpcrt4/rpc_server.c.orig	1969-12-31 16:00:00.000000000 -0800
++++ dlls/rpcrt4/rpc_server.c.orig	2025-10-10 10:22:12.330268196 -0700
 @@ -0,0 +1,1747 @@
 +/*
 + * RPC server API
@@ -35431,9 +35431,9 @@ diff -ruN --show-c-function wine-git.orig/dlls/rpcrt4/rpc_server.c.orig wine-git
 +    TRACE("\n");
 +    return RPCRT4_GetThreadCurrentCallHandle();
 +}
-diff -ruN --show-c-function wine-git.orig/dlls/user32/tests/input.c wine-git/dlls/user32/tests/input.c
---- wine-git.orig/dlls/user32/tests/input.c	2025-10-10 10:17:47.475751728 -0700
-+++ wine-git/dlls/user32/tests/input.c	2025-10-10 10:22:17.114365572 -0700
+diff -ruN --show-c-function dlls/user32/tests/input.c dlls/user32/tests/input.c
+--- dlls/user32/tests/input.c	2025-10-10 10:17:47.475751728 -0700
++++ dlls/user32/tests/input.c	2025-10-10 10:22:17.114365572 -0700
 @@ -4316,8 +4316,8 @@ static void test_SendInput_mouse_message
  
      mouse_event( MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0 );
@@ -35445,9 +35445,9 @@ diff -ruN --show-c-function wine-git.orig/dlls/user32/tests/input.c wine-git/dll
      mouse_event( MOUSEEVENTF_LEFTUP, 0, 0, 0, 0 );
      wait_messages( 5, FALSE );
      button_up_hwnd[1].message.hwnd = hwnd;
-diff -ruN --show-c-function wine-git.orig/dlls/win32u/dce.c wine-git/dlls/win32u/dce.c
---- wine-git.orig/dlls/win32u/dce.c	2025-10-10 10:17:47.494534953 -0700
-+++ wine-git/dlls/win32u/dce.c	2025-10-10 10:22:17.118829585 -0700
+diff -ruN --show-c-function dlls/win32u/dce.c dlls/win32u/dce.c
+--- dlls/win32u/dce.c	2025-10-10 10:17:47.494534953 -0700
++++ dlls/win32u/dce.c	2025-10-10 10:22:17.118829585 -0700
 @@ -1803,7 +1803,7 @@ BOOL WINAPI NtUserRedrawWindow( HWND hwn
      }
  
@@ -35457,9 +35457,9 @@ diff -ruN --show-c-function wine-git.orig/dlls/win32u/dce.c wine-git/dlls/win32u
  
      if (rect && !hrgn)
      {
-diff -ruN --show-c-function wine-git.orig/dlls/win32u/hook.c wine-git/dlls/win32u/hook.c
---- wine-git.orig/dlls/win32u/hook.c	2025-10-10 10:17:47.495752156 -0700
-+++ wine-git/dlls/win32u/hook.c	2025-10-10 10:22:17.123167901 -0700
+diff -ruN --show-c-function dlls/win32u/hook.c dlls/win32u/hook.c
+--- dlls/win32u/hook.c	2025-10-10 10:17:47.495752156 -0700
++++ dlls/win32u/hook.c	2025-10-10 10:22:17.123167901 -0700
 @@ -31,7 +31,9 @@
  
  WINE_DEFAULT_DEBUG_CHANNEL(hook);
@@ -35471,9 +35471,9 @@ diff -ruN --show-c-function wine-git.orig/dlls/win32u/hook.c wine-git/dlls/win32
  {
      "WH_MSGFILTER",
      "WH_JOURNALRECORD",
-diff -ruN --show-c-function wine-git.orig/dlls/win32u/input.c wine-git/dlls/win32u/input.c
---- wine-git.orig/dlls/win32u/input.c	2025-10-10 10:17:47.495752156 -0700
-+++ wine-git/dlls/win32u/input.c	2025-10-10 10:22:17.119006992 -0700
+diff -ruN --show-c-function dlls/win32u/input.c dlls/win32u/input.c
+--- dlls/win32u/input.c	2025-10-10 10:17:47.495752156 -0700
++++ dlls/win32u/input.c	2025-10-10 10:22:17.119006992 -0700
 @@ -787,6 +787,21 @@ BOOL WINAPI NtUserGetCursorInfo( CURSORI
      return TRUE;
  }
@@ -35496,9 +35496,9 @@ diff -ruN --show-c-function wine-git.orig/dlls/win32u/input.c wine-git/dlls/win3
  /**********************************************************************
   *           GetAsyncKeyState (win32u.@)
   */
-diff -ruN --show-c-function wine-git.orig/dlls/win32u/message.c wine-git/dlls/win32u/message.c
---- wine-git.orig/dlls/win32u/message.c	2025-10-10 10:17:47.496752177 -0700
-+++ wine-git/dlls/win32u/message.c	2025-10-10 10:22:17.125365795 -0700
+diff -ruN --show-c-function dlls/win32u/message.c dlls/win32u/message.c
+--- dlls/win32u/message.c	2025-10-10 10:17:47.496752177 -0700
++++ dlls/win32u/message.c	2025-10-10 10:22:17.125365795 -0700
 @@ -27,8 +27,6 @@
  #include <assert.h>
  #include "ntstatus.h"
@@ -35703,9 +35703,9 @@ diff -ruN --show-c-function wine-git.orig/dlls/win32u/message.c wine-git/dlls/wi
              wine_server_call( req );
              wake_bits = reply->wake_bits & wake_mask;
          }
-diff -ruN --show-c-function wine-git.orig/dlls/win32u/ntuser_private.h wine-git/dlls/win32u/ntuser_private.h
---- wine-git.orig/dlls/win32u/ntuser_private.h	2025-10-10 10:17:47.496752177 -0700
-+++ wine-git/dlls/win32u/ntuser_private.h	2025-10-10 10:22:17.123729095 -0700
+diff -ruN --show-c-function dlls/win32u/ntuser_private.h dlls/win32u/ntuser_private.h
+--- dlls/win32u/ntuser_private.h	2025-10-10 10:17:47.496752177 -0700
++++ dlls/win32u/ntuser_private.h	2025-10-10 10:22:17.123729095 -0700
 @@ -111,6 +111,7 @@ struct user_thread_info
  {
      struct ntuser_thread_info     client_info;            /* Data shared with client */
@@ -35734,9 +35734,9 @@ diff -ruN --show-c-function wine-git.orig/dlls/win32u/ntuser_private.h wine-git/
  
  /* systray.c */
  extern LRESULT system_tray_call( HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam, void *data );
-diff -ruN --show-c-function wine-git.orig/dlls/win32u/ntuser_private.h.orig wine-git/dlls/win32u/ntuser_private.h.orig
---- wine-git.orig/dlls/win32u/ntuser_private.h.orig	1969-12-31 16:00:00.000000000 -0800
-+++ wine-git/dlls/win32u/ntuser_private.h.orig	2025-10-10 10:22:12.407269764 -0700
+diff -ruN --show-c-function dlls/win32u/ntuser_private.h.orig dlls/win32u/ntuser_private.h.orig
+--- dlls/win32u/ntuser_private.h.orig	1969-12-31 16:00:00.000000000 -0800
++++ dlls/win32u/ntuser_private.h.orig	2025-10-10 10:22:12.407269764 -0700
 @@ -0,0 +1,244 @@
 +/*
 + * User definitions
@@ -35982,9 +35982,9 @@ diff -ruN --show-c-function wine-git.orig/dlls/win32u/ntuser_private.h.orig wine
 +BOOL is_window( HWND hwnd );
 +
 +#endif /* __WINE_NTUSER_PRIVATE_H */
-diff -ruN --show-c-function wine-git.orig/dlls/wineandroid.drv/window.c wine-git/dlls/wineandroid.drv/window.c
---- wine-git.orig/dlls/wineandroid.drv/window.c	2025-10-10 10:17:47.515663798 -0700
-+++ wine-git/dlls/wineandroid.drv/window.c	2025-10-10 10:22:17.114870679 -0700
+diff -ruN --show-c-function dlls/wineandroid.drv/window.c dlls/wineandroid.drv/window.c
+--- dlls/wineandroid.drv/window.c	2025-10-10 10:17:47.515663798 -0700
++++ dlls/wineandroid.drv/window.c	2025-10-10 10:22:17.114870679 -0700
 @@ -391,19 +391,13 @@ static void pull_events(void)
  }
  
@@ -36020,9 +36020,9 @@ diff -ruN --show-c-function wine-git.orig/dlls/wineandroid.drv/window.c wine-git
  }
  
  
-diff -ruN --show-c-function wine-git.orig/dlls/winemac.drv/event.c wine-git/dlls/winemac.drv/event.c
---- wine-git.orig/dlls/winemac.drv/event.c	2025-10-10 10:17:47.528752861 -0700
-+++ wine-git/dlls/winemac.drv/event.c	2025-10-10 10:22:17.114975738 -0700
+diff -ruN --show-c-function dlls/winemac.drv/event.c dlls/winemac.drv/event.c
+--- dlls/winemac.drv/event.c	2025-10-10 10:17:47.528752861 -0700
++++ dlls/winemac.drv/event.c	2025-10-10 10:22:17.114975738 -0700
 @@ -26,8 +26,6 @@
  
  #include "config.h"
@@ -36086,9 +36086,9 @@ diff -ruN --show-c-function wine-git.orig/dlls/winemac.drv/event.c wine-git/dlls
 -    return !check_fd_events(macdrv_get_event_queue_fd(data->queue), POLLIN);
 +    return process_events(data->queue, event_mask);
  }
-diff -ruN --show-c-function wine-git.orig/dlls/winex11.drv/event.c wine-git/dlls/winex11.drv/event.c
---- wine-git.orig/dlls/winex11.drv/event.c	2025-10-10 10:17:47.540131919 -0700
-+++ wine-git/dlls/winex11.drv/event.c	2025-10-10 10:22:17.115080056 -0700
+diff -ruN --show-c-function dlls/winex11.drv/event.c dlls/winex11.drv/event.c
+--- dlls/winex11.drv/event.c	2025-10-10 10:17:47.540131919 -0700
++++ dlls/winex11.drv/event.c	2025-10-10 10:22:17.115080056 -0700
 @@ -464,28 +464,19 @@ static inline BOOL call_event_handler( D
      return ret;
  }
@@ -36170,10 +36170,10 @@ diff -ruN --show-c-function wine-git.orig/dlls/winex11.drv/event.c wine-git/dlls
   *           EVENT_x11_time_to_win32_time
   *
   * Make our timer and the X timer line up as best we can
-Binary files wine-git.orig/.git/index and wine-git/.git/index differ
-diff -ruN --show-c-function wine-git.orig/.git/logs/HEAD wine-git/.git/logs/HEAD
---- wine-git.orig/.git/logs/HEAD	2025-10-10 10:17:49.477579329 -0700
-+++ wine-git/.git/logs/HEAD	2025-10-10 10:22:14.339309096 -0700
+Binary files .git/index and .git/index differ
+diff -ruN --show-c-function .git/logs/HEAD .git/logs/HEAD
+--- .git/logs/HEAD	2025-10-10 10:17:49.477579329 -0700
++++ .git/logs/HEAD	2025-10-10 10:22:14.339309096 -0700
 @@ -1,3 +1,3 @@
 -0000000000000000000000000000000000000000 2827471c57299793d8e0868679184f8d762a5309 Vincent <vincent@ryzendesktop.(none)> 1760116667 -0700	clone: from /home/vincent/Downloads/wine-tkg-git/wine-tkg-git/wine-git
 -2827471c57299793d8e0868679184f8d762a5309 01269452e0fbb1f081d506bd64996590a553e2b9 Vincent <vincent@ryzendesktop.(none)> 1760116669 -0700	checkout: moving from master to makepkg
@@ -36181,89 +36181,89 @@ diff -ruN --show-c-function wine-git.orig/.git/logs/HEAD wine-git/.git/logs/HEAD
 +0000000000000000000000000000000000000000 2827471c57299793d8e0868679184f8d762a5309 Vincent <vincent@ryzendesktop.(none)> 1760116931 -0700	clone: from /home/vincent/Downloads/wine-tkg-git/wine-tkg-git/wine-git
 +2827471c57299793d8e0868679184f8d762a5309 01269452e0fbb1f081d506bd64996590a553e2b9 Vincent <vincent@ryzendesktop.(none)> 1760116934 -0700	checkout: moving from master to makepkg
 +01269452e0fbb1f081d506bd64996590a553e2b9 01269452e0fbb1f081d506bd64996590a553e2b9 Vincent <vincent@ryzendesktop.(none)> 1760116934 -0700	reset: moving to HEAD
-diff -ruN --show-c-function wine-git.orig/.git/logs/refs/heads/makepkg wine-git/.git/logs/refs/heads/makepkg
---- wine-git.orig/.git/logs/refs/heads/makepkg	2025-10-10 10:17:49.311790981 -0700
-+++ wine-git/.git/logs/refs/heads/makepkg	2025-10-10 10:22:14.175305758 -0700
+diff -ruN --show-c-function .git/logs/refs/heads/makepkg .git/logs/refs/heads/makepkg
+--- .git/logs/refs/heads/makepkg	2025-10-10 10:17:49.311790981 -0700
++++ .git/logs/refs/heads/makepkg	2025-10-10 10:22:14.175305758 -0700
 @@ -1 +1 @@
 -0000000000000000000000000000000000000000 01269452e0fbb1f081d506bd64996590a553e2b9 Vincent <vincent@ryzendesktop.(none)> 1760116669 -0700	branch: Created from wine-10.16
 +0000000000000000000000000000000000000000 01269452e0fbb1f081d506bd64996590a553e2b9 Vincent <vincent@ryzendesktop.(none)> 1760116934 -0700	branch: Created from wine-10.16
-diff -ruN --show-c-function wine-git.orig/.git/logs/refs/heads/master wine-git/.git/logs/refs/heads/master
---- wine-git.orig/.git/logs/refs/heads/master	2025-10-10 10:17:47.046005634 -0700
-+++ wine-git/.git/logs/refs/heads/master	2025-10-10 10:22:11.957367010 -0700
+diff -ruN --show-c-function .git/logs/refs/heads/master .git/logs/refs/heads/master
+--- .git/logs/refs/heads/master	2025-10-10 10:17:47.046005634 -0700
++++ .git/logs/refs/heads/master	2025-10-10 10:22:11.957367010 -0700
 @@ -1 +1 @@
 -0000000000000000000000000000000000000000 2827471c57299793d8e0868679184f8d762a5309 Vincent <vincent@ryzendesktop.(none)> 1760116667 -0700	clone: from /home/vincent/Downloads/wine-tkg-git/wine-tkg-git/wine-git
 +0000000000000000000000000000000000000000 2827471c57299793d8e0868679184f8d762a5309 Vincent <vincent@ryzendesktop.(none)> 1760116931 -0700	clone: from /home/vincent/Downloads/wine-tkg-git/wine-tkg-git/wine-git
-diff -ruN --show-c-function wine-git.orig/.git/logs/refs/remotes/origin/HEAD wine-git/.git/logs/refs/remotes/origin/HEAD
---- wine-git.orig/.git/logs/refs/remotes/origin/HEAD	2025-10-10 10:17:47.045233770 -0700
-+++ wine-git/.git/logs/refs/remotes/origin/HEAD	2025-10-10 10:22:11.956607891 -0700
+diff -ruN --show-c-function .git/logs/refs/remotes/origin/HEAD .git/logs/refs/remotes/origin/HEAD
+--- .git/logs/refs/remotes/origin/HEAD	2025-10-10 10:17:47.045233770 -0700
++++ .git/logs/refs/remotes/origin/HEAD	2025-10-10 10:22:11.956607891 -0700
 @@ -1 +1 @@
 -0000000000000000000000000000000000000000 2827471c57299793d8e0868679184f8d762a5309 Vincent <vincent@ryzendesktop.(none)> 1760116667 -0700	clone: from /home/vincent/Downloads/wine-tkg-git/wine-tkg-git/wine-git
 +0000000000000000000000000000000000000000 2827471c57299793d8e0868679184f8d762a5309 Vincent <vincent@ryzendesktop.(none)> 1760116931 -0700	clone: from /home/vincent/Downloads/wine-tkg-git/wine-tkg-git/wine-git
-Binary files wine-git.orig/.git/objects/00/9751b399da97a53e6bdce49786c6a11d075d27 and wine-git/.git/objects/00/9751b399da97a53e6bdce49786c6a11d075d27 differ
-Binary files wine-git.orig/.git/objects/02/193b862ba671bbc397d6b5558b62c8cafcc750 and wine-git/.git/objects/02/193b862ba671bbc397d6b5558b62c8cafcc750 differ
-Binary files wine-git.orig/.git/objects/05/235a912462753754bf62b64582d0561d047f9e and wine-git/.git/objects/05/235a912462753754bf62b64582d0561d047f9e differ
-Binary files wine-git.orig/.git/objects/0c/01ec1c0d3a616407f587561bdbcf0ea3b244f3 and wine-git/.git/objects/0c/01ec1c0d3a616407f587561bdbcf0ea3b244f3 differ
-Binary files wine-git.orig/.git/objects/0d/49a996c2a826fb87108fac8fc8f16124bf215a and wine-git/.git/objects/0d/49a996c2a826fb87108fac8fc8f16124bf215a differ
-Binary files wine-git.orig/.git/objects/0d/f7fd2f18e7280e039aca79c1c14091e0a3e79e and wine-git/.git/objects/0d/f7fd2f18e7280e039aca79c1c14091e0a3e79e differ
-Binary files wine-git.orig/.git/objects/10/c971322acdb44ed32ca8f11b8c40e60040e3c3 and wine-git/.git/objects/10/c971322acdb44ed32ca8f11b8c40e60040e3c3 differ
-Binary files wine-git.orig/.git/objects/11/d86563a1052b5927dad6a22344b5432d5c2cbc and wine-git/.git/objects/11/d86563a1052b5927dad6a22344b5432d5c2cbc differ
-Binary files wine-git.orig/.git/objects/1a/850b66b44233fd3f8abb97b89169af1a26ed28 and wine-git/.git/objects/1a/850b66b44233fd3f8abb97b89169af1a26ed28 differ
-Binary files wine-git.orig/.git/objects/1f/7ae6c182dad7517377396a865fa7ceb1ef79c5 and wine-git/.git/objects/1f/7ae6c182dad7517377396a865fa7ceb1ef79c5 differ
-Binary files wine-git.orig/.git/objects/23/22b042ec2df7ee31b91ce1bb243a21a4808d6d and wine-git/.git/objects/23/22b042ec2df7ee31b91ce1bb243a21a4808d6d differ
-Binary files wine-git.orig/.git/objects/24/a53104f8b37da36affa08915293ec21e15ec5c and wine-git/.git/objects/24/a53104f8b37da36affa08915293ec21e15ec5c differ
-Binary files wine-git.orig/.git/objects/26/ad168542fb2b8bcd73c6523166da7edc8b4964 and wine-git/.git/objects/26/ad168542fb2b8bcd73c6523166da7edc8b4964 differ
-Binary files wine-git.orig/.git/objects/28/a5620268fb4e24e3255062be9969990f5db335 and wine-git/.git/objects/28/a5620268fb4e24e3255062be9969990f5db335 differ
-Binary files wine-git.orig/.git/objects/31/12934f1573d71526bd101570e17134e1495f82 and wine-git/.git/objects/31/12934f1573d71526bd101570e17134e1495f82 differ
-Binary files wine-git.orig/.git/objects/35/7a7e1fbcb2aa7f522acba623813c8065f46c16 and wine-git/.git/objects/35/7a7e1fbcb2aa7f522acba623813c8065f46c16 differ
-Binary files wine-git.orig/.git/objects/38/843f2789b7db3b6c4439300e6f63192ba460e6 and wine-git/.git/objects/38/843f2789b7db3b6c4439300e6f63192ba460e6 differ
-Binary files wine-git.orig/.git/objects/3d/5f41eeb38a12537da025bf716b24f5fac76a58 and wine-git/.git/objects/3d/5f41eeb38a12537da025bf716b24f5fac76a58 differ
-Binary files wine-git.orig/.git/objects/3d/750154d1ba7774f9929f09ec63e9cb4422b246 and wine-git/.git/objects/3d/750154d1ba7774f9929f09ec63e9cb4422b246 differ
-Binary files wine-git.orig/.git/objects/3e/f214557c3b8031d0b7a82214f0dc29f4db01c5 and wine-git/.git/objects/3e/f214557c3b8031d0b7a82214f0dc29f4db01c5 differ
-Binary files wine-git.orig/.git/objects/44/4bd29e84b47fbd15e6c1e4ea760c2ab77b8940 and wine-git/.git/objects/44/4bd29e84b47fbd15e6c1e4ea760c2ab77b8940 differ
-Binary files wine-git.orig/.git/objects/55/cd6aa037ea6b1e9558f1a42f77c2f7adc9c84d and wine-git/.git/objects/55/cd6aa037ea6b1e9558f1a42f77c2f7adc9c84d differ
-Binary files wine-git.orig/.git/objects/57/542aff5e10179df114f697d0abd3c319e03018 and wine-git/.git/objects/57/542aff5e10179df114f697d0abd3c319e03018 differ
-Binary files wine-git.orig/.git/objects/62/eba262a11396dc3832dccbb9f2e807501ff906 and wine-git/.git/objects/62/eba262a11396dc3832dccbb9f2e807501ff906 differ
-Binary files wine-git.orig/.git/objects/66/f17bf73f295528c950d382ae904e5552726ed7 and wine-git/.git/objects/66/f17bf73f295528c950d382ae904e5552726ed7 differ
-Binary files wine-git.orig/.git/objects/6b/fccb4cbcdda0ad6428898e2cf40ee9b90f5b94 and wine-git/.git/objects/6b/fccb4cbcdda0ad6428898e2cf40ee9b90f5b94 differ
-Binary files wine-git.orig/.git/objects/72/9b10d1cd435a10696b12b7901e7d3c25e74f71 and wine-git/.git/objects/72/9b10d1cd435a10696b12b7901e7d3c25e74f71 differ
-Binary files wine-git.orig/.git/objects/74/c507ef663b1511bdd056351df0e65a70915236 and wine-git/.git/objects/74/c507ef663b1511bdd056351df0e65a70915236 differ
-Binary files wine-git.orig/.git/objects/75/5b80e1b3bb38a4f24da5e116e222ead7c49000 and wine-git/.git/objects/75/5b80e1b3bb38a4f24da5e116e222ead7c49000 differ
-Binary files wine-git.orig/.git/objects/78/42e56a2910806a8975fc531322b64543c24f0b and wine-git/.git/objects/78/42e56a2910806a8975fc531322b64543c24f0b differ
-Binary files wine-git.orig/.git/objects/7d/87b6493fa9041c9b8b0403a5d0fa748d5ff42a and wine-git/.git/objects/7d/87b6493fa9041c9b8b0403a5d0fa748d5ff42a differ
-Binary files wine-git.orig/.git/objects/83/8c07ea57058ed1e2989dca4f409fd2dce8925e and wine-git/.git/objects/83/8c07ea57058ed1e2989dca4f409fd2dce8925e differ
-Binary files wine-git.orig/.git/objects/86/809b610c70dbae376656f57d6f7075436c2057 and wine-git/.git/objects/86/809b610c70dbae376656f57d6f7075436c2057 differ
-Binary files wine-git.orig/.git/objects/86/8d52f9cba37c754da3240f4a12c0190d714f51 and wine-git/.git/objects/86/8d52f9cba37c754da3240f4a12c0190d714f51 differ
-Binary files wine-git.orig/.git/objects/8a/9f8b1ef277938d67245dd7db246ac795ad5aa9 and wine-git/.git/objects/8a/9f8b1ef277938d67245dd7db246ac795ad5aa9 differ
-Binary files wine-git.orig/.git/objects/8d/dfa9dcf4edc96acd06a7e6ff9ea7ff195e3c92 and wine-git/.git/objects/8d/dfa9dcf4edc96acd06a7e6ff9ea7ff195e3c92 differ
-Binary files wine-git.orig/.git/objects/8e/141eae5b92fe8064cfa7bc9b1c2f1918c2c215 and wine-git/.git/objects/8e/141eae5b92fe8064cfa7bc9b1c2f1918c2c215 differ
-Binary files wine-git.orig/.git/objects/91/02cf911aa1c1b4ed0709c0d4766f197398f3f3 and wine-git/.git/objects/91/02cf911aa1c1b4ed0709c0d4766f197398f3f3 differ
-Binary files wine-git.orig/.git/objects/97/7ad4242e238dbd20e2ba40476ced3fc14dea98 and wine-git/.git/objects/97/7ad4242e238dbd20e2ba40476ced3fc14dea98 differ
-Binary files wine-git.orig/.git/objects/9b/aec508d4a530586aa7ccc42e1614a919497f28 and wine-git/.git/objects/9b/aec508d4a530586aa7ccc42e1614a919497f28 differ
-Binary files wine-git.orig/.git/objects/9c/12eefa5652b7a8789b18a073f881af7638011b and wine-git/.git/objects/9c/12eefa5652b7a8789b18a073f881af7638011b differ
-Binary files wine-git.orig/.git/objects/9c/35d84a44f93edd126c92758a41cfa57f02e268 and wine-git/.git/objects/9c/35d84a44f93edd126c92758a41cfa57f02e268 differ
-Binary files wine-git.orig/.git/objects/a4/92760ac4efa9e545c13de5508aae52f7de2d28 and wine-git/.git/objects/a4/92760ac4efa9e545c13de5508aae52f7de2d28 differ
-Binary files wine-git.orig/.git/objects/ac/8c76860da17a65fcdb841fea68d7ed16667070 and wine-git/.git/objects/ac/8c76860da17a65fcdb841fea68d7ed16667070 differ
-Binary files wine-git.orig/.git/objects/af/a05b0d2098aba6a574b9f7ead3e0149a3c07d2 and wine-git/.git/objects/af/a05b0d2098aba6a574b9f7ead3e0149a3c07d2 differ
-Binary files wine-git.orig/.git/objects/af/a34006a69e3b0429ca344351d68cf79a11ec1e and wine-git/.git/objects/af/a34006a69e3b0429ca344351d68cf79a11ec1e differ
-Binary files wine-git.orig/.git/objects/b5/adb833af15e261706c97ad9f6b1433bd4141c3 and wine-git/.git/objects/b5/adb833af15e261706c97ad9f6b1433bd4141c3 differ
-Binary files wine-git.orig/.git/objects/b6/80f50914c29bc7214eca55f943929586bf81d2 and wine-git/.git/objects/b6/80f50914c29bc7214eca55f943929586bf81d2 differ
-Binary files wine-git.orig/.git/objects/c3/6f5e29827a1fea984a38395c78f8eb34b1a324 and wine-git/.git/objects/c3/6f5e29827a1fea984a38395c78f8eb34b1a324 differ
-Binary files wine-git.orig/.git/objects/c4/4894690ec47859d9d8e3d8da8805ccd2318224 and wine-git/.git/objects/c4/4894690ec47859d9d8e3d8da8805ccd2318224 differ
-Binary files wine-git.orig/.git/objects/c9/8bf97d4052417853a52c90a8a3438bb70af428 and wine-git/.git/objects/c9/8bf97d4052417853a52c90a8a3438bb70af428 differ
-Binary files wine-git.orig/.git/objects/d2/f1e045016fc821ed91ce6625284a389358b6b4 and wine-git/.git/objects/d2/f1e045016fc821ed91ce6625284a389358b6b4 differ
-Binary files wine-git.orig/.git/objects/d3/9f4efa3ecf85c9099e7a8ff858b4f1d402a7da and wine-git/.git/objects/d3/9f4efa3ecf85c9099e7a8ff858b4f1d402a7da differ
-Binary files wine-git.orig/.git/objects/d4/f8cf5e964e6b65fceda60e54bb5d6eea3a95fe and wine-git/.git/objects/d4/f8cf5e964e6b65fceda60e54bb5d6eea3a95fe differ
-Binary files wine-git.orig/.git/objects/de/759c23c36144fa287a1982fb2e255b4f435157 and wine-git/.git/objects/de/759c23c36144fa287a1982fb2e255b4f435157 differ
-Binary files wine-git.orig/.git/objects/e0/8835c9b8ce2051b8aa52151247246522bb5b9f and wine-git/.git/objects/e0/8835c9b8ce2051b8aa52151247246522bb5b9f differ
-Binary files wine-git.orig/.git/objects/e1/93f61b3a7672d04a81a9f8b79826cd3481a82b and wine-git/.git/objects/e1/93f61b3a7672d04a81a9f8b79826cd3481a82b differ
-Binary files wine-git.orig/.git/objects/e3/889f24601be29697cacfb57bbf3b88b75b3648 and wine-git/.git/objects/e3/889f24601be29697cacfb57bbf3b88b75b3648 differ
-Binary files wine-git.orig/.git/objects/ec/c3b776bb3a835d91797e935a509ffb3076c9b8 and wine-git/.git/objects/ec/c3b776bb3a835d91797e935a509ffb3076c9b8 differ
-Binary files wine-git.orig/.git/objects/ef/b9b0c62559b5fda24ddd9ea0e69e7865a13b25 and wine-git/.git/objects/ef/b9b0c62559b5fda24ddd9ea0e69e7865a13b25 differ
-Binary files wine-git.orig/.git/objects/f4/f5e713935d51a6d050409eb230268fc2b9fe45 and wine-git/.git/objects/f4/f5e713935d51a6d050409eb230268fc2b9fe45 differ
-Binary files wine-git.orig/.git/objects/fa/c3509dfbacd972e9880c050a8502072f3f7242 and wine-git/.git/objects/fa/c3509dfbacd972e9880c050a8502072f3f7242 differ
-diff -ruN --show-c-function wine-git.orig/include/config.h.in wine-git/include/config.h.in
---- wine-git.orig/include/config.h.in	2025-10-10 10:17:58.880995274 -0700
-+++ wine-git/include/config.h.in	2025-10-10 10:22:24.480560064 -0700
+Binary files .git/objects/00/9751b399da97a53e6bdce49786c6a11d075d27 and .git/objects/00/9751b399da97a53e6bdce49786c6a11d075d27 differ
+Binary files .git/objects/02/193b862ba671bbc397d6b5558b62c8cafcc750 and .git/objects/02/193b862ba671bbc397d6b5558b62c8cafcc750 differ
+Binary files .git/objects/05/235a912462753754bf62b64582d0561d047f9e and .git/objects/05/235a912462753754bf62b64582d0561d047f9e differ
+Binary files .git/objects/0c/01ec1c0d3a616407f587561bdbcf0ea3b244f3 and .git/objects/0c/01ec1c0d3a616407f587561bdbcf0ea3b244f3 differ
+Binary files .git/objects/0d/49a996c2a826fb87108fac8fc8f16124bf215a and .git/objects/0d/49a996c2a826fb87108fac8fc8f16124bf215a differ
+Binary files .git/objects/0d/f7fd2f18e7280e039aca79c1c14091e0a3e79e and .git/objects/0d/f7fd2f18e7280e039aca79c1c14091e0a3e79e differ
+Binary files .git/objects/10/c971322acdb44ed32ca8f11b8c40e60040e3c3 and .git/objects/10/c971322acdb44ed32ca8f11b8c40e60040e3c3 differ
+Binary files .git/objects/11/d86563a1052b5927dad6a22344b5432d5c2cbc and .git/objects/11/d86563a1052b5927dad6a22344b5432d5c2cbc differ
+Binary files .git/objects/1a/850b66b44233fd3f8abb97b89169af1a26ed28 and .git/objects/1a/850b66b44233fd3f8abb97b89169af1a26ed28 differ
+Binary files .git/objects/1f/7ae6c182dad7517377396a865fa7ceb1ef79c5 and .git/objects/1f/7ae6c182dad7517377396a865fa7ceb1ef79c5 differ
+Binary files .git/objects/23/22b042ec2df7ee31b91ce1bb243a21a4808d6d and .git/objects/23/22b042ec2df7ee31b91ce1bb243a21a4808d6d differ
+Binary files .git/objects/24/a53104f8b37da36affa08915293ec21e15ec5c and .git/objects/24/a53104f8b37da36affa08915293ec21e15ec5c differ
+Binary files .git/objects/26/ad168542fb2b8bcd73c6523166da7edc8b4964 and .git/objects/26/ad168542fb2b8bcd73c6523166da7edc8b4964 differ
+Binary files .git/objects/28/a5620268fb4e24e3255062be9969990f5db335 and .git/objects/28/a5620268fb4e24e3255062be9969990f5db335 differ
+Binary files .git/objects/31/12934f1573d71526bd101570e17134e1495f82 and .git/objects/31/12934f1573d71526bd101570e17134e1495f82 differ
+Binary files .git/objects/35/7a7e1fbcb2aa7f522acba623813c8065f46c16 and .git/objects/35/7a7e1fbcb2aa7f522acba623813c8065f46c16 differ
+Binary files .git/objects/38/843f2789b7db3b6c4439300e6f63192ba460e6 and .git/objects/38/843f2789b7db3b6c4439300e6f63192ba460e6 differ
+Binary files .git/objects/3d/5f41eeb38a12537da025bf716b24f5fac76a58 and .git/objects/3d/5f41eeb38a12537da025bf716b24f5fac76a58 differ
+Binary files .git/objects/3d/750154d1ba7774f9929f09ec63e9cb4422b246 and .git/objects/3d/750154d1ba7774f9929f09ec63e9cb4422b246 differ
+Binary files .git/objects/3e/f214557c3b8031d0b7a82214f0dc29f4db01c5 and .git/objects/3e/f214557c3b8031d0b7a82214f0dc29f4db01c5 differ
+Binary files .git/objects/44/4bd29e84b47fbd15e6c1e4ea760c2ab77b8940 and .git/objects/44/4bd29e84b47fbd15e6c1e4ea760c2ab77b8940 differ
+Binary files .git/objects/55/cd6aa037ea6b1e9558f1a42f77c2f7adc9c84d and .git/objects/55/cd6aa037ea6b1e9558f1a42f77c2f7adc9c84d differ
+Binary files .git/objects/57/542aff5e10179df114f697d0abd3c319e03018 and .git/objects/57/542aff5e10179df114f697d0abd3c319e03018 differ
+Binary files .git/objects/62/eba262a11396dc3832dccbb9f2e807501ff906 and .git/objects/62/eba262a11396dc3832dccbb9f2e807501ff906 differ
+Binary files .git/objects/66/f17bf73f295528c950d382ae904e5552726ed7 and .git/objects/66/f17bf73f295528c950d382ae904e5552726ed7 differ
+Binary files .git/objects/6b/fccb4cbcdda0ad6428898e2cf40ee9b90f5b94 and .git/objects/6b/fccb4cbcdda0ad6428898e2cf40ee9b90f5b94 differ
+Binary files .git/objects/72/9b10d1cd435a10696b12b7901e7d3c25e74f71 and .git/objects/72/9b10d1cd435a10696b12b7901e7d3c25e74f71 differ
+Binary files .git/objects/74/c507ef663b1511bdd056351df0e65a70915236 and .git/objects/74/c507ef663b1511bdd056351df0e65a70915236 differ
+Binary files .git/objects/75/5b80e1b3bb38a4f24da5e116e222ead7c49000 and .git/objects/75/5b80e1b3bb38a4f24da5e116e222ead7c49000 differ
+Binary files .git/objects/78/42e56a2910806a8975fc531322b64543c24f0b and .git/objects/78/42e56a2910806a8975fc531322b64543c24f0b differ
+Binary files .git/objects/7d/87b6493fa9041c9b8b0403a5d0fa748d5ff42a and .git/objects/7d/87b6493fa9041c9b8b0403a5d0fa748d5ff42a differ
+Binary files .git/objects/83/8c07ea57058ed1e2989dca4f409fd2dce8925e and .git/objects/83/8c07ea57058ed1e2989dca4f409fd2dce8925e differ
+Binary files .git/objects/86/809b610c70dbae376656f57d6f7075436c2057 and .git/objects/86/809b610c70dbae376656f57d6f7075436c2057 differ
+Binary files .git/objects/86/8d52f9cba37c754da3240f4a12c0190d714f51 and .git/objects/86/8d52f9cba37c754da3240f4a12c0190d714f51 differ
+Binary files .git/objects/8a/9f8b1ef277938d67245dd7db246ac795ad5aa9 and .git/objects/8a/9f8b1ef277938d67245dd7db246ac795ad5aa9 differ
+Binary files .git/objects/8d/dfa9dcf4edc96acd06a7e6ff9ea7ff195e3c92 and .git/objects/8d/dfa9dcf4edc96acd06a7e6ff9ea7ff195e3c92 differ
+Binary files .git/objects/8e/141eae5b92fe8064cfa7bc9b1c2f1918c2c215 and .git/objects/8e/141eae5b92fe8064cfa7bc9b1c2f1918c2c215 differ
+Binary files .git/objects/91/02cf911aa1c1b4ed0709c0d4766f197398f3f3 and .git/objects/91/02cf911aa1c1b4ed0709c0d4766f197398f3f3 differ
+Binary files .git/objects/97/7ad4242e238dbd20e2ba40476ced3fc14dea98 and .git/objects/97/7ad4242e238dbd20e2ba40476ced3fc14dea98 differ
+Binary files .git/objects/9b/aec508d4a530586aa7ccc42e1614a919497f28 and .git/objects/9b/aec508d4a530586aa7ccc42e1614a919497f28 differ
+Binary files .git/objects/9c/12eefa5652b7a8789b18a073f881af7638011b and .git/objects/9c/12eefa5652b7a8789b18a073f881af7638011b differ
+Binary files .git/objects/9c/35d84a44f93edd126c92758a41cfa57f02e268 and .git/objects/9c/35d84a44f93edd126c92758a41cfa57f02e268 differ
+Binary files .git/objects/a4/92760ac4efa9e545c13de5508aae52f7de2d28 and .git/objects/a4/92760ac4efa9e545c13de5508aae52f7de2d28 differ
+Binary files .git/objects/ac/8c76860da17a65fcdb841fea68d7ed16667070 and .git/objects/ac/8c76860da17a65fcdb841fea68d7ed16667070 differ
+Binary files .git/objects/af/a05b0d2098aba6a574b9f7ead3e0149a3c07d2 and .git/objects/af/a05b0d2098aba6a574b9f7ead3e0149a3c07d2 differ
+Binary files .git/objects/af/a34006a69e3b0429ca344351d68cf79a11ec1e and .git/objects/af/a34006a69e3b0429ca344351d68cf79a11ec1e differ
+Binary files .git/objects/b5/adb833af15e261706c97ad9f6b1433bd4141c3 and .git/objects/b5/adb833af15e261706c97ad9f6b1433bd4141c3 differ
+Binary files .git/objects/b6/80f50914c29bc7214eca55f943929586bf81d2 and .git/objects/b6/80f50914c29bc7214eca55f943929586bf81d2 differ
+Binary files .git/objects/c3/6f5e29827a1fea984a38395c78f8eb34b1a324 and .git/objects/c3/6f5e29827a1fea984a38395c78f8eb34b1a324 differ
+Binary files .git/objects/c4/4894690ec47859d9d8e3d8da8805ccd2318224 and .git/objects/c4/4894690ec47859d9d8e3d8da8805ccd2318224 differ
+Binary files .git/objects/c9/8bf97d4052417853a52c90a8a3438bb70af428 and .git/objects/c9/8bf97d4052417853a52c90a8a3438bb70af428 differ
+Binary files .git/objects/d2/f1e045016fc821ed91ce6625284a389358b6b4 and .git/objects/d2/f1e045016fc821ed91ce6625284a389358b6b4 differ
+Binary files .git/objects/d3/9f4efa3ecf85c9099e7a8ff858b4f1d402a7da and .git/objects/d3/9f4efa3ecf85c9099e7a8ff858b4f1d402a7da differ
+Binary files .git/objects/d4/f8cf5e964e6b65fceda60e54bb5d6eea3a95fe and .git/objects/d4/f8cf5e964e6b65fceda60e54bb5d6eea3a95fe differ
+Binary files .git/objects/de/759c23c36144fa287a1982fb2e255b4f435157 and .git/objects/de/759c23c36144fa287a1982fb2e255b4f435157 differ
+Binary files .git/objects/e0/8835c9b8ce2051b8aa52151247246522bb5b9f and .git/objects/e0/8835c9b8ce2051b8aa52151247246522bb5b9f differ
+Binary files .git/objects/e1/93f61b3a7672d04a81a9f8b79826cd3481a82b and .git/objects/e1/93f61b3a7672d04a81a9f8b79826cd3481a82b differ
+Binary files .git/objects/e3/889f24601be29697cacfb57bbf3b88b75b3648 and .git/objects/e3/889f24601be29697cacfb57bbf3b88b75b3648 differ
+Binary files .git/objects/ec/c3b776bb3a835d91797e935a509ffb3076c9b8 and .git/objects/ec/c3b776bb3a835d91797e935a509ffb3076c9b8 differ
+Binary files .git/objects/ef/b9b0c62559b5fda24ddd9ea0e69e7865a13b25 and .git/objects/ef/b9b0c62559b5fda24ddd9ea0e69e7865a13b25 differ
+Binary files .git/objects/f4/f5e713935d51a6d050409eb230268fc2b9fe45 and .git/objects/f4/f5e713935d51a6d050409eb230268fc2b9fe45 differ
+Binary files .git/objects/fa/c3509dfbacd972e9880c050a8502072f3f7242 and .git/objects/fa/c3509dfbacd972e9880c050a8502072f3f7242 differ
+diff -ruN --show-c-function include/config.h.in include/config.h.in
+--- include/config.h.in	2025-10-10 10:17:58.880995274 -0700
++++ include/config.h.in	2025-10-10 10:22:24.480560064 -0700
 @@ -198,9 +198,6 @@
  /* Define to 1 if you have the <linux/major.h> header file. */
  #undef HAVE_LINUX_MAJOR_H
@@ -36304,9 +36304,9 @@ diff -ruN --show-c-function wine-git.orig/include/config.h.in wine-git/include/c
  /* Define to 1 if you have the <sys/event.h> header file. */
  #undef HAVE_SYS_EVENT_H
  
-diff -ruN --show-c-function wine-git.orig/include/config.h.in~ wine-git/include/config.h.in~
---- wine-git.orig/include/config.h.in~	2025-10-10 10:17:48.596775696 -0700
-+++ wine-git/include/config.h.in~	2025-10-10 10:22:17.144246720 -0700
+diff -ruN --show-c-function include/config.h.in~ include/config.h.in~
+--- include/config.h.in~	2025-10-10 10:17:48.596775696 -0700
++++ include/config.h.in~	2025-10-10 10:22:17.144246720 -0700
 @@ -198,9 +198,6 @@
  /* Define to 1 if you have the <linux/major.h> header file. */
  #undef HAVE_LINUX_MAJOR_H
@@ -36349,9 +36349,9 @@ diff -ruN --show-c-function wine-git.orig/include/config.h.in~ wine-git/include/
  /* Define to 1 if you have the <sys/event.h> header file. */
  #undef HAVE_SYS_EVENT_H
  
-diff -ruN --show-c-function wine-git.orig/include/wine/server_protocol.h wine-git/include/wine/server_protocol.h
---- wine-git.orig/include/wine/server_protocol.h	2025-10-10 10:17:48.596775696 -0700
-+++ wine-git/include/wine/server_protocol.h	2025-10-10 10:22:22.403082879 -0700
+diff -ruN --show-c-function include/wine/server_protocol.h include/wine/server_protocol.h
+--- include/wine/server_protocol.h	2025-10-10 10:17:48.596775696 -0700
++++ include/wine/server_protocol.h	2025-10-10 10:22:22.403082879 -0700
 @@ -974,8 +974,6 @@ struct obj_locator
  };
  
@@ -36591,9 +36591,9 @@ diff -ruN --show-c-function wine-git.orig/include/wine/server_protocol.h wine-gi
 +#define SERVER_PROTOCOL_VERSION 911
  
  #endif /* __WINE_WINE_SERVER_PROTOCOL_H */
-diff -ruN --show-c-function wine-git.orig/README.esync wine-git/README.esync
---- wine-git.orig/README.esync	1969-12-31 16:00:00.000000000 -0800
-+++ wine-git/README.esync	2025-10-10 10:22:17.172498779 -0700
+diff -ruN --show-c-function README.esync README.esync
+--- README.esync	1969-12-31 16:00:00.000000000 -0800
++++ README.esync	2025-10-10 10:22:17.172498779 -0700
 @@ -0,0 +1,196 @@
 +This is eventfd-based synchronization, or 'esync' for short. Turn it on with
 +WINEESYNC=1; debug it with +esync.
@@ -36791,9 +36791,9 @@ diff -ruN --show-c-function wine-git.orig/README.esync wine-git/README.esync
 +Anyway, yeah, this is esync. Use it if you like.
 +
 +--Zebediah Figura
-diff -ruN --show-c-function wine-git.orig/server/async.c wine-git/server/async.c
---- wine-git.orig/server/async.c	2025-10-10 10:17:47.802634392 -0700
-+++ wine-git/server/async.c	2025-10-10 10:22:17.149366284 -0700
+diff -ruN --show-c-function server/async.c server/async.c
+--- server/async.c	2025-10-10 10:17:47.802634392 -0700
++++ server/async.c	2025-10-10 10:22:17.149366284 -0700
 @@ -78,10 +78,10 @@ static const struct object_ops async_ops
      add_queue,                 /* add_queue */
      remove_queue,              /* remove_queue */
@@ -36818,9 +36818,9 @@ diff -ruN --show-c-function wine-git.orig/server/async.c wine-git/server/async.c
      default_map_access,       /* map_access */
      default_get_sd,           /* get_sd */
      default_set_sd,           /* set_sd */
-diff -ruN --show-c-function wine-git.orig/server/async.c.orig wine-git/server/async.c.orig
---- wine-git.orig/server/async.c.orig	1969-12-31 16:00:00.000000000 -0800
-+++ wine-git/server/async.c.orig	2025-10-10 10:22:12.712275974 -0700
+diff -ruN --show-c-function server/async.c.orig server/async.c.orig
+--- server/async.c.orig	1969-12-31 16:00:00.000000000 -0800
++++ server/async.c.orig	2025-10-10 10:22:12.712275974 -0700
 @@ -0,0 +1,909 @@
 +/*
 + * Server-side async I/O support
@@ -37731,9 +37731,9 @@ diff -ruN --show-c-function wine-git.orig/server/async.c.orig wine-git/server/as
 +
 +    release_object( &async->obj );
 +}
-diff -ruN --show-c-function wine-git.orig/server/atom.c wine-git/server/atom.c
---- wine-git.orig/server/atom.c	2025-10-10 10:17:47.802634392 -0700
-+++ wine-git/server/atom.c	2025-10-10 10:22:17.149607304 -0700
+diff -ruN --show-c-function server/atom.c server/atom.c
+--- server/atom.c	2025-10-10 10:17:47.802634392 -0700
++++ server/atom.c	2025-10-10 10:22:17.149607304 -0700
 @@ -77,10 +77,10 @@ static const struct object_ops atom_tabl
      no_add_queue,                 /* add_queue */
      NULL,                         /* remove_queue */
@@ -37746,9 +37746,9 @@ diff -ruN --show-c-function wine-git.orig/server/atom.c wine-git/server/atom.c
      default_map_access,           /* map_access */
      default_get_sd,               /* get_sd */
      default_set_sd,               /* set_sd */
-diff -ruN --show-c-function wine-git.orig/server/atom.c.orig wine-git/server/atom.c.orig
---- wine-git.orig/server/atom.c.orig	1969-12-31 16:00:00.000000000 -0800
-+++ wine-git/server/atom.c.orig	2025-10-10 10:22:12.712275974 -0700
+diff -ruN --show-c-function server/atom.c.orig server/atom.c.orig
+--- server/atom.c.orig	1969-12-31 16:00:00.000000000 -0800
++++ server/atom.c.orig	2025-10-10 10:22:12.712275974 -0700
 @@ -0,0 +1,440 @@
 +/*
 + * Server-side atom management
@@ -38190,9 +38190,9 @@ diff -ruN --show-c-function wine-git.orig/server/atom.c.orig wine-git/server/ato
 +        reply->total = entry->len;
 +    }
 +}
-diff -ruN --show-c-function wine-git.orig/server/change.c wine-git/server/change.c
---- wine-git.orig/server/change.c	2025-10-10 10:17:47.802634392 -0700
-+++ wine-git/server/change.c	2025-10-10 10:22:17.172620550 -0700
+diff -ruN --show-c-function server/change.c server/change.c
+--- server/change.c	2025-10-10 10:17:47.802634392 -0700
++++ server/change.c	2025-10-10 10:22:17.172620550 -0700
 @@ -109,13 +109,13 @@ static const struct object_ops dir_ops =
      sizeof(struct dir),       /* size */
      &file_type,               /* type */
@@ -38212,9 +38212,9 @@ diff -ruN --show-c-function wine-git.orig/server/change.c wine-git/server/change
      default_map_access,       /* map_access */
      dir_get_sd,               /* get_sd */
      dir_set_sd,               /* set_sd */
-diff -ruN --show-c-function wine-git.orig/server/clipboard.c wine-git/server/clipboard.c
---- wine-git.orig/server/clipboard.c	2025-10-10 10:17:47.802634392 -0700
-+++ wine-git/server/clipboard.c	2025-10-10 10:22:17.149868810 -0700
+diff -ruN --show-c-function server/clipboard.c server/clipboard.c
+--- server/clipboard.c	2025-10-10 10:17:47.802634392 -0700
++++ server/clipboard.c	2025-10-10 10:22:17.149868810 -0700
 @@ -76,10 +76,10 @@ static const struct object_ops clipboard
      no_add_queue,                 /* add_queue */
      NULL,                         /* remove_queue */
@@ -38227,9 +38227,9 @@ diff -ruN --show-c-function wine-git.orig/server/clipboard.c wine-git/server/cli
      default_map_access,           /* map_access */
      default_get_sd,               /* get_sd */
      default_set_sd,               /* set_sd */
-diff -ruN --show-c-function wine-git.orig/server/completion.c wine-git/server/completion.c
---- wine-git.orig/server/completion.c	2025-10-10 10:17:47.802634392 -0700
-+++ wine-git/server/completion.c	2025-10-10 10:22:17.149986112 -0700
+diff -ruN --show-c-function server/completion.c server/completion.c
+--- server/completion.c	2025-10-10 10:17:47.802634392 -0700
++++ server/completion.c	2025-10-10 10:22:17.149986112 -0700
 @@ -72,11 +72,11 @@ struct completion_wait
  
  struct completion
@@ -38356,9 +38356,9 @@ diff -ruN --show-c-function wine-git.orig/server/completion.c wine-git/server/co
      }
  
      release_object( completion );
-diff -ruN --show-c-function wine-git.orig/server/console.c wine-git/server/console.c
---- wine-git.orig/server/console.c	2025-10-10 10:17:47.802634392 -0700
-+++ wine-git/server/console.c	2025-10-10 10:22:17.173873787 -0700
+diff -ruN --show-c-function server/console.c server/console.c
+--- server/console.c	2025-10-10 10:17:47.802634392 -0700
++++ server/console.c	2025-10-10 10:22:17.173873787 -0700
 @@ -41,6 +41,7 @@
  #include "wincon.h"
  #include "winternl.h"
@@ -38987,9 +38987,9 @@ diff -ruN --show-c-function wine-git.orig/server/console.c wine-git/server/conso
 -    if (list_empty( &server->queue )) reset_sync( server->sync );
      release_object( server );
  }
-diff -ruN --show-c-function wine-git.orig/server/d3dkmt.c wine-git/server/d3dkmt.c
---- wine-git.orig/server/d3dkmt.c	2025-10-10 10:17:47.802634392 -0700
-+++ wine-git/server/d3dkmt.c	2025-10-10 10:22:17.123045740 -0700
+diff -ruN --show-c-function server/d3dkmt.c server/d3dkmt.c
+--- server/d3dkmt.c	2025-10-10 10:17:47.802634392 -0700
++++ server/d3dkmt.c	2025-10-10 10:22:17.123045740 -0700
 @@ -55,10 +55,10 @@ static const struct object_ops d3dkmt_ob
      no_add_queue,                   /* add_queue */
      NULL,                           /* remove_queue */
@@ -39025,9 +39025,9 @@ diff -ruN --show-c-function wine-git.orig/server/d3dkmt.c wine-git/server/d3dkmt
      default_map_access,                     /* map_access */
      default_get_sd,                         /* get_sd */
      default_set_sd,                         /* set_sd */
-diff -ruN --show-c-function wine-git.orig/server/debugger.c wine-git/server/debugger.c
---- wine-git.orig/server/debugger.c	2025-10-10 10:17:47.802634392 -0700
-+++ wine-git/server/debugger.c	2025-10-10 10:22:17.150308203 -0700
+diff -ruN --show-c-function server/debugger.c server/debugger.c
+--- server/debugger.c	2025-10-10 10:17:47.802634392 -0700
++++ server/debugger.c	2025-10-10 10:22:17.150308203 -0700
 @@ -43,7 +43,6 @@ enum debug_event_state { EVENT_QUEUED, E
  struct debug_event
  {
@@ -39244,9 +39244,9 @@ diff -ruN --show-c-function wine-git.orig/server/debugger.c wine-git/server/debu
      }
      else
      {
-diff -ruN --show-c-function wine-git.orig/server/device.c wine-git/server/device.c
---- wine-git.orig/server/device.c	2025-10-10 10:17:47.802634392 -0700
-+++ wine-git/server/device.c	2025-10-10 10:22:17.160181955 -0700
+diff -ruN --show-c-function server/device.c server/device.c
+--- server/device.c	2025-10-10 10:17:47.802634392 -0700
++++ server/device.c	2025-10-10 10:22:17.160181955 -0700
 @@ -38,6 +38,7 @@
  #include "handle.h"
  #include "request.h"
@@ -39435,9 +39435,9 @@ diff -ruN --show-c-function wine-git.orig/server/device.c wine-git/server/device
              }
              else close_handle( current->process, reply->next );
          }
-diff -ruN --show-c-function wine-git.orig/server/directory.c wine-git/server/directory.c
---- wine-git.orig/server/directory.c	2025-10-10 10:17:47.802634392 -0700
-+++ wine-git/server/directory.c	2025-10-10 10:22:17.150607911 -0700
+diff -ruN --show-c-function server/directory.c server/directory.c
+--- server/directory.c	2025-10-10 10:17:47.802634392 -0700
++++ server/directory.c	2025-10-10 10:22:17.150607911 -0700
 @@ -69,10 +69,10 @@ static const struct object_ops object_ty
      no_add_queue,                 /* add_queue */
      NULL,                         /* remove_queue */
@@ -39462,9 +39462,9 @@ diff -ruN --show-c-function wine-git.orig/server/directory.c wine-git/server/dir
      default_map_access,           /* map_access */
      default_get_sd,               /* get_sd */
      default_set_sd,               /* set_sd */
-diff -ruN --show-c-function wine-git.orig/server/esync.c wine-git/server/esync.c
---- wine-git.orig/server/esync.c	1969-12-31 16:00:00.000000000 -0800
-+++ wine-git/server/esync.c	2025-10-10 10:22:17.173292935 -0700
+diff -ruN --show-c-function server/esync.c server/esync.c
+--- server/esync.c	1969-12-31 16:00:00.000000000 -0800
++++ server/esync.c	2025-10-10 10:22:17.173292935 -0700
 @@ -0,0 +1,588 @@
 +/*
 + * eventfd-based synchronization objects
@@ -40054,9 +40054,9 @@ diff -ruN --show-c-function wine-git.orig/server/esync.c wine-git/server/esync.c
 +{
 +    send_client_fd( current->process, current->esync_apc_fd, current->id );
 +}
-diff -ruN --show-c-function wine-git.orig/server/esync.h wine-git/server/esync.h
---- wine-git.orig/server/esync.h	1969-12-31 16:00:00.000000000 -0800
-+++ wine-git/server/esync.h	2025-10-10 10:22:17.173418323 -0700
+diff -ruN --show-c-function server/esync.h server/esync.h
+--- server/esync.h	1969-12-31 16:00:00.000000000 -0800
++++ server/esync.h	2025-10-10 10:22:17.173418323 -0700
 @@ -0,0 +1,35 @@
 +/*
 + * eventfd-based synchronization objects
@@ -40093,9 +40093,9 @@ diff -ruN --show-c-function wine-git.orig/server/esync.h wine-git/server/esync.h
 +void esync_set_event( struct esync *esync );
 +void esync_reset_event( struct esync *esync );
 +void esync_abandon_mutexes( struct thread *thread );
-diff -ruN --show-c-function wine-git.orig/server/event.c wine-git/server/event.c
---- wine-git.orig/server/event.c	2025-10-10 10:17:47.802634392 -0700
-+++ wine-git/server/event.c	2025-10-10 10:22:17.157949712 -0700
+diff -ruN --show-c-function server/event.c server/event.c
+--- server/event.c	2025-10-10 10:17:47.802634392 -0700
++++ server/event.c	2025-10-10 10:22:17.157949712 -0700
 @@ -35,6 +35,7 @@
  #include "thread.h"
  #include "request.h"
@@ -40441,9 +40441,9 @@ diff -ruN --show-c-function wine-git.orig/server/event.c wine-git/server/event.c
  
      release_object( event );
  }
-diff -ruN --show-c-function wine-git.orig/server/fd.c wine-git/server/fd.c
---- wine-git.orig/server/fd.c	2025-10-10 10:17:47.802758721 -0700
-+++ wine-git/server/fd.c	2025-10-10 10:22:17.172811923 -0700
+diff -ruN --show-c-function server/fd.c server/fd.c
+--- server/fd.c	2025-10-10 10:17:47.802758721 -0700
++++ server/fd.c	2025-10-10 10:22:17.172811923 -0700
 @@ -94,6 +94,7 @@
  #include "handle.h"
  #include "process.h"
@@ -40775,9 +40775,9 @@ diff -ruN --show-c-function wine-git.orig/server/fd.c wine-git/server/fd.c
  int default_fd_get_poll_events( struct fd *fd )
  {
      int events = 0;
-diff -ruN --show-c-function wine-git.orig/server/file.c wine-git/server/file.c
---- wine-git.orig/server/file.c	2025-10-10 10:17:47.802758721 -0700
-+++ wine-git/server/file.c	2025-10-10 10:22:17.151279785 -0700
+diff -ruN --show-c-function server/file.c server/file.c
+--- server/file.c	2025-10-10 10:17:47.802758721 -0700
++++ server/file.c	2025-10-10 10:22:17.151279785 -0700
 @@ -91,13 +91,13 @@ static const struct object_ops file_ops
      sizeof(struct file),          /* size */
      &file_type,                   /* type */
@@ -40797,9 +40797,9 @@ diff -ruN --show-c-function wine-git.orig/server/file.c wine-git/server/file.c
      default_map_access,           /* map_access */
      file_get_sd,                  /* get_sd */
      file_set_sd,                  /* set_sd */
-diff -ruN --show-c-function wine-git.orig/server/file.h wine-git/server/file.h
---- wine-git.orig/server/file.h	2025-10-10 10:17:48.598775739 -0700
-+++ wine-git/server/file.h	2025-10-10 10:22:17.170829344 -0700
+diff -ruN --show-c-function server/file.h server/file.h
+--- server/file.h	2025-10-10 10:17:48.598775739 -0700
++++ server/file.h	2025-10-10 10:22:17.170829344 -0700
 @@ -108,7 +108,8 @@ extern void set_fd_signaled( struct fd *
  extern char *dup_fd_name( struct fd *root, const char *name ) __WINE_DEALLOC(free) __WINE_MALLOC;
  extern void get_nt_name( struct fd *fd, struct unicode_str *name );
@@ -40810,9 +40810,9 @@ diff -ruN --show-c-function wine-git.orig/server/file.h wine-git/server/file.h
  extern WCHAR *default_fd_get_full_name( struct object *obj, data_size_t max, data_size_t *ret_len );
  extern int default_fd_get_poll_events( struct fd *fd );
  extern void default_poll_event( struct fd *fd, int event );
-diff -ruN --show-c-function wine-git.orig/server/handle.c wine-git/server/handle.c
---- wine-git.orig/server/handle.c	2025-10-10 10:17:47.802758721 -0700
-+++ wine-git/server/handle.c	2025-10-10 10:22:17.151411706 -0700
+diff -ruN --show-c-function server/handle.c server/handle.c
+--- server/handle.c	2025-10-10 10:17:47.802758721 -0700
++++ server/handle.c	2025-10-10 10:22:17.151411706 -0700
 @@ -126,10 +126,10 @@ static const struct object_ops handle_ta
      no_add_queue,                    /* add_queue */
      NULL,                            /* remove_queue */
@@ -40825,9 +40825,9 @@ diff -ruN --show-c-function wine-git.orig/server/handle.c wine-git/server/handle
      default_map_access,              /* map_access */
      default_get_sd,                  /* get_sd */
      default_set_sd,                  /* set_sd */
-diff -ruN --show-c-function wine-git.orig/server/hook.c wine-git/server/hook.c
---- wine-git.orig/server/hook.c	2025-10-10 10:17:47.802758721 -0700
-+++ wine-git/server/hook.c	2025-10-10 10:22:17.151555779 -0700
+diff -ruN --show-c-function server/hook.c server/hook.c
+--- server/hook.c	2025-10-10 10:17:47.802758721 -0700
++++ server/hook.c	2025-10-10 10:22:17.151555779 -0700
 @@ -58,6 +58,10 @@ struct hook
      data_size_t         module_size;
  };
@@ -40851,9 +40851,9 @@ diff -ruN --show-c-function wine-git.orig/server/hook.c wine-git/server/hook.c
      default_map_access,           /* map_access */
      default_get_sd,               /* get_sd */
      default_set_sd,               /* set_sd */
-diff -ruN --show-c-function wine-git.orig/server/inproc_sync.c wine-git/server/inproc_sync.c
---- wine-git.orig/server/inproc_sync.c	2025-10-10 10:17:48.598775739 -0700
-+++ wine-git/server/inproc_sync.c	1969-12-31 16:00:00.000000000 -0800
+diff -ruN --show-c-function server/inproc_sync.c server/inproc_sync.c
+--- server/inproc_sync.c	2025-10-10 10:17:48.598775739 -0700
++++ server/inproc_sync.c	1969-12-31 16:00:00.000000000 -0800
 @@ -1,307 +0,0 @@
 -/*
 - * In-process synchronization primitives
@@ -41162,9 +41162,9 @@ diff -ruN --show-c-function wine-git.orig/server/inproc_sync.c wine-git/server/i
 -
 -    release_object( obj );
 -}
-diff -ruN --show-c-function wine-git.orig/server/mailslot.c wine-git/server/mailslot.c
---- wine-git.orig/server/mailslot.c	2025-10-10 10:17:47.802758721 -0700
-+++ wine-git/server/mailslot.c	2025-10-10 10:22:17.151679333 -0700
+diff -ruN --show-c-function server/mailslot.c server/mailslot.c
+--- server/mailslot.c	2025-10-10 10:17:47.802758721 -0700
++++ server/mailslot.c	2025-10-10 10:22:17.151679333 -0700
 @@ -79,13 +79,13 @@ static const struct object_ops mailslot_
      sizeof(struct mailslot),   /* size */
      &file_type,                /* type */
@@ -41227,9 +41227,9 @@ diff -ruN --show-c-function wine-git.orig/server/mailslot.c wine-git/server/mail
      default_map_access,                     /* map_access */
      default_get_sd,                         /* get_sd */
      default_set_sd,                         /* set_sd */
-diff -ruN --show-c-function wine-git.orig/server/main.c wine-git/server/main.c
---- wine-git.orig/server/main.c	2025-10-10 10:17:47.802758721 -0700
-+++ wine-git/server/main.c	2025-10-10 10:22:17.144599178 -0700
+diff -ruN --show-c-function server/main.c server/main.c
+--- server/main.c	2025-10-10 10:17:47.802758721 -0700
++++ server/main.c	2025-10-10 10:22:17.144599178 -0700
 @@ -40,6 +40,7 @@
  #include "thread.h"
  #include "request.h"
@@ -41248,9 +41248,9 @@ diff -ruN --show-c-function wine-git.orig/server/main.c wine-git/server/main.c
      if (debug_level) fprintf( stderr, "wineserver: starting (pid=%ld)\n", (long) getpid() );
      set_current_time();
      init_signals();
-diff -ruN --show-c-function wine-git.orig/server/main.c.orig wine-git/server/main.c.orig
---- wine-git.orig/server/main.c.orig	1969-12-31 16:00:00.000000000 -0800
-+++ wine-git/server/main.c.orig	2025-10-10 10:22:12.713275995 -0700
+diff -ruN --show-c-function server/main.c.orig server/main.c.orig
+--- server/main.c.orig	1969-12-31 16:00:00.000000000 -0800
++++ server/main.c.orig	2025-10-10 10:22:12.713275995 -0700
 @@ -0,0 +1,271 @@
 +/*
 + * Server main function
@@ -41523,9 +41523,9 @@ diff -ruN --show-c-function wine-git.orig/server/main.c.orig wine-git/server/mai
 +    main_loop();
 +    return 0;
 +}
-diff -ruN --show-c-function wine-git.orig/server/Makefile.in wine-git/server/Makefile.in
---- wine-git.orig/server/Makefile.in	2025-10-10 10:17:47.802394217 -0700
-+++ wine-git/server/Makefile.in	2025-10-10 10:22:17.144386324 -0700
+diff -ruN --show-c-function server/Makefile.in server/Makefile.in
+--- server/Makefile.in	2025-10-10 10:17:47.802394217 -0700
++++ server/Makefile.in	2025-10-10 10:22:17.144386324 -0700
 @@ -12,12 +12,12 @@ SOURCES = \
  	debugger.c \
  	device.c \
@@ -41540,9 +41540,9 @@ diff -ruN --show-c-function wine-git.orig/server/Makefile.in wine-git/server/Mak
  	mach.c \
  	mailslot.c \
  	main.c \
-diff -ruN --show-c-function wine-git.orig/server/Makefile.in.orig wine-git/server/Makefile.in.orig
---- wine-git.orig/server/Makefile.in.orig	1969-12-31 16:00:00.000000000 -0800
-+++ wine-git/server/Makefile.in.orig	2025-10-10 10:22:12.712194761 -0700
+diff -ruN --show-c-function server/Makefile.in.orig server/Makefile.in.orig
+--- server/Makefile.in.orig	1969-12-31 16:00:00.000000000 -0800
++++ server/Makefile.in.orig	2025-10-10 10:22:12.712194761 -0700
 @@ -0,0 +1,55 @@
 +PROGRAMS = wineserver
 +
@@ -41599,9 +41599,9 @@ diff -ruN --show-c-function wine-git.orig/server/Makefile.in.orig wine-git/serve
 +UNIX_LIBS   = $(LDEXECFLAGS) $(RT_LIBS) $(INOTIFY_LIBS) $(PROCSTAT_LIBS)
 +
 +unicode_EXTRADEFS = -DBINDIR="\"${bindir}\"" -DDATADIR="\"${datadir}\""
-diff -ruN --show-c-function wine-git.orig/server/mapping.c wine-git/server/mapping.c
---- wine-git.orig/server/mapping.c	2025-10-10 10:17:48.598775739 -0700
-+++ wine-git/server/mapping.c	2025-10-10 10:22:17.151848384 -0700
+diff -ruN --show-c-function server/mapping.c server/mapping.c
+--- server/mapping.c	2025-10-10 10:17:48.598775739 -0700
++++ server/mapping.c	2025-10-10 10:22:17.151848384 -0700
 @@ -67,10 +67,10 @@ static const struct object_ops ranges_op
      no_add_queue,              /* add_queue */
      NULL,                      /* remove_queue */
@@ -41638,9 +41638,9 @@ diff -ruN --show-c-function wine-git.orig/server/mapping.c wine-git/server/mappi
      default_map_access,          /* map_access */
      default_get_sd,              /* get_sd */
      default_set_sd,              /* set_sd */
-diff -ruN --show-c-function wine-git.orig/server/mutex.c wine-git/server/mutex.c
---- wine-git.orig/server/mutex.c	2025-10-10 10:17:47.802758721 -0700
-+++ wine-git/server/mutex.c	2025-10-10 10:22:17.152019488 -0700
+diff -ruN --show-c-function server/mutex.c server/mutex.c
+--- server/mutex.c	2025-10-10 10:17:47.802758721 -0700
++++ server/mutex.c	2025-10-10 10:22:17.152019488 -0700
 @@ -50,32 +50,33 @@ struct type_descr mutex_type =
      },
  };
@@ -41951,9 +41951,9 @@ diff -ruN --show-c-function wine-git.orig/server/mutex.c wine-git/server/mutex.c
  
          release_object( mutex );
      }
-diff -ruN --show-c-function wine-git.orig/server/named_pipe.c wine-git/server/named_pipe.c
---- wine-git.orig/server/named_pipe.c	2025-10-10 10:17:47.802758721 -0700
-+++ wine-git/server/named_pipe.c	2025-10-10 10:22:17.170967346 -0700
+diff -ruN --show-c-function server/named_pipe.c server/named_pipe.c
+--- server/named_pipe.c	2025-10-10 10:17:47.802758721 -0700
++++ server/named_pipe.c	2025-10-10 10:22:17.170967346 -0700
 @@ -119,10 +119,10 @@ static const struct object_ops named_pip
      no_add_queue,                 /* add_queue */
      NULL,                         /* remove_queue */
@@ -42054,9 +42054,9 @@ diff -ruN --show-c-function wine-git.orig/server/named_pipe.c wine-git/server/na
      default_map_access,                      /* map_access */
      default_get_sd,                          /* get_sd */
      default_set_sd,                          /* set_sd */
-diff -ruN --show-c-function wine-git.orig/server/object.c wine-git/server/object.c
---- wine-git.orig/server/object.c	2025-10-10 10:17:47.802758721 -0700
-+++ wine-git/server/object.c	2025-10-10 10:22:17.152343833 -0700
+diff -ruN --show-c-function server/object.c server/object.c
+--- server/object.c	2025-10-10 10:17:47.802758721 -0700
++++ server/object.c	2025-10-10 10:22:17.152343833 -0700
 @@ -109,10 +109,10 @@ static const struct object_ops apc_reser
      no_add_queue,               /* add_queue */
      NULL,                       /* remove_queue */
@@ -42102,9 +42102,9 @@ diff -ruN --show-c-function wine-git.orig/server/object.c wine-git/server/object
  unsigned int default_map_access( struct object *obj, unsigned int access )
  {
      return map_access( access, &obj->ops->type->mapping );
-diff -ruN --show-c-function wine-git.orig/server/object.h wine-git/server/object.h
---- wine-git.orig/server/object.h	2025-10-10 10:17:47.802758721 -0700
-+++ wine-git/server/object.h	2025-10-10 10:22:17.152489499 -0700
+diff -ruN --show-c-function server/object.h server/object.h
+--- server/object.h	2025-10-10 10:17:47.802758721 -0700
++++ server/object.h	2025-10-10 10:22:17.152489499 -0700
 @@ -78,14 +78,14 @@ struct object_ops
      void (*remove_queue)(struct object *,struct wait_queue_entry *);
      /* is object signaled? */
@@ -42171,9 +42171,9 @@ diff -ruN --show-c-function wine-git.orig/server/object.h wine-git/server/object
  /* serial functions */
  
  int get_serial_async_timeout(struct object *obj, int type, int count);
-diff -ruN --show-c-function wine-git.orig/server/process.c wine-git/server/process.c
---- wine-git.orig/server/process.c	2025-10-10 10:17:48.598775739 -0700
-+++ wine-git/server/process.c	2025-10-10 10:22:17.156227457 -0700
+diff -ruN --show-c-function server/process.c server/process.c
+--- server/process.c	2025-10-10 10:17:48.598775739 -0700
++++ server/process.c	2025-10-10 10:22:17.156227457 -0700
 @@ -64,6 +64,7 @@
  #include "request.h"
  #include "user.h"
@@ -42497,9 +42497,9 @@ diff -ruN --show-c-function wine-git.orig/server/process.c wine-git/server/proce
      info_ptr = get_req_data_after_objattr( objattr, &info->data_size );
  
      if ((req->handles_size & 3) || req->handles_size > info->data_size)
-diff -ruN --show-c-function wine-git.orig/server/process.h wine-git/server/process.h
---- wine-git.orig/server/process.h	2025-10-10 10:17:47.802758721 -0700
-+++ wine-git/server/process.h	2025-10-10 10:22:17.156366426 -0700
+diff -ruN --show-c-function server/process.h server/process.h
+--- server/process.h	2025-10-10 10:17:47.802758721 -0700
++++ server/process.h	2025-10-10 10:22:17.156366426 -0700
 @@ -36,7 +36,6 @@ enum startup_state { STARTUP_IN_PROGRESS
  struct process
  {
@@ -42516,9 +42516,9 @@ diff -ruN --show-c-function wine-git.orig/server/process.h wine-git/server/proce
  };
  
  /* process functions */
-diff -ruN --show-c-function wine-git.orig/server/protocol.def wine-git/server/protocol.def
---- wine-git.orig/server/protocol.def	2025-10-10 10:17:48.598775739 -0700
-+++ wine-git/server/protocol.def	2025-10-10 10:22:17.166222829 -0700
+diff -ruN --show-c-function server/protocol.def server/protocol.def
+--- server/protocol.def	2025-10-10 10:17:48.598775739 -0700
++++ server/protocol.def	2025-10-10 10:22:17.166222829 -0700
 @@ -990,8 +990,6 @@ struct obj_locator
  };
  
@@ -42661,9 +42661,9 @@ diff -ruN --show-c-function wine-git.orig/server/protocol.def wine-git/server/pr
 +/* Retrieve the fd to wait on for user APCs. */
 +@REQ(get_esync_apc_fd)
 +@END
-diff -ruN --show-c-function wine-git.orig/server/queue.c wine-git/server/queue.c
---- wine-git.orig/server/queue.c	2025-10-10 10:17:48.599775761 -0700
-+++ wine-git/server/queue.c	2025-10-10 10:22:17.159847221 -0700
+diff -ruN --show-c-function server/queue.c server/queue.c
+--- server/queue.c	2025-10-10 10:17:48.599775761 -0700
++++ server/queue.c	2025-10-10 10:22:17.159847221 -0700
 @@ -45,10 +45,7 @@
  #include "process.h"
  #include "request.h"
@@ -43221,9 +43221,9 @@ diff -ruN --show-c-function wine-git.orig/server/queue.c wine-git/server/queue.c
      release_object( desktop );
  }
 +
-diff -ruN --show-c-function wine-git.orig/server/registry.c wine-git/server/registry.c
---- wine-git.orig/server/registry.c	2025-10-10 10:17:47.803758742 -0700
-+++ wine-git/server/registry.c	2025-10-10 10:22:17.153264909 -0700
+diff -ruN --show-c-function server/registry.c server/registry.c
+--- server/registry.c	2025-10-10 10:17:47.803758742 -0700
++++ server/registry.c	2025-10-10 10:22:17.153264909 -0700
 @@ -180,10 +180,10 @@ static const struct object_ops key_ops =
      no_add_queue,            /* add_queue */
      NULL,                    /* remove_queue */
@@ -43236,9 +43236,9 @@ diff -ruN --show-c-function wine-git.orig/server/registry.c wine-git/server/regi
      key_map_access,          /* map_access */
      key_get_sd,              /* get_sd */
      default_set_sd,          /* set_sd */
-diff -ruN --show-c-function wine-git.orig/server/request.c wine-git/server/request.c
---- wine-git.orig/server/request.c	2025-10-10 10:17:48.599775761 -0700
-+++ wine-git/server/request.c	2025-10-10 10:22:17.153515755 -0700
+diff -ruN --show-c-function server/request.c server/request.c
+--- server/request.c	2025-10-10 10:17:48.599775761 -0700
++++ server/request.c	2025-10-10 10:22:17.153515755 -0700
 @@ -89,10 +89,10 @@ static const struct object_ops master_so
      no_add_queue,                  /* add_queue */
      NULL,                          /* remove_queue */
@@ -43251,9 +43251,9 @@ diff -ruN --show-c-function wine-git.orig/server/request.c wine-git/server/reque
      default_map_access,            /* map_access */
      default_get_sd,                /* get_sd */
      default_set_sd,                /* set_sd */
-diff -ruN --show-c-function wine-git.orig/server/request_handlers.h wine-git/server/request_handlers.h
---- wine-git.orig/server/request_handlers.h	2025-10-10 10:17:48.599775761 -0700
-+++ wine-git/server/request_handlers.h	2025-10-10 10:22:22.409492703 -0700
+diff -ruN --show-c-function server/request_handlers.h server/request_handlers.h
+--- server/request_handlers.h	2025-10-10 10:17:48.599775761 -0700
++++ server/request_handlers.h	2025-10-10 10:22:22.409492703 -0700
 @@ -302,14 +302,17 @@ DECL_HANDLER(suspend_process);
  DECL_HANDLER(resume_process);
  DECL_HANDLER(get_next_process);
@@ -43366,9 +43366,9 @@ diff -ruN --show-c-function wine-git.orig/server/request_handlers.h wine-git/ser
  C_ASSERT( offsetof(struct d3dkmt_object_open_name_reply, handle) == 8 );
  C_ASSERT( sizeof(struct d3dkmt_object_open_name_reply) == 16 );
 +C_ASSERT( sizeof(struct get_esync_apc_fd_request) == 16 );
-diff -ruN --show-c-function wine-git.orig/server/request_trace.h wine-git/server/request_trace.h
---- wine-git.orig/server/request_trace.h	2025-10-10 10:17:56.799195505 -0700
-+++ wine-git/server/request_trace.h	2025-10-10 10:22:22.406573919 -0700
+diff -ruN --show-c-function server/request_trace.h server/request_trace.h
+--- server/request_trace.h	2025-10-10 10:17:56.799195505 -0700
++++ server/request_trace.h	2025-10-10 10:22:22.406573919 -0700
 @@ -147,7 +147,6 @@ static void dump_init_first_thread_reply
      fprintf( stderr, ", tid=%04x", req->tid );
      dump_timeout( ", server_start=", &req->server_start );
@@ -43542,9 +43542,9 @@ diff -ruN --show-c-function wine-git.orig/server/request_trace.h wine-git/server
      { "NO_SUCH_DEVICE",              STATUS_NO_SUCH_DEVICE },
      { "NO_SUCH_FILE",                STATUS_NO_SUCH_FILE },
      { "NO_TOKEN",                    STATUS_NO_TOKEN },
-diff -ruN --show-c-function wine-git.orig/server/semaphore.c wine-git/server/semaphore.c
---- wine-git.orig/server/semaphore.c	2025-10-10 10:17:47.804758763 -0700
-+++ wine-git/server/semaphore.c	2025-10-10 10:22:17.153642976 -0700
+diff -ruN --show-c-function server/semaphore.c server/semaphore.c
+--- server/semaphore.c	2025-10-10 10:17:47.804758763 -0700
++++ server/semaphore.c	2025-10-10 10:22:17.153642976 -0700
 @@ -50,121 +50,30 @@ struct type_descr semaphore_type =
      },
  };
@@ -43806,9 +43806,9 @@ diff -ruN --show-c-function wine-git.orig/server/semaphore.c wine-git/server/sem
          release_object( sem );
      }
  }
-diff -ruN --show-c-function wine-git.orig/server/serial.c wine-git/server/serial.c
---- wine-git.orig/server/serial.c	2025-10-10 10:17:47.804758763 -0700
-+++ wine-git/server/serial.c	2025-10-10 10:22:17.153737255 -0700
+diff -ruN --show-c-function server/serial.c server/serial.c
+--- server/serial.c	2025-10-10 10:17:47.804758763 -0700
++++ server/serial.c	2025-10-10 10:22:17.153737255 -0700
 @@ -88,13 +88,13 @@ static const struct object_ops serial_op
      sizeof(struct serial),        /* size */
      &file_type,                   /* type */
@@ -43828,9 +43828,9 @@ diff -ruN --show-c-function wine-git.orig/server/serial.c wine-git/server/serial
      default_map_access,           /* map_access */
      default_get_sd,               /* get_sd */
      default_set_sd,               /* set_sd */
-diff -ruN --show-c-function wine-git.orig/server/signal.c wine-git/server/signal.c
---- wine-git.orig/server/signal.c	2025-10-10 10:17:47.804758763 -0700
-+++ wine-git/server/signal.c	2025-10-10 10:22:17.153836884 -0700
+diff -ruN --show-c-function server/signal.c server/signal.c
+--- server/signal.c	2025-10-10 10:17:47.804758763 -0700
++++ server/signal.c	2025-10-10 10:22:17.153836884 -0700
 @@ -62,10 +62,10 @@ static const struct object_ops handler_o
      no_add_queue,             /* add_queue */
      NULL,                     /* remove_queue */
@@ -43843,9 +43843,9 @@ diff -ruN --show-c-function wine-git.orig/server/signal.c wine-git/server/signal
      default_map_access,       /* map_access */
      default_get_sd,           /* get_sd */
      default_set_sd,           /* set_sd */
-diff -ruN --show-c-function wine-git.orig/server/sock.c wine-git/server/sock.c
---- wine-git.orig/server/sock.c	2025-10-10 10:17:47.804758763 -0700
-+++ wine-git/server/sock.c	2025-10-10 10:22:17.154019941 -0700
+diff -ruN --show-c-function server/sock.c server/sock.c
+--- server/sock.c	2025-10-10 10:17:47.804758763 -0700
++++ server/sock.c	2025-10-10 10:22:17.154019941 -0700
 @@ -483,13 +483,13 @@ static const struct object_ops sock_ops
      sizeof(struct sock),          /* size */
      &file_type,                   /* type */
@@ -43889,9 +43889,9 @@ diff -ruN --show-c-function wine-git.orig/server/sock.c wine-git/server/sock.c
      default_map_access,         /* map_access */
      default_get_sd,             /* get_sd */
      default_set_sd,             /* set_sd */
-diff -ruN --show-c-function wine-git.orig/server/sock.c.orig wine-git/server/sock.c.orig
---- wine-git.orig/server/sock.c.orig	1969-12-31 16:00:00.000000000 -0800
-+++ wine-git/server/sock.c.orig	2025-10-10 10:22:12.715276035 -0700
+diff -ruN --show-c-function server/sock.c.orig server/sock.c.orig
+--- server/sock.c.orig	1969-12-31 16:00:00.000000000 -0800
++++ server/sock.c.orig	2025-10-10 10:22:12.715276035 -0700
 @@ -0,0 +1,4449 @@
 +/*
 + * Server-side socket management
@@ -48342,9 +48342,9 @@ diff -ruN --show-c-function wine-git.orig/server/sock.c.orig wine-git/server/soc
 +        enum_handles_of_type( &sock_ops, enum_udp_endpoints, &info );
 +    }
 +}
-diff -ruN --show-c-function wine-git.orig/server/symlink.c wine-git/server/symlink.c
---- wine-git.orig/server/symlink.c	2025-10-10 10:17:47.804758763 -0700
-+++ wine-git/server/symlink.c	2025-10-10 10:22:17.154320711 -0700
+diff -ruN --show-c-function server/symlink.c server/symlink.c
+--- server/symlink.c	2025-10-10 10:17:47.804758763 -0700
++++ server/symlink.c	2025-10-10 10:22:17.154320711 -0700
 @@ -71,10 +71,10 @@ static const struct object_ops symlink_o
      no_add_queue,                 /* add_queue */
      NULL,                         /* remove_queue */
@@ -48357,9 +48357,9 @@ diff -ruN --show-c-function wine-git.orig/server/symlink.c wine-git/server/symli
      default_map_access,           /* map_access */
      default_get_sd,               /* get_sd */
      default_set_sd,               /* set_sd */
-diff -ruN --show-c-function wine-git.orig/server/thread.c wine-git/server/thread.c
---- wine-git.orig/server/thread.c	2025-10-10 10:17:48.600775782 -0700
-+++ wine-git/server/thread.c	2025-10-10 10:22:17.173594698 -0700
+diff -ruN --show-c-function server/thread.c server/thread.c
+--- server/thread.c	2025-10-10 10:17:48.600775782 -0700
++++ server/thread.c	2025-10-10 10:22:17.173594698 -0700
 @@ -60,6 +60,7 @@
  #include "request.h"
  #include "user.h"
@@ -48924,9 +48924,9 @@ diff -ruN --show-c-function wine-git.orig/server/thread.c wine-git/server/thread
 -        send_client_fd( current->process, fd, reply->handle );
 -    }
 -}
-diff -ruN --show-c-function wine-git.orig/server/thread.h wine-git/server/thread.h
---- wine-git.orig/server/thread.h	2025-10-10 10:17:48.600775782 -0700
-+++ wine-git/server/thread.h	2025-10-10 10:22:17.166820302 -0700
+diff -ruN --show-c-function server/thread.h server/thread.h
+--- server/thread.h	2025-10-10 10:17:48.600775782 -0700
++++ server/thread.h	2025-10-10 10:22:17.166820302 -0700
 @@ -50,14 +50,14 @@ struct inflight_fd
  struct thread
  {
@@ -48944,9 +48944,9 @@ diff -ruN --show-c-function wine-git.orig/server/thread.h wine-git/server/thread
      unsigned int           system_regs;   /* which system regs have been set */
      struct msg_queue      *queue;         /* message queue */
      struct thread_wait    *wait;          /* current wait condition if sleeping */
-diff -ruN --show-c-function wine-git.orig/server/timer.c wine-git/server/timer.c
---- wine-git.orig/server/timer.c	2025-10-10 10:17:47.804758763 -0700
-+++ wine-git/server/timer.c	2025-10-10 10:22:17.164848754 -0700
+diff -ruN --show-c-function server/timer.c server/timer.c
+--- server/timer.c	2025-10-10 10:17:47.804758763 -0700
++++ server/timer.c	2025-10-10 10:22:17.164848754 -0700
 @@ -35,6 +35,7 @@
  #include "file.h"
  #include "handle.h"
@@ -49079,9 +49079,9 @@ diff -ruN --show-c-function wine-git.orig/server/timer.c wine-git/server/timer.c
  }
  
  /* create a timer */
-diff -ruN --show-c-function wine-git.orig/server/token.c wine-git/server/token.c
---- wine-git.orig/server/token.c	2025-10-10 10:17:47.804758763 -0700
-+++ wine-git/server/token.c	2025-10-10 10:22:17.154837401 -0700
+diff -ruN --show-c-function server/token.c server/token.c
+--- server/token.c	2025-10-10 10:17:47.804758763 -0700
++++ server/token.c	2025-10-10 10:22:17.154837401 -0700
 @@ -145,10 +145,10 @@ static const struct object_ops token_ops
      no_add_queue,              /* add_queue */
      NULL,                      /* remove_queue */
@@ -49094,9 +49094,9 @@ diff -ruN --show-c-function wine-git.orig/server/token.c wine-git/server/token.c
      default_map_access,        /* map_access */
      default_get_sd,            /* get_sd */
      token_set_sd,              /* set_sd */
-diff -ruN --show-c-function wine-git.orig/server/window.c wine-git/server/window.c
---- wine-git.orig/server/window.c	2025-10-10 10:17:48.600775782 -0700
-+++ wine-git/server/window.c	2025-10-10 10:22:17.155062488 -0700
+diff -ruN --show-c-function server/window.c server/window.c
+--- server/window.c	2025-10-10 10:17:48.600775782 -0700
++++ server/window.c	2025-10-10 10:22:17.155062488 -0700
 @@ -108,10 +108,10 @@ static const struct object_ops window_op
      no_add_queue,             /* add_queue */
      NULL,                     /* remove_queue */
@@ -49109,9 +49109,9 @@ diff -ruN --show-c-function wine-git.orig/server/window.c wine-git/server/window
      default_map_access,       /* map_access */
      default_get_sd,           /* get_sd */
      default_set_sd,           /* set_sd */
-diff -ruN --show-c-function wine-git.orig/server/winstation.c wine-git/server/winstation.c
---- wine-git.orig/server/winstation.c	2025-10-10 10:17:48.600775782 -0700
-+++ wine-git/server/winstation.c	2025-10-10 10:22:17.155372576 -0700
+diff -ruN --show-c-function server/winstation.c server/winstation.c
+--- server/winstation.c	2025-10-10 10:17:48.600775782 -0700
++++ server/winstation.c	2025-10-10 10:22:17.155372576 -0700
 @@ -76,10 +76,10 @@ static const struct object_ops winstatio
      no_add_queue,                 /* add_queue */
      NULL,                         /* remove_queue */
