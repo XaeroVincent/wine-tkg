@@ -3904,51 +3904,6 @@ diff -ruN --show-c-function include/config.h.in include/config.h.in
  /* Define to 1 if you have the <sys/event.h> header file. */
  #undef HAVE_SYS_EVENT_H
  
-diff -ruN --show-c-function include/config.h.in~ include/config.h.in~
---- include/config.h.in~	2025-10-10 10:17:48.596775696 -0700
-+++ include/config.h.in~	2025-10-10 17:46:05.261974360 -0700
-@@ -198,9 +198,6 @@
- /* Define to 1 if you have the <linux/major.h> header file. */
- #undef HAVE_LINUX_MAJOR_H
- 
--/* Define to 1 if you have the <linux/ntsync.h> header file. */
--#undef HAVE_LINUX_NTSYNC_H
--
- /* Define to 1 if you have the <linux/param.h> header file. */
- #undef HAVE_LINUX_PARAM_H
- 
-@@ -336,6 +333,9 @@
- /* Define to 1 if you have the 'posix_fallocate' function. */
- #undef HAVE_POSIX_FALLOCATE
- 
-+/* Define to 1 if you have the `ppoll' function. */
-+#undef HAVE_PPOLL
-+
- /* Define to 1 if you have the 'prctl' function. */
- #undef HAVE_PRCTL
- 
-@@ -396,7 +396,10 @@
- /* Define to 1 if 'interface_id' is a member of 'sg_io_hdr_t'. */
- #undef HAVE_SG_IO_HDR_T_INTERFACE_ID
- 
--/* Define to 1 if 'si_fd' is a member of 'siginfo_t'. */
-+/* Define to 1 if you have the `shm_open' function. */
-+#undef HAVE_SHM_OPEN
-+
-+/* Define to 1 if `si_fd' is a member of `siginfo_t'. */
- #undef HAVE_SIGINFO_T_SI_FD
- 
- /* Define to 1 if you have the 'sigprocmask' function. */
-@@ -525,6 +528,9 @@
- /* Define to 1 if you have the <sys/epoll.h> header file. */
- #undef HAVE_SYS_EPOLL_H
- 
-+/* Define to 1 if you have the <sys/eventfd.h> header file. */
-+#undef HAVE_SYS_EVENTFD_H
-+
- /* Define to 1 if you have the <sys/event.h> header file. */
- #undef HAVE_SYS_EVENT_H
- 
 diff -ruN --show-c-function include/wine/server_protocol.h include/wine/server_protocol.h
 --- include/wine/server_protocol.h	2025-10-10 10:17:48.596775696 -0700
 +++ include/wine/server_protocol.h	2025-10-10 17:46:10.563476284 -0700
@@ -9443,14 +9398,6 @@ diff -ruN --show-c-function server/request_trace.h server/request_trace.h
  };
  
  static const struct
-@@ -4478,7 +4518,6 @@ static const struct
-     { "NO_IMPERSONATION_TOKEN",      STATUS_NO_IMPERSONATION_TOKEN },
-     { "NO_MEMORY",                   STATUS_NO_MEMORY },
-     { "NO_MORE_ENTRIES",             STATUS_NO_MORE_ENTRIES },
--    { "NO_MORE_FILES",               STATUS_NO_MORE_FILES },
-     { "NO_SUCH_DEVICE",              STATUS_NO_SUCH_DEVICE },
-     { "NO_SUCH_FILE",                STATUS_NO_SUCH_FILE },
-     { "NO_TOKEN",                    STATUS_NO_TOKEN },
 diff -ruN --show-c-function server/semaphore.c server/semaphore.c
 --- server/semaphore.c	2025-10-10 10:17:47.804758763 -0700
 +++ server/semaphore.c	2025-10-10 17:46:05.271396279 -0700
