@@ -1,0 +1,151 @@
+diff -ruN --show-c-function vanilla-1017/dlls/kernel32/heap.c LAA-1017/dlls/kernel32/heap.c
+--- vanilla-1017/dlls/kernel32/heap.c	2025-10-21 17:44:35.775818642 -0700
++++ LAA-1017/dlls/kernel32/heap.c	2025-10-21 21:09:15.623921255 -0700
+@@ -42,6 +42,8 @@
+ WINE_DEFAULT_DEBUG_CHANNEL(globalmem);
+ 
+ 
++extern BOOL WINAPI __wine_needs_override_large_address_aware(void);
++
+ /***********************************************************************
+  *           HeapCreate   (KERNEL32.@)
+  *
+@@ -424,6 +426,7 @@ VOID WINAPI GlobalMemoryStatus( LPMEMORY
+     OSVERSIONINFOW osver;
+ #ifndef _WIN64
+     IMAGE_NT_HEADERS *nt = RtlImageNtHeader( GetModuleHandleW(0) );
++    static int force_large_address_aware = -1;
+ #endif
+ 
+     /* Because GlobalMemoryStatus is identical to GlobalMemoryStatusEX save
+@@ -450,6 +453,8 @@ VOID WINAPI GlobalMemoryStatus( LPMEMORY
+     lpBuffer->dwAvailVirtual = memstatus.ullAvailVirtual;
+ 
+ #ifndef _WIN64
++    if (force_large_address_aware == -1)
++        force_large_address_aware = __wine_needs_override_large_address_aware();
+     if ( osver.dwMajorVersion >= 5 || osver.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS )
+     {
+         lpBuffer->dwTotalPhys = min( memstatus.ullTotalPhys, MAXDWORD );
+@@ -463,7 +468,8 @@ VOID WINAPI GlobalMemoryStatus( LPMEMORY
+ 
+     /* values are limited to 2Gb unless the app has the IMAGE_FILE_LARGE_ADDRESS_AWARE flag */
+     /* page file sizes are not limited (Adobe Illustrator 8 depends on this) */
+-    if (!(nt->FileHeader.Characteristics & IMAGE_FILE_LARGE_ADDRESS_AWARE))
++    if (!(nt->FileHeader.Characteristics & IMAGE_FILE_LARGE_ADDRESS_AWARE) &&
++        !force_large_address_aware)
+     {
+         if (lpBuffer->dwTotalPhys > MAXLONG) lpBuffer->dwTotalPhys = MAXLONG;
+         if (lpBuffer->dwAvailPhys > MAXLONG) lpBuffer->dwAvailPhys = MAXLONG;
+diff -ruN --show-c-function vanilla-1017/dlls/ntdll/ntdll.spec LAA-1017/dlls/ntdll/ntdll.spec
+--- vanilla-1017/dlls/ntdll/ntdll.spec	2025-10-21 17:44:35.915771334 -0700
++++ LAA-1017/dlls/ntdll/ntdll.spec	2025-10-21 21:09:15.624065028 -0700
+@@ -1756,6 +1756,9 @@
+ @ cdecl -norelay __wine_dbg_output(str)
+ @ cdecl -norelay __wine_dbg_strdup(str)
+ 
++# Virtual memory
++@ stdcall -syscall __wine_needs_override_large_address_aware()
++
+ # Version
+ @ cdecl wine_get_version()
+ @ cdecl wine_get_build_id()
+diff -ruN --show-c-function vanilla-1017/dlls/ntdll/ntsyscalls.h LAA-1017/dlls/ntdll/ntsyscalls.h
+--- vanilla-1017/dlls/ntdll/ntsyscalls.h	2025-10-21 17:44:35.915771334 -0700
++++ LAA-1017/dlls/ntdll/ntsyscalls.h	2025-10-21 21:09:19.697162375 -0700
+@@ -263,7 +263,8 @@
+     SYSCALL_ENTRY( 0x0103, NtWow64IsProcessorFeaturePresent, 4 ) \
+     SYSCALL_ENTRY( 0x0104, NtWow64QueryInformationProcess64, 20 ) \
+     SYSCALL_ENTRY( 0x0105, NtWow64ReadVirtualMemory64, 28 ) \
+-    SYSCALL_ENTRY( 0x0106, NtWow64WriteVirtualMemory64, 28 )
++    SYSCALL_ENTRY( 0x0106, NtWow64WriteVirtualMemory64, 28 ) \
++    SYSCALL_ENTRY( 0x0107, __wine_needs_override_large_address_aware, 0 )
+ #ifdef _WIN64
+ #define ALL_SYSCALLS \
+     SYSCALL_ENTRY( 0x0000, NtAccessCheck, 64 ) \
+@@ -522,7 +523,8 @@
+     SYSCALL_ENTRY( 0x00fd, NtUnmapViewOfSectionEx, 24 ) \
+     SYSCALL_ENTRY( 0x00fe, NtWaitForAlertByThreadId, 16 ) \
+     SYSCALL_ENTRY( 0x00ff, NtWaitForDebugEvent, 32 ) \
+-    SYSCALL_ENTRY( 0x0100, NtWaitForKeyedEvent, 32 )
++    SYSCALL_ENTRY( 0x0100, NtWaitForKeyedEvent, 32 ) \
++    SYSCALL_ENTRY( 0x0101, __wine_needs_override_large_address_aware, 0 )
+ #else
+ #define ALL_SYSCALLS ALL_SYSCALLS32
+ #endif
+diff -ruN --show-c-function vanilla-1017/dlls/ntdll/signal_arm64ec.c LAA-1017/dlls/ntdll/signal_arm64ec.c
+--- vanilla-1017/dlls/ntdll/signal_arm64ec.c	2025-10-21 17:44:36.786790942 -0700
++++ LAA-1017/dlls/ntdll/signal_arm64ec.c	2025-10-21 21:09:15.624266992 -0700
+@@ -340,6 +340,7 @@ ALL_SYSCALLS
+ 
+ #define SYSCALL_API __attribute__((hybrid_patchable))
+ 
++DEFINE_SYSCALL_(BOOL, __wine_needs_override_large_address_aware, (void))
+ DEFINE_SYSCALL(NtAcceptConnectPort, (HANDLE *handle, ULONG id, LPC_MESSAGE *msg, BOOLEAN accept, LPC_SECTION_WRITE *write, LPC_SECTION_READ *read))
+ DEFINE_SYSCALL(NtAccessCheck, (PSECURITY_DESCRIPTOR descr, HANDLE token, ACCESS_MASK access, GENERIC_MAPPING *mapping, PRIVILEGE_SET *privs, ULONG *retlen, ULONG *access_granted, NTSTATUS *access_status))
+ DEFINE_SYSCALL(NtAccessCheckAndAuditAlarm, (UNICODE_STRING *subsystem, HANDLE handle, UNICODE_STRING *typename, UNICODE_STRING *objectname, PSECURITY_DESCRIPTOR descr, ACCESS_MASK access, GENERIC_MAPPING *mapping, BOOLEAN creation, ACCESS_MASK *access_granted, NTSTATUS *access_status, BOOLEAN *onclose))
+diff -ruN --show-c-function vanilla-1017/dlls/ntdll/unix/unix_private.h LAA-1017/dlls/ntdll/unix/unix_private.h
+--- vanilla-1017/dlls/ntdll/unix/unix_private.h	2025-10-21 17:44:35.924771537 -0700
++++ LAA-1017/dlls/ntdll/unix/unix_private.h	2025-10-21 21:09:15.624437265 -0700
+@@ -691,4 +691,6 @@ static inline int is_gdt_sel( WORD sel )
+ 
+ #endif  /* defined(__i386__) || defined(__x86_64__) */
+ 
++BOOL WINAPI __wine_needs_override_large_address_aware(void);
++
+ #endif /* __NTDLL_UNIX_PRIVATE_H */
+diff -ruN --show-c-function vanilla-1017/dlls/ntdll/unix/virtual.c LAA-1017/dlls/ntdll/unix/virtual.c
+--- vanilla-1017/dlls/ntdll/unix/virtual.c	2025-10-21 17:44:35.924771537 -0700
++++ LAA-1017/dlls/ntdll/unix/virtual.c	2025-10-21 21:09:15.624753827 -0700
+@@ -5021,6 +5021,24 @@ static void virtual_release_address_spac
+ 
+ #endif  /* _WIN64 */
+ 
++BOOL WINAPI __wine_needs_override_large_address_aware(void)
++{
++    static int needs_override = -1;
++
++    if (needs_override == -1)
++    {
++        const char *str = getenv( "WINE_LARGE_ADDRESS_AWARE" );
++
++        needs_override = !str || atoi(str) == 1;
++    }
++    return needs_override;
++}
++
++static BOOL is_large_address_aware(void)
++{
++    return (main_image_info.ImageCharacteristics & IMAGE_FILE_LARGE_ADDRESS_AWARE)
++           || __wine_needs_override_large_address_aware();
++}
+ 
+ /***********************************************************************
+  *           virtual_set_large_address_space
+@@ -5040,11 +5058,11 @@ void virtual_set_large_address_space(voi
+                 free_reserved_memory( 0, (char *)0x7ffe0000 );
+ #endif
+         }
+-        else user_space_wow_limit = ((main_image_info.ImageCharacteristics & IMAGE_FILE_LARGE_ADDRESS_AWARE) ? limit_4g : limit_2g) - 1;
++        else user_space_wow_limit = (is_large_address_aware() ? limit_4g : limit_2g) - 1;
+     }
+     else
+     {
+-        if (!(main_image_info.ImageCharacteristics & IMAGE_FILE_LARGE_ADDRESS_AWARE)) return;
++        if (!is_large_address_aware()) return;
+         free_reserved_memory( (char *)0x80000000, address_space_limit );
+     }
+     user_space_limit = working_set_limit = address_space_limit;
+diff -ruN --show-c-function vanilla-1017/dlls/wow64/system.c LAA-1017/dlls/wow64/system.c
+--- vanilla-1017/dlls/wow64/system.c	2025-10-21 17:44:36.108079220 -0700
++++ LAA-1017/dlls/wow64/system.c	2025-10-21 21:09:15.625114572 -0700
+@@ -857,3 +857,9 @@ NTSTATUS WINAPI wow64_NtWow64GetNativeSy
+         return STATUS_INVALID_INFO_CLASS;
+     }
+ }
++
++BOOL WINAPI __wine_needs_override_large_address_aware(void);
++NTSTATUS WINAPI wow64___wine_needs_override_large_address_aware( UINT * args )
++{
++    return __wine_needs_override_large_address_aware();
++}
