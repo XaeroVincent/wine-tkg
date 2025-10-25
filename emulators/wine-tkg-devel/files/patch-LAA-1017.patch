@@ -1,6 +1,6 @@
-diff -ruN --show-c-function vanilla-1017/dlls/kernel32/heap.c LAA-1017/dlls/kernel32/heap.c
---- vanilla-1017/dlls/kernel32/heap.c	2025-10-21 17:44:35.775818642 -0700
-+++ LAA-1017/dlls/kernel32/heap.c	2025-10-21 21:09:15.623921255 -0700
+diff -ruN --show-c-function dlls/kernel32/heap.c dlls/kernel32/heap.c
+--- dlls/kernel32/heap.c	2025-10-21 17:44:35.775818642 -0700
++++ dlls/kernel32/heap.c	2025-10-21 21:09:15.623921255 -0700
 @@ -42,6 +42,8 @@
  WINE_DEFAULT_DEBUG_CHANNEL(globalmem);
  
@@ -37,9 +37,9 @@ diff -ruN --show-c-function vanilla-1017/dlls/kernel32/heap.c LAA-1017/dlls/kern
      {
          if (lpBuffer->dwTotalPhys > MAXLONG) lpBuffer->dwTotalPhys = MAXLONG;
          if (lpBuffer->dwAvailPhys > MAXLONG) lpBuffer->dwAvailPhys = MAXLONG;
-diff -ruN --show-c-function vanilla-1017/dlls/ntdll/ntdll.spec LAA-1017/dlls/ntdll/ntdll.spec
---- vanilla-1017/dlls/ntdll/ntdll.spec	2025-10-21 17:44:35.915771334 -0700
-+++ LAA-1017/dlls/ntdll/ntdll.spec	2025-10-21 21:09:15.624065028 -0700
+diff -ruN --show-c-function dlls/ntdll/ntdll.spec dlls/ntdll/ntdll.spec
+--- dlls/ntdll/ntdll.spec	2025-10-21 17:44:35.915771334 -0700
++++ dlls/ntdll/ntdll.spec	2025-10-21 21:09:15.624065028 -0700
 @@ -1756,6 +1756,9 @@
  @ cdecl -norelay __wine_dbg_output(str)
  @ cdecl -norelay __wine_dbg_strdup(str)
@@ -50,9 +50,9 @@ diff -ruN --show-c-function vanilla-1017/dlls/ntdll/ntdll.spec LAA-1017/dlls/ntd
  # Version
  @ cdecl wine_get_version()
  @ cdecl wine_get_build_id()
-diff -ruN --show-c-function vanilla-1017/dlls/ntdll/ntsyscalls.h LAA-1017/dlls/ntdll/ntsyscalls.h
---- vanilla-1017/dlls/ntdll/ntsyscalls.h	2025-10-21 17:44:35.915771334 -0700
-+++ LAA-1017/dlls/ntdll/ntsyscalls.h	2025-10-21 21:09:19.697162375 -0700
+diff -ruN --show-c-function dlls/ntdll/ntsyscalls.h dlls/ntdll/ntsyscalls.h
+--- dlls/ntdll/ntsyscalls.h	2025-10-21 17:44:35.915771334 -0700
++++ dlls/ntdll/ntsyscalls.h	2025-10-21 21:09:19.697162375 -0700
 @@ -263,7 +263,8 @@
      SYSCALL_ENTRY( 0x0103, NtWow64IsProcessorFeaturePresent, 4 ) \
      SYSCALL_ENTRY( 0x0104, NtWow64QueryInformationProcess64, 20 ) \
@@ -73,9 +73,9 @@ diff -ruN --show-c-function vanilla-1017/dlls/ntdll/ntsyscalls.h LAA-1017/dlls/n
  #else
  #define ALL_SYSCALLS ALL_SYSCALLS32
  #endif
-diff -ruN --show-c-function vanilla-1017/dlls/ntdll/signal_arm64ec.c LAA-1017/dlls/ntdll/signal_arm64ec.c
---- vanilla-1017/dlls/ntdll/signal_arm64ec.c	2025-10-21 17:44:36.786790942 -0700
-+++ LAA-1017/dlls/ntdll/signal_arm64ec.c	2025-10-21 21:09:15.624266992 -0700
+diff -ruN --show-c-function dlls/ntdll/signal_arm64ec.c dlls/ntdll/signal_arm64ec.c
+--- dlls/ntdll/signal_arm64ec.c	2025-10-21 17:44:36.786790942 -0700
++++ dlls/ntdll/signal_arm64ec.c	2025-10-21 21:09:15.624266992 -0700
 @@ -340,6 +340,7 @@ ALL_SYSCALLS
  
  #define SYSCALL_API __attribute__((hybrid_patchable))
@@ -84,9 +84,9 @@ diff -ruN --show-c-function vanilla-1017/dlls/ntdll/signal_arm64ec.c LAA-1017/dl
  DEFINE_SYSCALL(NtAcceptConnectPort, (HANDLE *handle, ULONG id, LPC_MESSAGE *msg, BOOLEAN accept, LPC_SECTION_WRITE *write, LPC_SECTION_READ *read))
  DEFINE_SYSCALL(NtAccessCheck, (PSECURITY_DESCRIPTOR descr, HANDLE token, ACCESS_MASK access, GENERIC_MAPPING *mapping, PRIVILEGE_SET *privs, ULONG *retlen, ULONG *access_granted, NTSTATUS *access_status))
  DEFINE_SYSCALL(NtAccessCheckAndAuditAlarm, (UNICODE_STRING *subsystem, HANDLE handle, UNICODE_STRING *typename, UNICODE_STRING *objectname, PSECURITY_DESCRIPTOR descr, ACCESS_MASK access, GENERIC_MAPPING *mapping, BOOLEAN creation, ACCESS_MASK *access_granted, NTSTATUS *access_status, BOOLEAN *onclose))
-diff -ruN --show-c-function vanilla-1017/dlls/ntdll/unix/unix_private.h LAA-1017/dlls/ntdll/unix/unix_private.h
---- vanilla-1017/dlls/ntdll/unix/unix_private.h	2025-10-21 17:44:35.924771537 -0700
-+++ LAA-1017/dlls/ntdll/unix/unix_private.h	2025-10-21 21:09:15.624437265 -0700
+diff -ruN --show-c-function dlls/ntdll/unix/unix_private.h dlls/ntdll/unix/unix_private.h
+--- dlls/ntdll/unix/unix_private.h	2025-10-21 17:44:35.924771537 -0700
++++ dlls/ntdll/unix/unix_private.h	2025-10-21 21:09:15.624437265 -0700
 @@ -691,4 +691,6 @@ static inline int is_gdt_sel( WORD sel )
  
  #endif  /* defined(__i386__) || defined(__x86_64__) */
@@ -94,9 +94,9 @@ diff -ruN --show-c-function vanilla-1017/dlls/ntdll/unix/unix_private.h LAA-1017
 +BOOL WINAPI __wine_needs_override_large_address_aware(void);
 +
  #endif /* __NTDLL_UNIX_PRIVATE_H */
-diff -ruN --show-c-function vanilla-1017/dlls/ntdll/unix/virtual.c LAA-1017/dlls/ntdll/unix/virtual.c
---- vanilla-1017/dlls/ntdll/unix/virtual.c	2025-10-21 17:44:35.924771537 -0700
-+++ LAA-1017/dlls/ntdll/unix/virtual.c	2025-10-21 21:09:15.624753827 -0700
+diff -ruN --show-c-function dlls/ntdll/unix/virtual.c dlls/ntdll/unix/virtual.c
+--- dlls/ntdll/unix/virtual.c	2025-10-21 17:44:35.924771537 -0700
++++ dlls/ntdll/unix/virtual.c	2025-10-21 21:09:15.624753827 -0700
 @@ -5021,6 +5021,24 @@ static void virtual_release_address_spac
  
  #endif  /* _WIN64 */
@@ -136,9 +136,9 @@ diff -ruN --show-c-function vanilla-1017/dlls/ntdll/unix/virtual.c LAA-1017/dlls
          free_reserved_memory( (char *)0x80000000, address_space_limit );
      }
      user_space_limit = working_set_limit = address_space_limit;
-diff -ruN --show-c-function vanilla-1017/dlls/wow64/system.c LAA-1017/dlls/wow64/system.c
---- vanilla-1017/dlls/wow64/system.c	2025-10-21 17:44:36.108079220 -0700
-+++ LAA-1017/dlls/wow64/system.c	2025-10-21 21:09:15.625114572 -0700
+diff -ruN --show-c-function dlls/wow64/system.c dlls/wow64/system.c
+--- dlls/wow64/system.c	2025-10-21 17:44:36.108079220 -0700
++++ dlls/wow64/system.c	2025-10-21 21:09:15.625114572 -0700
 @@ -857,3 +857,9 @@ NTSTATUS WINAPI wow64_NtWow64GetNativeSy
          return STATUS_INVALID_INFO_CLASS;
      }

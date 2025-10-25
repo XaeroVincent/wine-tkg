@@ -1,6 +1,6 @@
-diff -ruN --show-c-function vanilla-1017/configure protonvulkan-1017/configure
---- vanilla-1017/configure	2025-10-21 17:44:47.290026993 -0700
-+++ protonvulkan-1017/configure	2025-10-21 17:23:46.636875701 -0700
+diff -ruN --show-c-function configure configure
+--- configure	2025-10-21 17:44:47.290026993 -0700
++++ configure	2025-10-21 17:23:46.636875701 -0700
 @@ -1426,6 +1426,7 @@ enable_serialui
  enable_setupapi
  enable_sfc
@@ -17,9 +17,9 @@ diff -ruN --show-c-function vanilla-1017/configure protonvulkan-1017/configure
  wine_fn_config_makefile dlls/shcore enable_shcore
  wine_fn_config_makefile dlls/shcore/tests enable_tests
  wine_fn_config_makefile dlls/shdoclc enable_shdoclc
-diff -ruN --show-c-function vanilla-1017/configure.ac protonvulkan-1017/configure.ac
---- vanilla-1017/configure.ac	2025-10-21 20:56:16.464249113 -0700
-+++ protonvulkan-1017/configure.ac	2025-10-21 21:15:57.310866950 -0700
+diff -ruN --show-c-function configure.ac configure.ac
+--- configure.ac	2025-10-21 20:56:16.464249113 -0700
++++ configure.ac	2025-10-21 21:15:57.310866950 -0700
 @@ -3158,6 +3158,7 @@ WINE_CONFIG_MAKEFILE(dlls/setupapi/tests
  WINE_CONFIG_MAKEFILE(dlls/setupx.dll16)
  WINE_CONFIG_MAKEFILE(dlls/sfc)
@@ -28,9 +28,9 @@ diff -ruN --show-c-function vanilla-1017/configure.ac protonvulkan-1017/configur
  WINE_CONFIG_MAKEFILE(dlls/shcore)
  WINE_CONFIG_MAKEFILE(dlls/shcore/tests)
  WINE_CONFIG_MAKEFILE(dlls/shdoclc)
-diff -ruN --show-c-function vanilla-1017/dlls/ntdll/unix/server.c protonvulkan-1017/dlls/ntdll/unix/server.c
---- vanilla-1017/dlls/ntdll/unix/server.c	2025-10-21 17:44:35.922771491 -0700
-+++ protonvulkan-1017/dlls/ntdll/unix/server.c	2025-10-21 17:23:40.571124542 -0700
+diff -ruN --show-c-function dlls/ntdll/unix/server.c dlls/ntdll/unix/server.c
+--- dlls/ntdll/unix/server.c	2025-10-21 17:44:35.922771491 -0700
++++ dlls/ntdll/unix/server.c	2025-10-21 17:23:40.571124542 -0700
 @@ -939,7 +939,7 @@ unsigned int server_queue_process_apc( H
   *
   * Send a file descriptor to the server.
@@ -40,9 +40,9 @@ diff -ruN --show-c-function vanilla-1017/dlls/ntdll/unix/server.c protonvulkan-1
  {
      struct send_fd data;
      struct msghdr msghdr;
-diff -ruN --show-c-function vanilla-1017/dlls/ntdll/unix/unix_private.h protonvulkan-1017/dlls/ntdll/unix/unix_private.h
---- vanilla-1017/dlls/ntdll/unix/unix_private.h	2025-10-21 17:44:35.924771537 -0700
-+++ protonvulkan-1017/dlls/ntdll/unix/unix_private.h	2025-10-21 17:23:40.571263926 -0700
+diff -ruN --show-c-function dlls/ntdll/unix/unix_private.h dlls/ntdll/unix/unix_private.h
+--- dlls/ntdll/unix/unix_private.h	2025-10-21 17:44:35.924771537 -0700
++++ dlls/ntdll/unix/unix_private.h	2025-10-21 17:23:40.571263926 -0700
 @@ -233,6 +233,7 @@ extern unsigned int server_queue_process
                                                union apc_result *result );
  extern int server_get_unix_fd( HANDLE handle, unsigned int wanted_access, int *unix_fd,
@@ -51,9 +51,9 @@ diff -ruN --show-c-function vanilla-1017/dlls/ntdll/unix/unix_private.h protonvu
  extern int wine_server_receive_fd( obj_handle_t *handle );
  extern void process_exit_wrapper( int status ) DECLSPEC_NORETURN;
  extern size_t server_init_process(void);
-diff -ruN --show-c-function vanilla-1017/dlls/ntoskrnl.exe/ntoskrnl.c protonvulkan-1017/dlls/ntoskrnl.exe/ntoskrnl.c
---- vanilla-1017/dlls/ntoskrnl.exe/ntoskrnl.c	2025-10-21 17:44:35.926181403 -0700
-+++ protonvulkan-1017/dlls/ntoskrnl.exe/ntoskrnl.c	2025-10-21 17:23:40.567378798 -0700
+diff -ruN --show-c-function dlls/ntoskrnl.exe/ntoskrnl.c dlls/ntoskrnl.exe/ntoskrnl.c
+--- dlls/ntoskrnl.exe/ntoskrnl.c	2025-10-21 17:44:35.926181403 -0700
++++ dlls/ntoskrnl.exe/ntoskrnl.c	2025-10-21 17:23:40.567378798 -0700
 @@ -258,6 +258,15 @@ POBJECT_TYPE WINAPI ObGetObjectType( voi
      return header->type;
  }
@@ -80,9 +80,9 @@ diff -ruN --show-c-function vanilla-1017/dlls/ntoskrnl.exe/ntoskrnl.c protonvulk
  };
  
  DECLARE_CRITICAL_SECTION(handle_map_cs);
-diff -ruN --show-c-function vanilla-1017/dlls/sharedgpures.sys/Makefile.in protonvulkan-1017/dlls/sharedgpures.sys/Makefile.in
---- vanilla-1017/dlls/sharedgpures.sys/Makefile.in	1969-12-31 16:00:00.000000000 -0800
-+++ protonvulkan-1017/dlls/sharedgpures.sys/Makefile.in	2025-10-21 17:23:41.148923839 -0700
+diff -ruN --show-c-function dlls/sharedgpures.sys/Makefile.in dlls/sharedgpures.sys/Makefile.in
+--- dlls/sharedgpures.sys/Makefile.in	1969-12-31 16:00:00.000000000 -0800
++++ dlls/sharedgpures.sys/Makefile.in	2025-10-21 17:23:41.148923839 -0700
 @@ -0,0 +1,7 @@
 +MODULE    = sharedgpures.sys
 +IMPORTS   = ntoskrnl
@@ -91,14 +91,14 @@ diff -ruN --show-c-function vanilla-1017/dlls/sharedgpures.sys/Makefile.in proto
 +SOURCES = \
 +	shared_resource.c \
 +	sharedgpures.sys.spec
-diff -ruN --show-c-function vanilla-1017/dlls/sharedgpures.sys/sharedgpures.sys.spec protonvulkan-1017/dlls/sharedgpures.sys/sharedgpures.sys.spec
---- vanilla-1017/dlls/sharedgpures.sys/sharedgpures.sys.spec	1969-12-31 16:00:00.000000000 -0800
-+++ protonvulkan-1017/dlls/sharedgpures.sys/sharedgpures.sys.spec	2025-10-21 17:23:40.637536623 -0700
+diff -ruN --show-c-function dlls/sharedgpures.sys/sharedgpures.sys.spec dlls/sharedgpures.sys/sharedgpures.sys.spec
+--- dlls/sharedgpures.sys/sharedgpures.sys.spec	1969-12-31 16:00:00.000000000 -0800
++++ dlls/sharedgpures.sys/sharedgpures.sys.spec	2025-10-21 17:23:40.637536623 -0700
 @@ -0,0 +1 @@
 +# nothing to export
-diff -ruN --show-c-function vanilla-1017/dlls/sharedgpures.sys/shared_resource.c protonvulkan-1017/dlls/sharedgpures.sys/shared_resource.c
---- vanilla-1017/dlls/sharedgpures.sys/shared_resource.c	1969-12-31 16:00:00.000000000 -0800
-+++ protonvulkan-1017/dlls/sharedgpures.sys/shared_resource.c	2025-10-21 17:23:40.646467585 -0700
+diff -ruN --show-c-function dlls/sharedgpures.sys/shared_resource.c dlls/sharedgpures.sys/shared_resource.c
+--- dlls/sharedgpures.sys/shared_resource.c	1969-12-31 16:00:00.000000000 -0800
++++ dlls/sharedgpures.sys/shared_resource.c	2025-10-21 17:23:40.646467585 -0700
 @@ -0,0 +1,518 @@
 +#include <stdarg.h>
 +
@@ -618,9 +618,9 @@ diff -ruN --show-c-function vanilla-1017/dlls/sharedgpures.sys/shared_resource.c
 +
 +    return IoCreateSymbolicLink(&link_name, &device_name);
 +}
-diff -ruN --show-c-function vanilla-1017/dlls/vulkan-1/tests/vulkan.c protonvulkan-1017/dlls/vulkan-1/tests/vulkan.c
---- vanilla-1017/dlls/vulkan-1/tests/vulkan.c	2025-10-21 17:44:36.037714896 -0700
-+++ protonvulkan-1017/dlls/vulkan-1/tests/vulkan.c	2025-10-21 17:23:40.634924953 -0700
+diff -ruN --show-c-function dlls/vulkan-1/tests/vulkan.c dlls/vulkan-1/tests/vulkan.c
+--- dlls/vulkan-1/tests/vulkan.c	2025-10-21 17:44:36.037714896 -0700
++++ dlls/vulkan-1/tests/vulkan.c	2025-10-21 17:23:40.634924953 -0700
 @@ -1154,8 +1154,9 @@ static void import_memory(VkDevice vk_de
          import_handle_info.name = L"wine_test_buffer_export_name";
  
@@ -633,18 +633,18 @@ diff -ruN --show-c-function vanilla-1017/dlls/vulkan-1/tests/vulkan.c protonvulk
      }
  }
  
-diff -ruN --show-c-function vanilla-1017/dlls/vulkan-1/vulkan-1.spec protonvulkan-1017/dlls/vulkan-1/vulkan-1.spec
---- vanilla-1017/dlls/vulkan-1/vulkan-1.spec	2025-10-21 17:44:44.784970760 -0700
-+++ protonvulkan-1017/dlls/vulkan-1/vulkan-1.spec	2025-10-21 17:23:44.107978203 -0700
+diff -ruN --show-c-function dlls/vulkan-1/vulkan-1.spec dlls/vulkan-1/vulkan-1.spec
+--- dlls/vulkan-1/vulkan-1.spec	2025-10-21 17:44:44.784970760 -0700
++++ dlls/vulkan-1/vulkan-1.spec	2025-10-21 17:23:44.107978203 -0700
 @@ -276,3 +276,5 @@
  @ stdcall vkUpdateDescriptorSets(ptr long ptr long ptr) winevulkan.vkUpdateDescriptorSets
  @ stdcall vkWaitForFences(ptr long ptr long int64) winevulkan.vkWaitForFences
  @ stdcall vkWaitSemaphores(ptr ptr int64) winevulkan.vkWaitSemaphores
 +@ stdcall wine_vkAcquireKeyedMutex(ptr int64 int64 long) winevulkan.wine_vkAcquireKeyedMutex
 +@ stdcall wine_vkReleaseKeyedMutex(ptr int64 int64) winevulkan.wine_vkReleaseKeyedMutex
-diff -ruN --show-c-function vanilla-1017/dlls/win32u/d3dkmt.c protonvulkan-1017/dlls/win32u/d3dkmt.c
---- vanilla-1017/dlls/win32u/d3dkmt.c	2025-10-21 17:44:36.800791257 -0700
-+++ protonvulkan-1017/dlls/win32u/d3dkmt.c	2025-10-21 17:23:40.584190225 -0700
+diff -ruN --show-c-function dlls/win32u/d3dkmt.c dlls/win32u/d3dkmt.c
+--- dlls/win32u/d3dkmt.c	2025-10-21 17:44:36.800791257 -0700
++++ dlls/win32u/d3dkmt.c	2025-10-21 17:23:40.584190225 -0700
 @@ -180,16 +180,13 @@ static NTSTATUS d3dkmt_object_alloc( UIN
  }
  
@@ -896,9 +896,9 @@ diff -ruN --show-c-function vanilla-1017/dlls/win32u/d3dkmt.c protonvulkan-1017/
 -
 -    return STATUS_SUCCESS;
  }
-diff -ruN --show-c-function vanilla-1017/dlls/win32u/tests/d3dkmt.c protonvulkan-1017/dlls/win32u/tests/d3dkmt.c
---- vanilla-1017/dlls/win32u/tests/d3dkmt.c	2025-10-21 17:44:36.802791302 -0700
-+++ protonvulkan-1017/dlls/win32u/tests/d3dkmt.c	2025-10-21 17:23:40.584533845 -0700
+diff -ruN --show-c-function dlls/win32u/tests/d3dkmt.c dlls/win32u/tests/d3dkmt.c
+--- dlls/win32u/tests/d3dkmt.c	2025-10-21 17:44:36.802791302 -0700
++++ dlls/win32u/tests/d3dkmt.c	2025-10-21 17:23:40.584533845 -0700
 @@ -455,7 +455,8 @@ static void get_d3dkmt_resource_desc( LU
      D3DKMT_HANDLE resource;
      NTSTATUS status;
@@ -1020,9 +1020,9 @@ diff -ruN --show-c-function vanilla-1017/dlls/win32u/tests/d3dkmt.c protonvulkan
  
                  if (import) ok_ref( 0, IUnknown_Release( import ) );
              }
-diff -ruN --show-c-function vanilla-1017/dlls/win32u/vulkan.c protonvulkan-1017/dlls/win32u/vulkan.c
---- vanilla-1017/dlls/win32u/vulkan.c	2025-10-21 17:44:36.048434800 -0700
-+++ protonvulkan-1017/dlls/win32u/vulkan.c	2025-10-21 17:23:40.640565491 -0700
+diff -ruN --show-c-function dlls/win32u/vulkan.c dlls/win32u/vulkan.c
+--- dlls/win32u/vulkan.c	2025-10-21 17:44:36.048434800 -0700
++++ dlls/win32u/vulkan.c	2025-10-21 17:23:40.640565491 -0700
 @@ -26,7 +26,6 @@
  
  #include <dlfcn.h>
@@ -2651,9 +2651,9 @@ diff -ruN --show-c-function vanilla-1017/dlls/win32u/vulkan.c protonvulkan-1017/
  };
  
  static void vulkan_init_once(void)
-diff -ruN --show-c-function vanilla-1017/dlls/win32u/win32u_private.h protonvulkan-1017/dlls/win32u/win32u_private.h
---- vanilla-1017/dlls/win32u/win32u_private.h	2025-10-21 17:44:36.048774328 -0700
-+++ protonvulkan-1017/dlls/win32u/win32u_private.h	2025-10-21 17:23:40.585358264 -0700
+diff -ruN --show-c-function dlls/win32u/win32u_private.h dlls/win32u/win32u_private.h
+--- dlls/win32u/win32u_private.h	2025-10-21 17:44:36.048774328 -0700
++++ dlls/win32u/win32u_private.h	2025-10-21 17:23:40.585358264 -0700
 @@ -206,16 +206,6 @@ extern void free_vulkan_gpu( struct vulk
  extern BOOL get_vulkan_uuid_from_luid( const LUID *luid, GUID *uuid );
  extern BOOL get_luid_from_vulkan_uuid( const GUID *uuid, LUID *luid, UINT32 *node_mask );
@@ -2671,9 +2671,9 @@ diff -ruN --show-c-function vanilla-1017/dlls/win32u/win32u_private.h protonvulk
  /* winstation.c */
  
  struct object_lock
-diff -ruN --show-c-function vanilla-1017/dlls/winemac.drv/vulkan.c protonvulkan-1017/dlls/winemac.drv/vulkan.c
---- vanilla-1017/dlls/winemac.drv/vulkan.c	2025-10-21 17:44:36.078775004 -0700
-+++ protonvulkan-1017/dlls/winemac.drv/vulkan.c	2025-10-21 17:23:40.585433025 -0700
+diff -ruN --show-c-function dlls/winemac.drv/vulkan.c dlls/winemac.drv/vulkan.c
+--- dlls/winemac.drv/vulkan.c	2025-10-21 17:44:36.078775004 -0700
++++ dlls/winemac.drv/vulkan.c	2025-10-21 17:23:40.585433025 -0700
 @@ -99,17 +99,16 @@ static VkBool32 macdrv_get_physical_devi
  }
  
@@ -2695,9 +2695,9 @@ diff -ruN --show-c-function vanilla-1017/dlls/winemac.drv/vulkan.c protonvulkan-
  };
  
  UINT macdrv_VulkanInit(UINT version, void *vulkan_handle, const struct vulkan_driver_funcs **driver_funcs)
-diff -ruN --show-c-function vanilla-1017/dlls/winevulkan/loader_thunks.c protonvulkan-1017/dlls/winevulkan/loader_thunks.c
---- vanilla-1017/dlls/winevulkan/loader_thunks.c	2025-10-21 17:44:44.782970715 -0700
-+++ protonvulkan-1017/dlls/winevulkan/loader_thunks.c	2025-10-21 17:23:44.105834905 -0700
+diff -ruN --show-c-function dlls/winevulkan/loader_thunks.c dlls/winevulkan/loader_thunks.c
+--- dlls/winevulkan/loader_thunks.c	2025-10-21 17:44:44.782970715 -0700
++++ dlls/winevulkan/loader_thunks.c	2025-10-21 17:23:44.105834905 -0700
 @@ -5015,18 +5015,6 @@ VkResult WINAPI vkGetFenceStatus(VkDevic
      return params.result;
  }
@@ -2863,9 +2863,9 @@ diff -ruN --show-c-function vanilla-1017/dlls/winevulkan/loader_thunks.c protonv
  };
  
  static const struct vulkan_func vk_phys_dev_dispatch_table[] =
-diff -ruN --show-c-function vanilla-1017/dlls/winevulkan/loader_thunks.h protonvulkan-1017/dlls/winevulkan/loader_thunks.h
---- vanilla-1017/dlls/winevulkan/loader_thunks.h	2025-10-21 17:44:44.778970625 -0700
-+++ protonvulkan-1017/dlls/winevulkan/loader_thunks.h	2025-10-21 17:23:44.101834840 -0700
+diff -ruN --show-c-function dlls/winevulkan/loader_thunks.h dlls/winevulkan/loader_thunks.h
+--- dlls/winevulkan/loader_thunks.h	2025-10-21 17:44:44.778970625 -0700
++++ dlls/winevulkan/loader_thunks.h	2025-10-21 17:23:44.101834840 -0700
 @@ -508,7 +508,6 @@ enum unix_call
      unix_vkGetEncodedVideoSessionParametersKHR,
      unix_vkGetEventStatus,
@@ -2998,9 +2998,9 @@ diff -ruN --show-c-function vanilla-1017/dlls/winevulkan/loader_thunks.h protonv
 +};
 +
  #endif /* __WINE_VULKAN_LOADER_THUNKS_H */
-diff -ruN --show-c-function vanilla-1017/dlls/winevulkan/make_vulkan protonvulkan-1017/dlls/winevulkan/make_vulkan
---- vanilla-1017/dlls/winevulkan/make_vulkan	2025-10-21 17:44:36.083775116 -0700
-+++ protonvulkan-1017/dlls/winevulkan/make_vulkan	2025-10-21 17:23:40.648877783 -0700
+diff -ruN --show-c-function dlls/winevulkan/make_vulkan dlls/winevulkan/make_vulkan
+--- dlls/winevulkan/make_vulkan	2025-10-21 17:44:36.083775116 -0700
++++ dlls/winevulkan/make_vulkan	2025-10-21 17:23:40.648877783 -0700
 @@ -96,6 +96,7 @@ UNSUPPORTED_EXTENSIONS = [
      "VK_AMD_display_native_hdr",
      "VK_EXT_full_screen_exclusive",
@@ -3612,9 +3612,9 @@ diff -ruN --show-c-function vanilla-1017/dlls/winevulkan/make_vulkan protonvulka
  
          self._parse_enums(root)
          self._parse_types(root)
-diff -ruN --show-c-function vanilla-1017/dlls/winevulkan/vk_custom.xml protonvulkan-1017/dlls/winevulkan/vk_custom.xml
---- vanilla-1017/dlls/winevulkan/vk_custom.xml	1969-12-31 16:00:00.000000000 -0800
-+++ protonvulkan-1017/dlls/winevulkan/vk_custom.xml	2025-10-21 17:23:40.649096597 -0700
+diff -ruN --show-c-function dlls/winevulkan/vk_custom.xml dlls/winevulkan/vk_custom.xml
+--- dlls/winevulkan/vk_custom.xml	1969-12-31 16:00:00.000000000 -0800
++++ dlls/winevulkan/vk_custom.xml	2025-10-21 17:23:40.649096597 -0700
 @@ -0,0 +1,24 @@
 +<?xml version="1.0" encoding="UTF-8"?>
 +<registry>
@@ -3640,9 +3640,9 @@ diff -ruN --show-c-function vanilla-1017/dlls/winevulkan/vk_custom.xml protonvul
 +        </require>
 +    </feature>
 +</registry>
-diff -ruN --show-c-function vanilla-1017/dlls/winevulkan/vulkan.c protonvulkan-1017/dlls/winevulkan/vulkan.c
---- vanilla-1017/dlls/winevulkan/vulkan.c	2025-10-21 17:44:36.083775116 -0700
-+++ protonvulkan-1017/dlls/winevulkan/vulkan.c	2025-10-21 17:23:40.652383564 -0700
+diff -ruN --show-c-function dlls/winevulkan/vulkan.c dlls/winevulkan/vulkan.c
+--- dlls/winevulkan/vulkan.c	2025-10-21 17:44:36.083775116 -0700
++++ dlls/winevulkan/vulkan.c	2025-10-21 17:23:40.652383564 -0700
 @@ -23,6 +23,23 @@
  
  #include "config.h"
@@ -7550,9 +7550,9 @@ diff -ruN --show-c-function vanilla-1017/dlls/winevulkan/vulkan.c protonvulkan-1
 +    ERR("Unknown native physical device: %p, instance %p, handle %p\n", native_phys_dev, instance, handle);
 +    return NULL;
  }
-diff -ruN --show-c-function vanilla-1017/dlls/winevulkan/vulkan_private.h protonvulkan-1017/dlls/winevulkan/vulkan_private.h
---- vanilla-1017/dlls/winevulkan/vulkan_private.h	2025-10-21 17:44:36.083775116 -0700
-+++ protonvulkan-1017/dlls/winevulkan/vulkan_private.h	2025-10-21 17:23:40.651251132 -0700
+diff -ruN --show-c-function dlls/winevulkan/vulkan_private.h dlls/winevulkan/vulkan_private.h
+--- dlls/winevulkan/vulkan_private.h	2025-10-21 17:44:36.083775116 -0700
++++ dlls/winevulkan/vulkan_private.h	2025-10-21 17:23:40.651251132 -0700
 @@ -21,6 +21,7 @@
  #define __WINE_VULKAN_PRIVATE_H
  
@@ -7736,9 +7736,9 @@ diff -ruN --show-c-function vanilla-1017/dlls/winevulkan/vulkan_private.h proton
 +    memcpy((void *)(dst), (src), size);
 +
  #endif /* __WINE_VULKAN_PRIVATE_H */
-diff -ruN --show-c-function vanilla-1017/dlls/winevulkan/vulkan_thunks.c protonvulkan-1017/dlls/winevulkan/vulkan_thunks.c
---- vanilla-1017/dlls/winevulkan/vulkan_thunks.c	2025-10-21 17:44:44.770970445 -0700
-+++ protonvulkan-1017/dlls/winevulkan/vulkan_thunks.c	2025-10-21 17:23:44.098834792 -0700
+diff -ruN --show-c-function dlls/winevulkan/vulkan_thunks.c dlls/winevulkan/vulkan_thunks.c
+--- dlls/winevulkan/vulkan_thunks.c	2025-10-21 17:44:44.770970445 -0700
++++ dlls/winevulkan/vulkan_thunks.c	2025-10-21 17:23:44.098834792 -0700
 @@ -578,13 +578,6 @@ typedef struct VkVideoPictureResourceInf
      VkImageView DECLSPEC_ALIGN(8) imageViewBinding;
  } VkVideoPictureResourceInfoKHR32;
@@ -18565,9 +18565,9 @@ diff -ruN --show-c-function vanilla-1017/dlls/winevulkan/vulkan_thunks.c protonv
 +    thunk32_wine_vkReleaseKeyedMutex,
  };
  C_ASSERT(ARRAYSIZE(__wine_unix_call_funcs) == unix_count);
-diff -ruN --show-c-function vanilla-1017/dlls/winevulkan/vulkan_thunks.h protonvulkan-1017/dlls/winevulkan/vulkan_thunks.h
---- vanilla-1017/dlls/winevulkan/vulkan_thunks.h	2025-10-21 17:44:43.707946570 -0700
-+++ protonvulkan-1017/dlls/winevulkan/vulkan_thunks.h	2025-10-21 17:23:43.028817540 -0700
+diff -ruN --show-c-function dlls/winevulkan/vulkan_thunks.h dlls/winevulkan/vulkan_thunks.h
+--- dlls/winevulkan/vulkan_thunks.h	2025-10-21 17:44:43.707946570 -0700
++++ dlls/winevulkan/vulkan_thunks.h	2025-10-21 17:23:43.028817540 -0700
 @@ -22,18 +22,23 @@
  
  /* Functions for which we have custom implementations outside of the thunks. */
@@ -18633,9 +18633,9 @@ diff -ruN --show-c-function vanilla-1017/dlls/winevulkan/vulkan_thunks.h protonv
 +VkResult wine_wine_vkReleaseKeyedMutex(VkDevice device, VkDeviceMemory memory, uint64_t key);
  
  #endif /* __WINE_VULKAN_THUNKS_H */
-diff -ruN --show-c-function vanilla-1017/dlls/winevulkan/winevk.xml protonvulkan-1017/dlls/winevulkan/winevk.xml
---- vanilla-1017/dlls/winevulkan/winevk.xml	2025-10-21 17:44:36.086775184 -0700
-+++ protonvulkan-1017/dlls/winevulkan/winevk.xml	1969-12-31 16:00:00.000000000 -0800
+diff -ruN --show-c-function dlls/winevulkan/winevk.xml dlls/winevulkan/winevk.xml
+--- dlls/winevulkan/winevk.xml	2025-10-21 17:44:36.086775184 -0700
++++ dlls/winevulkan/winevk.xml	1969-12-31 16:00:00.000000000 -0800
 @@ -1,11 +0,0 @@
 -<?xml version="1.0" encoding="UTF-8"?>
 -<registry>
@@ -18648,9 +18648,9 @@ diff -ruN --show-c-function vanilla-1017/dlls/winevulkan/winevk.xml protonvulkan
 -        </type>
 -    </types>
 -</registry>
-diff -ruN --show-c-function vanilla-1017/dlls/winevulkan/winevulkan.spec protonvulkan-1017/dlls/winevulkan/winevulkan.spec
---- vanilla-1017/dlls/winevulkan/winevulkan.spec	2025-10-21 17:44:44.783970737 -0700
-+++ protonvulkan-1017/dlls/winevulkan/winevulkan.spec	2025-10-21 17:23:44.107350486 -0700
+diff -ruN --show-c-function dlls/winevulkan/winevulkan.spec dlls/winevulkan/winevulkan.spec
+--- dlls/winevulkan/winevulkan.spec	2025-10-21 17:44:44.783970737 -0700
++++ dlls/winevulkan/winevulkan.spec	2025-10-21 17:23:44.107350486 -0700
 @@ -279,5 +279,7 @@
  @ stdcall vkUpdateDescriptorSets(ptr long ptr long ptr)
  @ stdcall vkWaitForFences(ptr long ptr long int64)
@@ -18659,9 +18659,9 @@ diff -ruN --show-c-function vanilla-1017/dlls/winevulkan/winevulkan.spec protonv
 +@ stdcall wine_vkReleaseKeyedMutex(ptr int64 int64)
  @ stdcall -private DllRegisterServer()
  @ stdcall -private DllUnregisterServer()
-diff -ruN --show-c-function vanilla-1017/dlls/winewayland.drv/vulkan.c protonvulkan-1017/dlls/winewayland.drv/vulkan.c
---- vanilla-1017/dlls/winewayland.drv/vulkan.c	2025-10-21 17:44:36.087775206 -0700
-+++ protonvulkan-1017/dlls/winewayland.drv/vulkan.c	2025-10-21 17:23:40.592855504 -0700
+diff -ruN --show-c-function dlls/winewayland.drv/vulkan.c dlls/winewayland.drv/vulkan.c
+--- dlls/winewayland.drv/vulkan.c	2025-10-21 17:44:36.087775206 -0700
++++ dlls/winewayland.drv/vulkan.c	2025-10-21 17:23:40.592855504 -0700
 @@ -81,20 +81,16 @@ static VkBool32 wayland_get_physical_dev
                                                                          process_wayland.wl_display);
  }
@@ -18686,9 +18686,9 @@ diff -ruN --show-c-function vanilla-1017/dlls/winewayland.drv/vulkan.c protonvul
  };
  
  /**********************************************************************
-diff -ruN --show-c-function vanilla-1017/dlls/winex11.drv/vulkan.c protonvulkan-1017/dlls/winex11.drv/vulkan.c
---- vanilla-1017/dlls/winex11.drv/vulkan.c	2025-10-21 17:44:36.089775251 -0700
-+++ protonvulkan-1017/dlls/winex11.drv/vulkan.c	2025-10-21 17:23:40.592953589 -0700
+diff -ruN --show-c-function dlls/winex11.drv/vulkan.c dlls/winex11.drv/vulkan.c
+--- dlls/winex11.drv/vulkan.c	2025-10-21 17:44:36.089775251 -0700
++++ dlls/winex11.drv/vulkan.c	2025-10-21 17:23:40.592953589 -0700
 @@ -78,20 +78,16 @@ static VkBool32 X11DRV_get_physical_devi
                                                                        default_visual.visual->visualid );
  }
@@ -18713,9 +18713,9 @@ diff -ruN --show-c-function vanilla-1017/dlls/winex11.drv/vulkan.c protonvulkan-
  };
  
  UINT X11DRV_VulkanInit( UINT version, void *vulkan_handle, const struct vulkan_driver_funcs **driver_funcs )
-diff -ruN --show-c-function vanilla-1017/include/ddk/wdm.h protonvulkan-1017/include/ddk/wdm.h
---- vanilla-1017/include/ddk/wdm.h	2025-10-21 17:44:36.805791369 -0700
-+++ protonvulkan-1017/include/ddk/wdm.h	2025-10-21 17:23:40.638255743 -0700
+diff -ruN --show-c-function include/ddk/wdm.h include/ddk/wdm.h
+--- include/ddk/wdm.h	2025-10-21 17:44:36.805791369 -0700
++++ include/ddk/wdm.h	2025-10-21 17:23:40.638255743 -0700
 @@ -1889,6 +1889,7 @@ NTSTATUS  WINAPI ObRegisterCallbacks(POB
  NTSTATUS  WINAPI ObReferenceObjectByHandle(HANDLE,ACCESS_MASK,POBJECT_TYPE,KPROCESSOR_MODE,PVOID*,POBJECT_HANDLE_INFORMATION);
  NTSTATUS  WINAPI ObReferenceObjectByName(UNICODE_STRING*,ULONG,ACCESS_STATE*,ACCESS_MASK,POBJECT_TYPE,KPROCESSOR_MODE,void*,void**);
@@ -18724,9 +18724,9 @@ diff -ruN --show-c-function vanilla-1017/include/ddk/wdm.h protonvulkan-1017/inc
  void      WINAPI ObUnRegisterCallbacks(void*);
  
  NTSTATUS  WINAPI PoCallDriver(DEVICE_OBJECT*,IRP*);
-diff -ruN --show-c-function vanilla-1017/include/wine/server.h protonvulkan-1017/include/wine/server.h
---- vanilla-1017/include/wine/server.h	2025-10-21 17:44:36.175777187 -0700
-+++ protonvulkan-1017/include/wine/server.h	2025-10-21 17:23:40.578717624 -0700
+diff -ruN --show-c-function include/wine/server.h include/wine/server.h
+--- include/wine/server.h	2025-10-21 17:44:36.175777187 -0700
++++ include/wine/server.h	2025-10-21 17:23:40.578717624 -0700
 @@ -49,7 +49,6 @@ struct __server_request_info
      struct __server_iovec data[__SERVER_MAX_DATA];  /* request variable size data */
  };
@@ -18735,9 +18735,9 @@ diff -ruN --show-c-function vanilla-1017/include/wine/server.h protonvulkan-1017
  NTSYSAPI unsigned int CDECL wine_server_call( void *req_ptr );
  NTSYSAPI NTSTATUS CDECL wine_server_fd_to_handle( int fd, unsigned int access, unsigned int attributes, HANDLE *handle );
  NTSYSAPI NTSTATUS CDECL wine_server_handle_to_fd( HANDLE handle, unsigned int access, int *unix_fd, unsigned int *options );
-diff -ruN --show-c-function vanilla-1017/include/wine/server_protocol.h protonvulkan-1017/include/wine/server_protocol.h
---- vanilla-1017/include/wine/server_protocol.h	2025-10-21 17:44:36.806791392 -0700
-+++ protonvulkan-1017/include/wine/server_protocol.h	2025-10-21 17:23:40.578888798 -0700
+diff -ruN --show-c-function include/wine/server_protocol.h include/wine/server_protocol.h
+--- include/wine/server_protocol.h	2025-10-21 17:44:36.806791392 -0700
++++ include/wine/server_protocol.h	2025-10-21 17:23:40.578888798 -0700
 @@ -6014,9 +6014,7 @@ struct d3dkmt_object_create_request
  {
      struct request_header __header;
@@ -18758,9 +18758,9 @@ diff -ruN --show-c-function vanilla-1017/include/wine/server_protocol.h protonvu
  };
  struct d3dkmt_object_update_reply
  {
-diff -ruN --show-c-function vanilla-1017/include/wine/vulkan_driver.h protonvulkan-1017/include/wine/vulkan_driver.h
---- vanilla-1017/include/wine/vulkan_driver.h	2025-10-21 17:44:36.176777210 -0700
-+++ protonvulkan-1017/include/wine/vulkan_driver.h	2025-10-21 17:23:40.647755741 -0700
+diff -ruN --show-c-function include/wine/vulkan_driver.h include/wine/vulkan_driver.h
+--- include/wine/vulkan_driver.h	2025-10-21 17:44:36.176777210 -0700
++++ include/wine/vulkan_driver.h	2025-10-21 17:23:40.647755741 -0700
 @@ -45,9 +45,10 @@ struct vulkan_client_object
  
  #include "wine/vulkan.h"
@@ -18967,9 +18967,9 @@ diff -ruN --show-c-function vanilla-1017/include/wine/vulkan_driver.h protonvulk
  };
  
  #endif /* WINE_UNIX_LIB */
-diff -ruN --show-c-function vanilla-1017/include/wine/vulkan.h protonvulkan-1017/include/wine/vulkan.h
---- vanilla-1017/include/wine/vulkan.h	2025-10-21 17:44:43.706946548 -0700
-+++ protonvulkan-1017/include/wine/vulkan.h	2025-10-21 17:23:43.027817524 -0700
+diff -ruN --show-c-function include/wine/vulkan.h include/wine/vulkan.h
+--- include/wine/vulkan.h	2025-10-21 17:44:43.706946548 -0700
++++ include/wine/vulkan.h	2025-10-21 17:23:43.027817524 -0700
 @@ -234,10 +234,6 @@ typedef struct _XDisplay Display;
  #define VK_KHR_EXTERNAL_FENCE_CAPABILITIES_EXTENSION_NAME "VK_KHR_external_fence_capabilities"
  #define VK_KHR_EXTERNAL_FENCE_SPEC_VERSION 1
@@ -19442,9 +19442,9 @@ diff -ruN --show-c-function vanilla-1017/include/wine/vulkan.h protonvulkan-1017
 +} VkCreateInfoWineInstanceCallback;
 +#define VK_STRUCTURE_TYPE_CREATE_INFO_WINE_INSTANCE_CALLBACK 2125312002
  #endif /* __WINE_VULKAN_H */
-diff -ruN --show-c-function vanilla-1017/loader/wine.inf.in protonvulkan-1017/loader/wine.inf.in
---- vanilla-1017/loader/wine.inf.in	2025-10-21 17:44:36.808791437 -0700
-+++ protonvulkan-1017/loader/wine.inf.in	2025-10-21 17:23:40.638407019 -0700
+diff -ruN --show-c-function loader/wine.inf.in loader/wine.inf.in
+--- loader/wine.inf.in	2025-10-21 17:44:36.808791437 -0700
++++ loader/wine.inf.in	2025-10-21 17:23:40.638407019 -0700
 @@ -152,6 +152,7 @@ AddService=Winmgmt,0,WinmgmtService
  AddService=wuauserv,0,wuauService
  AddService=NDIS,0x800,NDISService
@@ -19493,9 +19493,9 @@ diff -ruN --show-c-function vanilla-1017/loader/wine.inf.in protonvulkan-1017/lo
  [RpcSsService]
  Description="RPC service"
  DisplayName="Remote Procedure Call (RPC)"
-diff -ruN --show-c-function vanilla-1017/MAINTAINERS protonvulkan-1017/MAINTAINERS
---- vanilla-1017/MAINTAINERS	2025-10-21 17:44:35.602764286 -0700
-+++ protonvulkan-1017/MAINTAINERS	2025-10-21 17:23:40.583994665 -0700
+diff -ruN --show-c-function MAINTAINERS MAINTAINERS
+--- MAINTAINERS	2025-10-21 17:44:35.602764286 -0700
++++ MAINTAINERS	2025-10-21 17:23:40.583994665 -0700
 @@ -64,12 +64,6 @@ P:	Esme Povirk <esme@codeweavers.com> @m
  F:	dlls/comdlg32/itemdlg.c
  F:	dlls/comdlg32/tests/itemdlg.c
@@ -19543,9 +19543,9 @@ diff -ruN --show-c-function vanilla-1017/MAINTAINERS protonvulkan-1017/MAINTAINE
  Web Services
  M:	Hans Leidekker <hans@codeweavers.com> @hans
  F:	dlls/webservices/
-diff -ruN --show-c-function vanilla-1017/server/d3dkmt.c protonvulkan-1017/server/d3dkmt.c
---- vanilla-1017/server/d3dkmt.c	2025-10-21 17:44:36.355168673 -0700
-+++ protonvulkan-1017/server/d3dkmt.c	2025-10-21 17:23:40.579149190 -0700
+diff -ruN --show-c-function server/d3dkmt.c server/d3dkmt.c
+--- server/d3dkmt.c	2025-10-21 17:44:36.355168673 -0700
++++ server/d3dkmt.c	2025-10-21 17:23:40.579149190 -0700
 @@ -42,11 +42,9 @@ struct d3dkmt_object
      d3dkmt_handle_t     global;         /* object global handle */
      void               *runtime;        /* client runtime data */
@@ -19670,9 +19670,9 @@ diff -ruN --show-c-function vanilla-1017/server/d3dkmt.c protonvulkan-1017/serve
      tmp = object->runtime;
      object->runtime = runtime;
      object->runtime_size = size;
-diff -ruN --show-c-function vanilla-1017/server/mapping.c protonvulkan-1017/server/mapping.c
---- vanilla-1017/server/mapping.c	2025-10-21 17:44:36.808791437 -0700
-+++ protonvulkan-1017/server/mapping.c	2025-10-21 17:23:40.567674297 -0700
+diff -ruN --show-c-function server/mapping.c server/mapping.c
+--- server/mapping.c	2025-10-21 17:44:36.808791437 -0700
++++ server/mapping.c	2025-10-21 17:23:40.567674297 -0700
 @@ -157,6 +157,7 @@ struct type_descr mapping_type =
  struct mapping
  {
@@ -19729,9 +19729,9 @@ diff -ruN --show-c-function vanilla-1017/server/mapping.c protonvulkan-1017/serv
  static void mapping_destroy( struct object *obj )
  {
      struct mapping *mapping = (struct mapping *)obj;
-diff -ruN --show-c-function vanilla-1017/server/protocol.def protonvulkan-1017/server/protocol.def
---- vanilla-1017/server/protocol.def	2025-10-21 17:44:36.808791437 -0700
-+++ protonvulkan-1017/server/protocol.def	2025-10-21 17:23:40.579309934 -0700
+diff -ruN --show-c-function server/protocol.def server/protocol.def
+--- server/protocol.def	2025-10-21 17:44:36.808791437 -0700
++++ server/protocol.def	2025-10-21 17:23:40.579309934 -0700
 @@ -4177,7 +4177,6 @@ enum inproc_sync_type
  /* Create a global d3dkmt object */
  @REQ(d3dkmt_object_create)
@@ -19748,9 +19748,9 @@ diff -ruN --show-c-function vanilla-1017/server/protocol.def protonvulkan-1017/s
      VARARG(runtime,bytes);              /* client runtime data */
  @END
  
-diff -ruN --show-c-function vanilla-1017/server/request_handlers.h protonvulkan-1017/server/request_handlers.h
---- vanilla-1017/server/request_handlers.h	2025-10-21 17:44:36.809791459 -0700
-+++ protonvulkan-1017/server/request_handlers.h	2025-10-21 17:23:40.579540961 -0700
+diff -ruN --show-c-function server/request_handlers.h server/request_handlers.h
+--- server/request_handlers.h	2025-10-21 17:44:36.809791459 -0700
++++ server/request_handlers.h	2025-10-21 17:23:40.579540961 -0700
 @@ -2310,13 +2310,13 @@ C_ASSERT( sizeof(struct get_inproc_alert
  C_ASSERT( offsetof(struct get_inproc_alert_fd_reply, handle) == 8 );
  C_ASSERT( sizeof(struct get_inproc_alert_fd_reply) == 16 );
@@ -19767,9 +19767,9 @@ diff -ruN --show-c-function vanilla-1017/server/request_handlers.h protonvulkan-
  C_ASSERT( sizeof(struct d3dkmt_object_update_request) == 24 );
  C_ASSERT( offsetof(struct d3dkmt_object_query_request, type) == 12 );
  C_ASSERT( offsetof(struct d3dkmt_object_query_request, global) == 16 );
-diff -ruN --show-c-function vanilla-1017/server/request_trace.h protonvulkan-1017/server/request_trace.h
---- vanilla-1017/server/request_trace.h	2025-10-21 17:44:36.809791459 -0700
-+++ protonvulkan-1017/server/request_trace.h	2025-10-21 17:23:40.579775194 -0700
+diff -ruN --show-c-function server/request_trace.h server/request_trace.h
+--- server/request_trace.h	2025-10-21 17:44:36.809791459 -0700
++++ server/request_trace.h	2025-10-21 17:23:40.579775194 -0700
 @@ -3396,7 +3396,6 @@ static void dump_get_inproc_alert_fd_rep
  static void dump_d3dkmt_object_create_request( const struct d3dkmt_object_create_request *req )
  {
