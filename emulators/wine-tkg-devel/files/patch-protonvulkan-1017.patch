@@ -48,9 +48,9 @@ diff -ruN --show-c-function dlls/ntdll/unix/unix_private.h dlls/ntdll/unix/unix_
  extern int server_get_unix_fd( HANDLE handle, unsigned int wanted_access, int *unix_fd,
                                 int *needs_close, enum server_fd_type *type, unsigned int *options );
 +extern void wine_server_send_fd( int fd );
- extern int wine_server_receive_fd( obj_handle_t *handle );
  extern void process_exit_wrapper( int status ) DECLSPEC_NORETURN;
  extern size_t server_init_process(void);
+ extern void server_init_process_done(void);
 diff -ruN --show-c-function dlls/ntoskrnl.exe/ntoskrnl.c dlls/ntoskrnl.exe/ntoskrnl.c
 --- dlls/ntoskrnl.exe/ntoskrnl.c	2025-10-21 17:44:35.926181403 -0700
 +++ dlls/ntoskrnl.exe/ntoskrnl.c	2025-10-21 17:23:40.567378798 -0700
@@ -7550,6 +7550,29 @@ diff -ruN --show-c-function dlls/winevulkan/vulkan.c dlls/winevulkan/vulkan.c
 +    ERR("Unknown native physical device: %p, instance %p, handle %p\n", native_phys_dev, instance, handle);
 +    return NULL;
  }
+--- dlls/winevulkan/vulkan.c.orig	2025-04-29 18:52:18.000000000 -0700
++++ dlls/winevulkan/vulkan.c		2025-05-01 22:56:53.024208000 -0700
+@@ -29,6 +29,7 @@
+ #include <stdio.h>
+ #include <assert.h>
+ #include <limits.h>
++#include <pthread_np.h>
+ #ifdef HAVE_SYS_SYSCALL_H
+ # include <sys/syscall.h>
+ #endif
+@@ -3547,11 +3548,7 @@
+ 
+ void *signaller_worker(void *arg)
+ {
+-#ifdef HAVE_SYS_SYSCALL_H
+-    int unix_tid = syscall( __NR_gettid );
+-#else
+-    int unix_tid = -1;
+-#endif
++    int unix_tid = pthread_getthreadid_np();
+     struct vulkan_device *device = arg;
+     struct wine_semaphore *sem;
+     VkSemaphoreWaitInfo wait_info = { 0 };
 diff -ruN --show-c-function dlls/winevulkan/vulkan_private.h dlls/winevulkan/vulkan_private.h
 --- dlls/winevulkan/vulkan_private.h	2025-10-21 17:44:36.083775116 -0700
 +++ dlls/winevulkan/vulkan_private.h	2025-10-21 17:23:40.651251132 -0700
@@ -19564,9 +19587,9 @@ diff -ruN --show-c-function server/d3dkmt.c server/d3dkmt.c
      no_signal,                      /* signal */
 -    d3dkmt_object_get_fd,           /* get_fd */
 +    no_get_fd,                      /* get_fd */
-     default_get_sync,               /* get_sync */
      default_map_access,             /* map_access */
      default_get_sd,                 /* get_sd */
+     default_set_sd,                 /* set_sd */
 @@ -74,27 +72,6 @@ static const struct object_ops d3dkmt_ob
      d3dkmt_object_destroy,          /* destroy */
  };

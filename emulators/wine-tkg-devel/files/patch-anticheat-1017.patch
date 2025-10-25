@@ -291,25 +291,25 @@ diff -ruN --show-c-function --no-dereference dlls/ntdll/ntdll.spec dlls/ntdll/nt
 +# Filesystem
 +@ stdcall -syscall wine_nt_to_unix_file_name(ptr ptr ptr long)
 diff -ruN --show-c-function --no-dereference dlls/ntdll/ntsyscalls.h dlls/ntdll/ntsyscalls.h
---- dlls/ntdll/ntsyscalls.h	2025-09-06 20:10:25.382489706 -0700
-+++ dlls/ntdll/ntsyscalls.h	2025-09-06 20:33:44.147240191 -0700
-@@ -263,7 +263,8 @@
-     SYSCALL_ENTRY( 0x0103, NtWow64IsProcessorFeaturePresent, 4 ) \
+--- dlls/ntdll/ntsyscalls.h	2025-10-24 21:13:58.797858000 -0700
++++ dlls/ntdll/ntsyscalls.h	2025-10-24 21:28:51.966005000 -0700
+@@ -264,7 +264,8 @@
      SYSCALL_ENTRY( 0x0104, NtWow64QueryInformationProcess64, 20 ) \
      SYSCALL_ENTRY( 0x0105, NtWow64ReadVirtualMemory64, 28 ) \
--    SYSCALL_ENTRY( 0x0106, NtWow64WriteVirtualMemory64, 28 )
-+    SYSCALL_ENTRY( 0x0106, NtWow64WriteVirtualMemory64, 28 ) \
-+    SYSCALL_ENTRY( 0x0107, wine_nt_to_unix_file_name, 16 )
+     SYSCALL_ENTRY( 0x0106, NtWow64WriteVirtualMemory64, 28 ) \
+-    SYSCALL_ENTRY( 0x0107, __wine_needs_override_large_address_aware, 0 )
++    SYSCALL_ENTRY( 0x0107, wine_nt_to_unix_file_name, 16 ) \
++    SYSCALL_ENTRY( 0x0108, __wine_needs_override_large_address_aware, 0 )
  #ifdef _WIN64
  #define ALL_SYSCALLS \
      SYSCALL_ENTRY( 0x0000, NtAccessCheck, 64 ) \
-@@ -522,7 +523,8 @@
-     SYSCALL_ENTRY( 0x00fd, NtUnmapViewOfSectionEx, 24 ) \
+@@ -524,7 +525,8 @@
      SYSCALL_ENTRY( 0x00fe, NtWaitForAlertByThreadId, 16 ) \
      SYSCALL_ENTRY( 0x00ff, NtWaitForDebugEvent, 32 ) \
--    SYSCALL_ENTRY( 0x0100, NtWaitForKeyedEvent, 32 )
-+    SYSCALL_ENTRY( 0x0100, NtWaitForKeyedEvent, 32 ) \
-+    SYSCALL_ENTRY( 0x0101, wine_nt_to_unix_file_name, 32 )
+     SYSCALL_ENTRY( 0x0100, NtWaitForKeyedEvent, 32 ) \
+-    SYSCALL_ENTRY( 0x0101, __wine_needs_override_large_address_aware, 0 )
++    SYSCALL_ENTRY( 0x0101, wine_nt_to_unix_file_name, 32 ) \
++    SYSCALL_ENTRY( 0x0102, __wine_needs_override_large_address_aware, 0 )
  #else
  #define ALL_SYSCALLS ALL_SYSCALLS32
  #endif
