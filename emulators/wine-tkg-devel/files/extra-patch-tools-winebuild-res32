@@ -1,4 +1,19 @@
---- tools/winebuild/res32.c.orig
+commit 0b3f90ab1485d5bd32bd72d41c7fd8213b3b95b9
+Author: Rémi Bernon <rbernon@codeweavers.com>
+Date:   Sat Feb 11 11:05:22 2023 +0100
+
+winebuild: Use .incbin instead of printf for resource data.
+
+apparently causes some (not completely reproducible) build
+issues on i386 due to resource exhaustion by the compiler,
+cf.  https://bugs.winehq.org/show_bug.cgi?id=54889 .
+
+https://github.com/llvm/llvm-project/issues/62339 tracks this on
+the LLVM side, alas has not really seen progress since April 2003.
+So for now this reverts the upstream commit (alas on i386 only as
+to minimize divergence and risk on 64-bit x86).
+
+--- tools/winebuild/res32.c
 +++ tools/winebuild/res32.c
 @@ -44,8 +44,6 @@ struct resource
  {
