@@ -1,2 +1,2 @@
 # wine-steam-devel
-Wine Devel with revert paches to workaround Windows Steam crashes on FreeBSD
+FreeBSD Wine Devel with paches to workaround the Windows Steam client not displaying a program window
