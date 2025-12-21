@@ -1,5 +1,5 @@
 PORTNAME=	wine
-DISTVERSION=	11.0-rc2
+DISTVERSION=	11.0-rc3
 PORTEPOCH=	1
 CATEGORIES=	emulators
 MASTER_SITES=	https://dl.winehq.org/wine/source/11.0/
@@ -159,17 +159,16 @@ pre-build:
 
 post-install:
 .if ${ARCH} == i386
-	${MV} ${STAGEDIR}${PREFIX}/bin/wineserver		${STAGEDIR}${PREFIX}/bin/wineserver32
-	${MV} ${STAGEDIR}${PREFIX}/bin/wine			${STAGEDIR}${PREFIX}/bin/wine.bin
-	-${ELFCTL} -e +noaslr					${STAGEDIR}${PREFIX}/bin/wine.bin
-	${INSTALL_SCRIPT} ${FILESDIR}/wine.sh			${STAGEDIR}${PREFIX}/bin/wine
+	${MV} ${STAGEDIR}${PREFIX}/bin/wineserver	${STAGEDIR}${PREFIX}/bin/wineserver32
+	${MV} ${STAGEDIR}${PREFIX}/bin/wine		${STAGEDIR}${PREFIX}/bin/wine.bin
+	-${ELFCTL} -e +noaslr				${STAGEDIR}${PREFIX}/bin/wine.bin
+	${INSTALL_SCRIPT} ${FILESDIR}/wine.sh		${STAGEDIR}${PREFIX}/bin/wine
 .else
-	${MV} ${STAGEDIR}${PREFIX}/bin/wine			${STAGEDIR}${PREFIX}/bin/wine64.bin
-	-${ELFCTL} -e +noaslr					${STAGEDIR}${PREFIX}/bin/wine64.bin
-	${INSTALL_SCRIPT} ${FILESDIR}/wine.sh			${STAGEDIR}${PREFIX}/bin/wine64
-	${INSTALL_SCRIPT} ${FILESDIR}/wine-wow64.sh		${STAGEDIR}${PREFIX}/bin/wine
-	${INSTALL_SCRIPT} ${FILESDIR}/pkg32.sh			${STAGEDIR}${DATADIR}/pkg32.sh
-	${INSTALL_SCRIPT} ${FILESDIR}/FreeBSD-14-i386.conf	${STAGEDIR}${DATADIR}/FreeBSD-14-i386.conf
+	${MV} ${STAGEDIR}${PREFIX}/bin/wine		${STAGEDIR}${PREFIX}/bin/wine64.bin
+	-${ELFCTL} -e +noaslr				${STAGEDIR}${PREFIX}/bin/wine64.bin
+	${INSTALL_SCRIPT} ${FILESDIR}/wine.sh		${STAGEDIR}${PREFIX}/bin/wine64
+	${INSTALL_SCRIPT} ${FILESDIR}/wine-wow64.sh	${STAGEDIR}${PREFIX}/bin/wine
+	${INSTALL_SCRIPT} ${FILESDIR}/pkg32.sh		${STAGEDIR}${DATADIR}/pkg32.sh
 .endif
 
 	@${MKDIR} ${STAGEDIR}${DOCSDIR}

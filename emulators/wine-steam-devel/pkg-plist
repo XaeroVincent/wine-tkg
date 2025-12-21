@@ -2897,7 +2897,6 @@ share/man/pl.UTF-8/man1/wine.1.gz
 %%DATADIR%%/nls/normnfkd.nls
 %%DATADIR%%/nls/sortdefault.nls
 %%WINE64%%%%DATADIR%%/pkg32.sh
-%%WINE64%%%%DATADIR%%/FreeBSD-14-i386.conf
 %%DATADIR%%/winmd/windows.applicationmodel.winmd
 %%DATADIR%%/winmd/windows.globalization.winmd
 %%DATADIR%%/winmd/windows.graphics.winmd
