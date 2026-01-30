@@ -1712,6 +1712,7 @@ lib/wine/%%WINEARCH%%-unix/winedmo.so
 %%GSTREAMER%%lib/wine/%%WINEARCH%%-unix/winegstreamer.so
 %%OSS%%lib/wine/%%WINEARCH%%-unix/wineoss.so
 lib/wine/%%WINEARCH%%-unix/wineps.so
+%%PULSEAUDIO%%lib/wine/%%WINEARCH%%-unix/winepulse.so
 lib/wine/%%WINEARCH%%-unix/winevulkan.so
 %%WAYLAND%%lib/wine/%%WINEARCH%%-unix/winewayland.so
 %%X11%%lib/wine/%%WINEARCH%%-unix/winex11.so
@@ -2689,6 +2690,7 @@ lib/wine/%%WINEARCH%%-windows/winemsibuilder.exe
 lib/wine/%%WINEARCH%%-windows/winepath.exe
 lib/wine/%%WINEARCH%%-windows/wineps.drv
 %%WINE32%%lib/wine/%%WINEARCH%%-windows/wineps16.drv16
+%%PULSEAUDIO%%lib/wine/%%WINEARCH%%-windows/winepulse.drv
 %%WINE32%%lib/wine/%%WINEARCH%%-windows/winevdm.exe
 lib/wine/%%WINEARCH%%-windows/winevulkan.dll
 %%WAYLAND%%lib/wine/%%WINEARCH%%-windows/winewayland.drv
