@@ -1,5 +1,5 @@
 PORTNAME=	wine
-DISTVERSION=	11.1
+DISTVERSION=	11.2
 PORTEPOCH=	1
 CATEGORIES=	emulators
 MASTER_SITES=	https://dl.winehq.org/wine/source/11.x/
@@ -69,8 +69,8 @@ SUB_FILES=	pkg-message
 
 PORTDATA=	wine.inf
 
-# GECKO and MONO are intentionally kept at the end since they are just
-# used to depends at runtime on wine-gecko-devel and wine-mono-devel
+# GECKO and MONO are intentionally kept at the end; they just pull in
+# run-time dependencies on wine-gecko and wine-mono.
 OPTIONS_DEFINE=		CUPS DOCS DOSBOX FFMPEG GNUTLS V4L WAYLAND X11 GECKO MONO
 OPTIONS_DEFAULT=	ALSA FFMPEG GNUTLS OSS WAYLAND X11
 .if ${FLAVOR} == allaudio
