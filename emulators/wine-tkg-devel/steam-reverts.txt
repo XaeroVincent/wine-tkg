@@ -1,0 +1,7 @@
+Reverts needed to fix the Windows Steam client for FreeBSD Wine:
+
+* Commit: 62b3eee965223a2de62daa87c4b81708cd62e6f3 - "user32: Add stub for SetProcessLaunchForegroundPolicy." - May 25th 2025
+* URL: https://gitlab.winehq.org/wine/wine/-/commit/62b3eee965223a2de62daa87c4b81708cd62e6f3
+
+* Commit: 9195d892ba24ca312588f2c338d33269b21bf0c8 - "configure: Build PEs with -ffp-exception-behavior=maytrap." - July 1st 2025
+* URL: https://gitlab.winehq.org/wine/wine/-/commit/9195d892ba24ca312588f2c338d33269b21bf0c8
