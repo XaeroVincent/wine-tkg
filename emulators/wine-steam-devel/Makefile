@@ -3,7 +3,7 @@ DISTVERSION=	11.3
 PORTEPOCH=	1
 CATEGORIES=	emulators
 MASTER_SITES=	https://dl.winehq.org/wine/source/11.x/
-PKGNAMESUFFIX=	-steam-devel${FLAVOR:N${FLAVORS:[1]}:C/.+/-${FLAVOR}/}
+PKGNAMESUFFIX=	-steam-ntsync-devel${FLAVOR:N${FLAVORS:[1]}:C/.+/-${FLAVOR}/}
 
 MAINTAINER=	monwarez@mailoo.org
 COMMENT=	Microsoft Windows compatibility environment
