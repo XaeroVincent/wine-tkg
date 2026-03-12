@@ -1,5 +1,5 @@
---- server/mutex.c.orig	2026-03-05 03:51:28.659079256 +0000
-+++ server/mutex.c	2026-03-05 03:52:05.233069586 +0000
+--- server/mutex.c.orig	2026-02-20 12:50:32.000000000 -0800
++++ server/mutex.c	2026-03-10 00:48:08.926439000 -0700
 @@ -21,9 +21,11 @@
  #include "config.h"
  
@@ -12,7 +12,7 @@
  #include <sys/types.h>
  
  #include "ntstatus.h"
-@@ -36,6 +38,37 @@
+@@ -36,6 +38,18 @@
  #include "request.h"
  #include "security.h"
  
@@ -26,31 +26,12 @@
 +#ifdef __FreeBSD__
 +# include <linux/ntsync.h>
 +extern int get_inproc_obj_fd( struct object *obj );
-+
-+static int release_inproc_mutex_sync( struct object *sync, unsigned int owner_tid )
-+{
-+    struct ntsync_mutex_args args = { .owner = owner_tid, .count = 0 };
-+    int fd = get_inproc_obj_fd( sync );
-+    if (fd < 0) return -1;
-+    return ioctl( fd, NTSYNC_IOC_MUTEX_UNLOCK, &args );
-+}
-+
-+static int read_inproc_mutex_sync( struct object *sync, unsigned int *owner, unsigned int *count )
-+{
-+    struct ntsync_mutex_args args = { 0 };
-+    int fd = get_inproc_obj_fd( sync );
-+    if (fd < 0) return -1;
-+    if (ioctl( fd, NTSYNC_IOC_MUTEX_READ, &args ) < 0) return -1;
-+    *owner = args.owner;
-+    *count = args.count;
-+    return 0;
-+}
 +#endif /* __FreeBSD__ */
 +
  static const WCHAR mutex_name[] = {'M','u','t','a','n','t'};
  
  struct type_descr mutex_type =
-@@ -153,11 +186,19 @@
+@@ -153,11 +167,19 @@
      mutex->abandoned = 0;
  }
  
@@ -72,7 +53,7 @@
  
      if (!(mutex = alloc_object( &mutex_sync_ops ))) return NULL;
      mutex->count = 0;
-@@ -216,7 +257,8 @@
+@@ -216,7 +238,8 @@
              /* initialize it if it didn't already exist */
              mutex->sync = NULL;
  
@@ -82,13 +63,13 @@
              {
                  release_object( mutex );
                  return NULL;
-@@ -260,9 +302,27 @@
+@@ -260,8 +283,28 @@
      struct mutex *mutex = (struct mutex *)obj;
      assert( obj->ops == &mutex_ops );
  
 -    assert( mutex->sync->ops == &mutex_sync_ops ); /* never called with inproc syncs */
      assert( signal == -1 ); /* always called from signal_object */
- 
++
 +#ifdef __FreeBSD__
 +    if (mutex->sync->ops != &mutex_sync_ops)
 +    {
@@ -99,7 +80,9 @@
 +            set_error( STATUS_ACCESS_DENIED );
 +            return 0;
 +        }
-+        if (release_inproc_mutex_sync( mutex->sync, current->id ) != 0)
++        struct ntsync_mutex_args args = { .owner = (unsigned int)current->id, .count = 0 };
++        int fd = get_inproc_obj_fd( mutex->sync );
++        if (fd < 0 || ioctl( fd, NTSYNC_IOC_MUTEX_UNLOCK, &args ) != 0)
 +        {
 +            set_error( errno == EPERM ? STATUS_MUTANT_NOT_OWNED : STATUS_UNSUCCESSFUL );
 +            return 0;
@@ -107,11 +90,10 @@
 +        return 1;
 +    }
 +#endif /* __FreeBSD__ */
-+
+ 
      if (!(access & SYNCHRONIZE))
      {
-         set_error( STATUS_ACCESS_DENIED );
-@@ -319,11 +379,27 @@
+@@ -319,11 +362,34 @@
      if ((mutex = (struct mutex *)get_handle_obj( current->process, req->handle,
                                                   0, &mutex_ops )))
      {
@@ -127,12 +109,19 @@
 +             * NTSYNC_IOC_MUTEX_UNLOCK returned EPERM (owner mismatch).  Push
 +             * the release through the driver from here using current->id,
 +             * which is the NT TID of the ntdll thread that called
-+             * NtReleaseMutant — i.e. the rightful owner. */
-+            unsigned int owner = 0, count = 0;
-+            read_inproc_mutex_sync( mutex->sync, &owner, &count );
-+            reply->prev_count = count;
-+            if (release_inproc_mutex_sync( mutex->sync, current->id ) != 0)
++             * NtReleaseMutant — i.e. the rightful owner.
++             *
++             * NTSYNC_IOC_MUTEX_UNLOCK is _IOWR: on success the kernel writes
++             * the atomically-captured previous count into args.count before
++             * returning.  Use that value directly — issuing a separate
++             * NTSYNC_IOC_MUTEX_READ first would introduce a TOCTOU race and
++             * an unnecessary extra ioctl round-trip. */
++            struct ntsync_mutex_args args = { .owner = (unsigned int)current->id, .count = 0 };
++            int fd = get_inproc_obj_fd( mutex->sync );
++            if (fd < 0 || ioctl( fd, NTSYNC_IOC_MUTEX_UNLOCK, &args ) != 0)
 +                set_error( errno == EPERM ? STATUS_MUTANT_NOT_OWNED : STATUS_UNSUCCESSFUL );
++            else
++                reply->prev_count = args.count;
 +        }
 +        else
 +#endif /* __FreeBSD__ */
@@ -144,7 +133,7 @@
          release_object( mutex );
      }
  }
-@@ -336,13 +412,34 @@
+@@ -336,13 +402,39 @@
      if ((mutex = (struct mutex *)get_handle_obj( current->process, req->handle,
                                                   MUTANT_QUERY_STATE, &mutex_ops )))
      {
@@ -158,12 +147,17 @@
 +#ifdef __FreeBSD__
 +        if (mutex->sync->ops != &mutex_sync_ops)
 +        {
-+            /* Inproc ntsync mutex: read state directly from the kernel object. */
-+            unsigned int owner = 0, count = 0;
-+            if (read_inproc_mutex_sync( mutex->sync, &owner, &count ) == 0)
++            /* Inproc ntsync mutex: read state directly from the kernel object.
++             * Check fd first so errno is only inspected after a genuine failed
++             * ioctl, not after the get_inproc_obj_fd call itself. */
++            struct ntsync_mutex_args args = { 0 };
++            int fd = get_inproc_obj_fd( mutex->sync );
++            if (fd < 0)
++                set_error( STATUS_UNSUCCESSFUL );
++            else if (ioctl( fd, NTSYNC_IOC_MUTEX_READ, &args ) == 0)
 +            {
-+                reply->count     = count;
-+                reply->owned     = (owner == (unsigned int)current->id);
++                reply->count     = args.count;
++                reply->owned     = (args.owner == (unsigned int)current->id);
 +                reply->abandoned = 0;
 +            }
 +            else if (errno == EOWNERDEAD)

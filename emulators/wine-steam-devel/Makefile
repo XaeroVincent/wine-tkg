@@ -1,5 +1,5 @@
 PORTNAME=	wine
-DISTVERSION=	11.3
+DISTVERSION=	11.4
 PORTEPOCH=	1
 CATEGORIES=	emulators
 MASTER_SITES=	https://dl.winehq.org/wine/source/11.x/
@@ -22,7 +22,7 @@ FLAVORS=	default allaudio
 FLAVOR?=	default
 
 # Only devel/llvm17 and later come with necessary include files - PR274542
-USES=		bison cpe desktop-file-utils gmake llvm:min=17,build,noexport \
+USES=		autoreconf bison cpe desktop-file-utils gmake llvm:min=17,build,noexport \
 		localbase pkgconfig sdl shebangfix tar:xz
 CPE_VENDOR=	winehq
 USE_GCC=	yes
@@ -55,7 +55,7 @@ CONFIGURE_ARGS=	--verbose \
 		--with-sdl \
 		--without-udev \
 		--without-unwind \
-		--without-usb
+		--with-usb
 CONFIGURE_ENV=	CPPBIN="${CPP}" FLEX="${LOCALBASE}/bin/flex"
 
 PIE_UNSAFE=	yes
@@ -69,8 +69,8 @@ SUB_FILES=	pkg-message
 
 PORTDATA=	wine.inf
 
-# GECKO and MONO are intentionally kept at the end; they just pull in
-# run-time dependencies on wine-gecko and wine-mono.
+# GECKO and MONO are intentionally kept at the end since they are just
+# used to depends at runtime on wine-gecko-devel and wine-mono-devel
 OPTIONS_DEFINE=		CUPS DOCS DOSBOX FFMPEG GNUTLS V4L WAYLAND X11 GECKO MONO
 OPTIONS_DEFAULT=	ALSA FFMPEG GNUTLS OSS WAYLAND X11
 .if ${FLAVOR} == allaudio
