@@ -8,4 +8,4 @@ export PULSE_LATENCY_MSEC=60
 # WINEPREFIX=$HOME/.wine_steam wine reg.exe ADD "HKEY_CURRENT_USER\Software\Wine\AppDefaults\steamwebhelper.exe\DllOverrides" /v "dxgi" /t "REG_SZ" /d "builtin" /f
 # WINEPREFIX=$HOME/.wine_steam winetricks -q corefonts nocrashdialog
 
-DXVK_HUD=full WINEESYNC=1 WINE_LARGE_ADDRESS_AWARE=1 WINEDEBUG=-all WINEPREFIX=$HOME/.wine_steam /usr/local/bin/wine "$HOME/.wine_steam/drive_c/Program Files (x86)/Steam/steam.exe" -cef-disable-sandbox -cef-in-process-gpu -cef-disable-gpu
+WINE_LARGE_ADDRESS_AWARE=1 WINEDEBUG="-all" WINEPREFIX=$HOME/.wine_steam /usr/local/bin/wine "$HOME/.wine_steam/drive_c/Program Files (x86)/Steam/steam.exe" -cef-disable-sandbox -cef-disable-seccomp-sandbox -no-cef-sandbox -cef-disable-gpu -cef-disable-hang-timeouts -console
