@@ -1,5 +1,5 @@
 --- dlls/ntdll/unix/signal_x86_64.c.orig	2026-03-20 13:33:36.000000000 -0700
-+++ dlls/ntdll/unix/signal_x86_64.c	2026-03-29 23:51:28.640015000 -0700
++++ dlls/ntdll/unix/signal_x86_64.c	2026-03-30 16:28:51.749770000 -0700
 @@ -201,6 +201,9 @@ __ASM_GLOBAL_FUNC( modify_ldt,
  
  #elif defined(__FreeBSD__) || defined (__FreeBSD_kernel__)
@@ -220,7 +220,7 @@
  
  #ifdef PR_SET_SYSCALL_USER_DISPATCH
      if (!syscall_dispatch_enabled)
-@@ -2719,6 +2843,40 @@ static void sigsys_handler( int signal, siginfo_t *sig
+@@ -2719,6 +2843,47 @@ static void sigsys_handler( int signal, siginfo_t *sig
      }
  #endif
  
@@ -235,7 +235,14 @@
 +            {
 +                if (syscall_nr == fbsd_syscall_nr_translation[i].win_syscall_nr)
 +                {
-+                    syscall_nr = fbsd_syscall_nr_translation[i].wine_syscall_nr;
++                    /* Only substitute if the Wine number was resolved at init time.
++                     * If wine_syscall_nr is still ~0u, the function was not found in
++                     * KeServiceDescriptorTable (unimplemented stub, missing entry, etc).
++                     * Keep the original Windows number so Wine's dispatcher rejects
++                     * it cleanly via its normal unknown-syscall path, rather than
++                     * using 0xFFFFFFFF as an index off the end of ServiceTable. */
++                    if (fbsd_syscall_nr_translation[i].wine_syscall_nr != ~0u)
++                        syscall_nr = fbsd_syscall_nr_translation[i].wine_syscall_nr;
 +                    break;
 +                }
 +            }
@@ -261,7 +268,7 @@
      frame->rip = RIP_sig(ucontext) + 0xb;
      frame->rcx = RIP_sig(ucontext);
      frame->eflags = EFL_sig(ucontext);
-@@ -2756,6 +2914,16 @@ void ldt_set_entry( WORD sel, LDT_ENTRY entry )
+@@ -2756,6 +2921,16 @@ void ldt_set_entry( WORD sel, LDT_ENTRY entry )
      if ((ret = modify_ldt( &ldt_info ))) ERR( "modify_ldt failed %d\n", ret );
  #elif defined(__APPLE__)
      if (i386_set_ldt(sel >> 3, (union ldt_entry *)&entry, 1) < 0) perror("i386_set_ldt");
@@ -278,10 +285,13 @@
  #else
      fprintf( stderr, "No LDT support on this platform\n" );
      exit(1);
-@@ -2880,6 +3048,72 @@ static int libc_addr_cb( struct dl_phdr_info *info, si
- }
- #endif
+@@ -2877,7 +3052,94 @@ static int libc_addr_cb( struct dl_phdr_info *info, si
+         libc_size = max( libc_size, info->dlpi_phdr[i].p_vaddr + info->dlpi_phdr[i].p_memsz );
  
+     return 1;
++}
++#endif
++
 +#ifdef __FreeBSD__
 +static __siginfohandler_t *libthr_signal_handlers[_SIG_MAXSIG];
 +
@@ -304,6 +314,18 @@
 +            __asm__ volatile ("wrfsbase %0" :: "r" (pthread_teb));
 +        else
 +        {
++            /* On CPUs without FSGSBASE, sysarch(AMD64_SET_FSBASE) requires a raw
++             * syscall instruction.  If SUD is in BLOCK state when this signal
++             * arrived (thread was in Windows user mode), SUD will intercept the
++             * sysarch syscall and deliver SIGSYS.  The SIGSYS handler would then
++             * misinterpret this as a redirected Windows syscall and corrupt RIP
++             * by advancing it +0xb bytes into the middle of our inline asm.
++             *
++             * Fix: save the current selector, force ALLOW for the duration of
++             * the sysarch call, then restore exactly what was there before so
++             * the caller's SUD state is preserved on return. */
++            uint8_t saved_dispatch = thread_data->syscall_dispatch;
++            thread_data->syscall_dispatch = 0; /* ALLOW: let sysarch through SUD */
 +            void *fsbase_val = pthread_teb;
 +            __asm__ volatile (
 +                "movq %0, %%rsi\n\t"         /* Manually load into %rsi to allow clobbering */
@@ -314,6 +336,7 @@
 +                : "r" (&fsbase_val)
 +                : "rax", "rcx", "rdx", "rsi", "rdi", "r8", "r9", "r10", "r11", "memory"
 +            );
++            thread_data->syscall_dispatch = saved_dispatch; /* restore BLOCK/ALLOW */
 +        }
 +
 +        /* Also fix mc_fsbase in the saved signal context.  Without this, the kernel
@@ -323,7 +346,7 @@
 +    }
 +
 +    libthr_signal_handlers[sig - 1](sig, info, _ucp);
-+}
+ }
 +
 +extern int __sys_sigaction(int, const struct sigaction * restrict, struct sigaction * restrict);
 +
@@ -335,23 +358,29 @@
 +    for (sig = 1; sig <= _SIG_MAXSIG; sig++)
 +    {
 +        if (__sys_sigaction(sig, NULL, &act) == -1) return -1;
-+        if (act.sa_handler != SIG_DFL && act.sa_handler != SIG_IGN)
++        if (act.sa_handler != SIG_DFL && act.sa_handler != SIG_IGN
++            && act.sa_sigaction != libthr_sighandler_wrapper)
 +        {
 +            libthr_signal_handlers[sig - 1] = act.sa_sigaction;
 +            act.sa_sigaction = libthr_sighandler_wrapper;
-+
++            /* Strip SA_RESETHAND: if libthr installed a one-shot handler and
++             * the kernel de-registers it on first delivery, our wrapper slot
++             * in libthr_signal_handlers would become a dangling pointer that
++             * fires again on the next delivery of this signal with no handler.
++             * Clearing the flag keeps the wrapper resident so it can forward
++             * correctly every time.  The one-shot semantic is gone, but libthr
++             * never uses SA_RESETHAND for its own internal signals in practice. */
++            act.sa_flags &= ~SA_RESETHAND;
 +            if (__sys_sigaction(sig, &act, NULL) == -1) return -1;
 +        }
 +    }
 +
 +    return 0;
 +}
-+#endif
-+
+ #endif
+ 
  /**********************************************************************
-  *		signal_init_process
-  */
-@@ -2909,6 +3143,11 @@ void signal_init_process(void)
+@@ -2909,6 +3171,11 @@ void signal_init_process(void)
          fs32_sel = alloc_fs_sel( -1, wow_teb );
  #elif defined(__APPLE__)
          cs32_sel = ldt_alloc_entry( ldt_make_cs32_entry() );
@@ -363,17 +392,19 @@
  #endif
      }
  
-@@ -2944,6 +3183,32 @@ void signal_init_process(void)
+@@ -2942,8 +3209,34 @@ void signal_init_process(void)
+     if (sigaction( SIGILL, &sig_act, NULL ) == -1) goto error;
+     if (sigaction( SIGBUS, &sig_act, NULL ) == -1) goto error;
  #if defined(__APPLE__) || defined(PR_SET_SYSCALL_USER_DISPATCH)
-     sig_act.sa_sigaction = sigsys_handler;
-     if (sigaction( SIGSYS, &sig_act, NULL ) == -1) goto error;
++    sig_act.sa_sigaction = sigsys_handler;
++    if (sigaction( SIGSYS, &sig_act, NULL ) == -1) goto error;
 +#endif
 +#ifdef __FreeBSD__
 +    if (wrap_libthr_signal_handlers() == -1) goto error;
 +
 +    /* Register the SUD intercept handler */
-+    sig_act.sa_sigaction = sigsys_handler;
-+    if (sigaction( SIGSYS, &sig_act, NULL ) == -1) goto error;
+     sig_act.sa_sigaction = sigsys_handler;
+     if (sigaction( SIGSYS, &sig_act, NULL ) == -1) goto error;
 +
 +    {
 +        const char *sgi = getenv("SteamGameId");
@@ -396,7 +427,7 @@
  #endif
      return;
  
-@@ -2981,6 +3246,13 @@ void init_syscall_frame( LPTHREAD_START_ROUTINE entry,
+@@ -2981,6 +3274,13 @@ void init_syscall_frame( LPTHREAD_START_ROUTINE entry,
  #endif
  #elif defined (__FreeBSD__) || defined (__FreeBSD_kernel__)
      amd64_set_gsbase( teb );
@@ -410,7 +441,7 @@
  #elif defined(__NetBSD__)
      sysarch( X86_64_SET_GSBASE, &teb );
  #elif defined (__APPLE__)
-@@ -3103,6 +3375,9 @@ __ASM_GLOBAL_FUNC( __wine_syscall_dispatcher,
+@@ -3103,6 +3403,9 @@ __ASM_GLOBAL_FUNC( __wine_syscall_dispatcher,
                     __ASM_CFI(".cfi_adjust_cfa_offset -8\n\t")
                     "movl $0,0xb4(%rcx)\n\t"        /* frame->restore_flags */
                     __ASM_LOCAL_LABEL("__wine_syscall_dispatcher_prolog_end") ":\n\t"
@@ -420,7 +451,7 @@
                     "movq %rbx,0x08(%rcx)\n\t"
                     __ASM_CFI_REG_IS_AT1(rbx, rcx, 0x08)
                     "movq %rdx,0x18(%rcx)\n\t"
-@@ -3201,6 +3476,23 @@ __ASM_GLOBAL_FUNC( __wine_syscall_dispatcher,
+@@ -3201,6 +3504,23 @@ __ASM_GLOBAL_FUNC( __wine_syscall_dispatcher,
                     "movl $0x3000003,%eax\n\t"      /* _thread_set_tsd_base */
                     "syscall\n\t"
                     "leaq -0x98(%rbp),%rcx\n"
@@ -444,7 +475,7 @@
  #endif
                     "ldmxcsr 0x33c(%r13)\n\t"       /* amd64_thread_data()->mxcsr */
                     "movl 0xb0(%rcx),%eax\n\t"      /* frame->syscall_id */
-@@ -3257,6 +3549,21 @@ __ASM_GLOBAL_FUNC( __wine_syscall_dispatcher,
+@@ -3257,6 +3577,21 @@ __ASM_GLOBAL_FUNC( __wine_syscall_dispatcher,
                     "syscall\n\t"
                     "movq %rdx,%rcx\n\t"
                     "movq %r8,%rax\n\t"
@@ -466,7 +497,7 @@
  #endif
                     "movl 0xb4(%rcx),%edx\n\t"      /* frame->restore_flags */
                     "testl $0x48,%edx\n\t"          /* CONTEXT_FLOATING_POINT | CONTEXT_XSTATE */
-@@ -3428,6 +3735,9 @@ __ASM_GLOBAL_FUNC( __wine_unix_call_dispatcher,
+@@ -3428,6 +3763,9 @@ __ASM_GLOBAL_FUNC( __wine_unix_call_dispatcher,
                     __ASM_CFI_REG_IS_AT2(rip, rcx, 0xf0,0x00)
                     "movl $0x20000,0xb4(%rcx)\n\t"  /* frame->restore_flags <- RESTORE_FLAGS_INCOMPLETE_FRAME_CONTEXT */
                     __ASM_LOCAL_LABEL("__wine_unix_call_dispatcher_prolog_end") ":\n\t"
@@ -476,10 +507,11 @@
                     "movq %rbx,0x08(%rcx)\n\t"
                     __ASM_CFI_REG_IS_AT1(rbx, rcx, 0x08)
                     "movq %rsi,0x20(%rcx)\n\t"
-@@ -3490,6 +3800,22 @@ __ASM_GLOBAL_FUNC( __wine_unix_call_dispatcher,
+@@ -3489,7 +3827,23 @@ __ASM_GLOBAL_FUNC( __wine_unix_call_dispatcher,
+                    "movq 0x320(%r13),%rdi\n\t"     /* amd64_thread_data()->pthread_teb */
                     "xorl %esi,%esi\n\t"
                     "movl $0x3000003,%eax\n\t"      /* _thread_set_tsd_base */
-                    "syscall\n\t"
++                   "syscall\n\t"
 +#elif defined(__FreeBSD__)
 +                   /* unix call dispatcher entry: restore pthread fsbase and WOW32 %%fs. */
 +                   "movw 0x338(%r13),%ax\n\t"      /* amd64_thread_data()->fs */
@@ -494,12 +526,12 @@
 +                   "leaq 0x320(%r13),%rsi\n\t"     /* sysarch requires a pointer to the value */
 +                   "movq $0xa5,%rax\n\t"           /* sysarch */
 +                   "movq $0x81,%rdi\n\t"           /* AMD64_SET_FSBASE */
-+                   "syscall\n\t"
+                    "syscall\n\t"
 +                   "2:\n\t"
  #endif
                     "ldmxcsr 0x33c(%r13)\n\t"       /* amd64_thread_data()->mxcsr */
                     "movq %r8,%rdi\n\t"             /* args */
-@@ -3528,6 +3854,20 @@ __ASM_GLOBAL_FUNC( __wine_unix_call_dispatcher,
+@@ -3528,6 +3882,20 @@ __ASM_GLOBAL_FUNC( __wine_unix_call_dispatcher,
                     "movq %r14,%rcx\n\t"
                     "movq %rdx,%rax\n\t"
                     "movq 0x60(%rcx),%r14\n\t"
