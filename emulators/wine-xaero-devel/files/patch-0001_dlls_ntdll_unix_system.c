@@ -1,10 +1,9 @@
---- dlls/ntdll/unix/system.c.orig	2026-03-20 13:33:36.000000000 -0700
-+++ dlls/ntdll/unix/system.c	2026-03-30 00:29:07.261088000 -0700
-@@ -41,7 +41,37 @@
- #endif
+--- dlls/ntdll/unix/system.c.orig	2026-04-03 13:03:21.000000000 -0700
++++ dlls/ntdll/unix/system.c	2026-04-07 12:53:40.270824000 -0700
+@@ -42,6 +42,36 @@
  #ifdef HAVE_SYS_SYSCTL_H
  # include <sys/sysctl.h>
-+#endif
+ #endif
 +
 +#if defined(__FreeBSD__) || defined(__FreeBSD_kernel__)
 +# include <sys/procctl.h>
@@ -26,7 +25,7 @@
 +    size_t    sud_len;
 +    uint8_t  *sud_selector;
 +};
- #endif
++#endif
 +
 +/* Runtime flag: -1 = not yet probed, 0 = stock kernel (SUD absent),
 + *                1 = SUD kernel patch present and per-thread capable.
@@ -38,13 +37,14 @@
  #ifdef HAVE_SYS_UTSNAME_H
  # include <sys/utsname.h>
  #endif
-@@ -1942,7 +1972,124 @@ static WORD append_smbios_boot_info( struct smbios_buf
+@@ -1941,8 +1971,126 @@ static WORD append_smbios_boot_info( struct smbios_buf
+     struct smbios_boot_info boot = { .hdr.type = SMBIOS_TYPE_BOOTINFO, .hdr.length = sizeof(boot) };
  
      return append_smbios( buf, &boot.hdr, NULL, 0 );
- }
++}
 +
 +#if defined(__FreeBSD__) || defined(__FreeBSD_kernel__)
- 
++
 +/***********************************************************************
 + * probe_sud_kernel (internal)
 + *
@@ -70,6 +70,7 @@
 +    /* Pass NULL so the kernel rejects the args (EFAULT) rather than
 +     * actually installing anything.  We only care whether the command
 +     * is recognised at all, not whether it succeeds. */
++    errno = 0;
 +    procctl(P_PID, getpid(), PROC_SUD_SET, NULL);
 +    available = (errno == EFAULT) ? 1 : 0;
 +
@@ -85,8 +86,8 @@
 +    if (__builtin_expect(val < 0, 0))
 +        val = probe_sud_kernel();
 +    return val;
-+}
-+
+ }
+ 
 +/***********************************************************************
 + * set_thread_syscall_dispatcher
 + *

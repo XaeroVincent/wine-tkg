@@ -214,7 +214,7 @@
      ucontext_t *ucontext = init_handler( sigcontext );
      struct syscall_frame *frame = get_syscall_frame();
  
--    TRACE_(seh)("SIGSYS, rax %#llx, rip %#llx.\n", RAX_sig(ucontext), RIP_sig(ucontext));
+-    TRACE_(seh)("SIGSYS, rax %#lx, rip %#lx.\n", (long)RAX_sig(ucontext), (long)RIP_sig(ucontext));
 +    TRACE_(seh)("SIGSYS, rax %#lx, rip %#lx.\n", (unsigned long)RAX_sig(ucontext),
 +                (unsigned long)RIP_sig(ucontext));
  
