@@ -15,7 +15,8 @@ LICENSE_FILE=	${WRKSRC}/LICENSE
 
 ONLY_FOR_ARCHS=	amd64 i386
 
-BUILD_DEPENDS=	${LOCALBASE}/bin/flex:textproc/flex
+BUILD_DEPENDS= ${LOCALBASE}/bin/flex:textproc/flex \
+               ${LOCALBASE}/include/linux/ntsync.h:emulators/ntsync-kmod
 LIB_DEPENDS=	libhwloc.so:devel/hwloc2
 
 FLAVORS=	default allaudio
