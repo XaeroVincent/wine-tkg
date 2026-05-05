@@ -1,6 +1,5 @@
 PORTNAME=	wine
-DISTVERSION=	11.7
-PORTEPOCH=	1
+DISTVERSION=	11.8
 CATEGORIES=	emulators
 MASTER_SITES=	https://dl.winehq.org/wine/source/11.x/
 PKGNAMESUFFIX=	-xaero-devel${FLAVOR:N${FLAVORS:[1]}:C/.+/-${FLAVOR}/}
@@ -54,7 +53,7 @@ CONFIGURE_ARGS=	--verbose \
 		--with-pthread \
 		--without-sane \
 		--with-sdl \
-		--without-udev \
+		--with-udev \
 		--without-unwind \
 		--with-usb
 CONFIGURE_ENV=	CPPBIN="${CPP}" FLEX="${LOCALBASE}/bin/flex"
@@ -73,7 +72,7 @@ PORTDATA=	wine.inf
 # GECKO and MONO are intentionally kept at the end since they are just
 # used to depends at runtime on wine-gecko-devel and wine-mono-devel
 OPTIONS_DEFINE=		CUPS DOCS DOSBOX FFMPEG GNUTLS V4L WAYLAND X11 GECKO MONO WOW64
-OPTIONS_DEFAULT=	ALSA FFMPEG GNUTLS OSS WAYLAND X11
+OPTIONS_DEFAULT=	ALSA FFMPEG GNUTLS OSS WAYLAND X11 WOW64
 .if ${FLAVOR} == allaudio
 OPTIONS_DEFAULT+=	PULSEAUDIO
 .endif
