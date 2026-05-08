@@ -10,6 +10,6 @@ export WINEDEBUG="-all"
 export PULSE_LATENCY_MSEC=60
 export WINE_LARGE_ADDRESS_AWARE=1
 export WINEPREFIX=$HOME/.wine_steam
-export WINE_D3D_CONFIG="renderer=vulkan"
+#export WINE_D3D_CONFIG="renderer=vulkan"
 
 /usr/local/bin/wine "$HOME/.wine_steam/drive_c/Program Files (x86)/Steam/steam.exe" -cef-disable-sandbox -cef-disable-seccomp-sandbox -cef-disable-hang-timeouts -cef-disable-gpu -console
