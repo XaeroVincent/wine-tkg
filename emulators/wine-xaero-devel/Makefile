@@ -184,21 +184,19 @@ pre-build:
 	cd ${WRKSRC} && ${SETENVI} ${WRK_ENV} ${MAKE_CMD} depend
 
 post-install:
-.if ! ${PORT_OPTIONS:MWOW64}
-.	if ${ARCH} == i386
-		${MV} ${STAGEDIR}${PREFIX}/bin/wineserver    ${STAGEDIR}${PREFIX}/bin/wineserver32
-		${MV} ${STAGEDIR}${PREFIX}/bin/wine        ${STAGEDIR}${PREFIX}/bin/wine.bin
-		-${ELFCTL} -e +noaslr,wxneeded                ${STAGEDIR}${PREFIX}/bin/wine.bin
-		${INSTALL_SCRIPT} ${FILESDIR}/wine.sh        ${STAGEDIR}${PREFIX}/bin/wine
-.	else
-		${MV} ${STAGEDIR}${PREFIX}/bin/wine        ${STAGEDIR}${PREFIX}/bin/wine64.bin
-		-${ELFCTL} -e +noaslr,wxneeded                ${STAGEDIR}${PREFIX}/bin/wine64.bin
-		${INSTALL_SCRIPT} ${FILESDIR}/wine.sh        ${STAGEDIR}${PREFIX}/bin/wine64
-		${INSTALL_SCRIPT} ${FILESDIR}/wine-wow64.sh    ${STAGEDIR}${PREFIX}/bin/wine
-		${INSTALL_SCRIPT} ${FILESDIR}/pkg32.sh        ${STAGEDIR}${DATADIR}/pkg32.sh
-.	endif
+.if ${ARCH} == i386
+	${MV} ${STAGEDIR}${PREFIX}/bin/wineserver ${STAGEDIR}${PREFIX}/bin/wineserver32
+	${MV} ${STAGEDIR}${PREFIX}/bin/wine ${STAGEDIR}${PREFIX}/bin/wine.bin
+	-${ELFCTL} -e +noaslr,wxneeded ${STAGEDIR}${PREFIX}/bin/wine.bin
+	${INSTALL_SCRIPT} ${FILESDIR}/wine.sh ${STAGEDIR}${PREFIX}/bin/wine
+.elif !${PORT_OPTIONS:MWOW64}  # since ${ARCH} == amd64
+	${MV} ${STAGEDIR}${PREFIX}/bin/wine ${STAGEDIR}${PREFIX}/bin/wine64.bin
+	-${ELFCTL} -e +noaslr,wxneeded ${STAGEDIR}${PREFIX}/bin/wine64.bin
+	${INSTALL_SCRIPT} ${FILESDIR}/wine.sh ${STAGEDIR}${PREFIX}/bin/wine64
+	${INSTALL_SCRIPT} ${FILESDIR}/wine-wow64.sh ${STAGEDIR}${PREFIX}/bin/wine
+	${INSTALL_SCRIPT} ${FILESDIR}/pkg32.sh ${STAGEDIR}${DATADIR}/pkg32.sh
 .else
-	-${ELFCTL} -e +noaslr,wxneeded        ${STAGEDIR}${PREFIX}/bin/wine
+	-${ELFCTL} -e +noaslr,wxneeded ${STAGEDIR}${PREFIX}/bin/wine
 .endif
 
 	@${MKDIR} ${STAGEDIR}${DOCSDIR}
