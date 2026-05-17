@@ -1487,6 +1487,7 @@ include/wine/windows/winsnmp.h
 include/wine/windows/winsock.h
 include/wine/windows/winsock2.h
 include/wine/windows/winspool.h
+include/wine/windows/winsqlite/winsqlite3.h
 include/wine/windows/winstring.h
 include/wine/windows/winsvc.h
 include/wine/windows/winsxs.h
@@ -1826,6 +1827,7 @@ lib/wine/%%WINEARCH%%-unix/libwininet.a
 lib/wine/%%WINEARCH%%-unix/libwinmm.a
 lib/wine/%%WINEARCH%%-unix/libwinnls32.a
 lib/wine/%%WINEARCH%%-unix/libwinspool.a
+lib/wine/%%WINEARCH%%-unix/libwinsqlite3.a
 lib/wine/%%WINEARCH%%-unix/libwintab32.a
 lib/wine/%%WINEARCH%%-unix/libwintrust.a
 lib/wine/%%WINEARCH%%-unix/libwintypes.a
@@ -2405,6 +2407,7 @@ lib/wine/%%WINEARCH%%-windows/libwininet.a
 lib/wine/%%WINEARCH%%-windows/libwinmm.a
 lib/wine/%%WINEARCH%%-windows/libwinnls32.a
 lib/wine/%%WINEARCH%%-windows/libwinspool.a
+lib/wine/%%WINEARCH%%-windows/libwinsqlite3.a
 lib/wine/%%WINEARCH%%-windows/libwintab32.a
 lib/wine/%%WINEARCH%%-windows/libwintrust.a
 lib/wine/%%WINEARCH%%-windows/libwintypes.a
@@ -2872,6 +2875,7 @@ lib/wine/%%WINEARCH%%-windows/winnls32.dll
 lib/wine/%%WINEARCH%%-windows/winprint.dll
 %%WINE32%%lib/wine/%%WINEARCH%%-windows/winsock.dll16
 lib/wine/%%WINEARCH%%-windows/winspool.drv
+lib/wine/%%WINEARCH%%-windows/winsqlite3.dll
 lib/wine/%%WINEARCH%%-windows/winsta.dll
 %%WINE32%%lib/wine/%%WINEARCH%%-windows/wintab.dll16
 lib/wine/%%WINEARCH%%-windows/wintab32.dll
