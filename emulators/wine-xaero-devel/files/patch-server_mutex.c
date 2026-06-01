@@ -12,7 +12,7 @@
  #include <sys/types.h>
  
  #include "ntstatus.h"
-@@ -36,6 +38,18 @@
+@@ -35,6 +37,18 @@
  #include "request.h"
  #include "security.h"
  
@@ -31,7 +31,7 @@
  static const WCHAR mutex_name[] = {'M','u','t','a','n','t'};
  
  struct type_descr mutex_type =
-@@ -153,11 +167,19 @@
+@@ -152,11 +166,19 @@
      mutex->abandoned = 0;
  }
  
@@ -53,7 +53,7 @@
  
      if (!(mutex = alloc_object( &mutex_sync_ops ))) return NULL;
      mutex->count = 0;
-@@ -216,7 +238,8 @@
+@@ -215,7 +237,8 @@
              /* initialize it if it didn't already exist */
              mutex->sync = NULL;
  
@@ -63,13 +63,13 @@
              {
                  release_object( mutex );
                  return NULL;
-@@ -260,8 +283,28 @@
+@@ -259,9 +282,30 @@
      struct mutex *mutex = (struct mutex *)obj;
      assert( obj->ops == &mutex_ops );
  
 -    assert( mutex->sync->ops == &mutex_sync_ops ); /* never called with inproc syncs */
      assert( signal == -1 ); /* always called from signal_object */
-+
+ 
 +#ifdef __FreeBSD__
 +    if (mutex->sync->ops != &mutex_sync_ops)
 +    {
@@ -90,10 +90,12 @@
 +        return 1;
 +    }
 +#endif /* __FreeBSD__ */
- 
++    assert( mutex->sync->ops == &mutex_sync_ops ); /* never called with inproc syncs */
++
      if (!(access & SYNCHRONIZE))
      {
-@@ -319,11 +362,34 @@
+         set_error( STATUS_ACCESS_DENIED );
+@@ -318,11 +362,35 @@
      if ((mutex = (struct mutex *)get_handle_obj( current->process, req->handle,
                                                   0, &mutex_ops )))
      {
@@ -126,6 +128,7 @@
 +        else
 +#endif /* __FreeBSD__ */
 +        {
++            assert( mutex->sync->ops == &mutex_sync_ops ); /* never called with inproc syncs */
 +            struct mutex_sync *sync = (struct mutex_sync *)mutex->sync;
 +            reply->prev_count = sync->count;
 +            do_release( sync, current, 1 );
@@ -133,7 +136,7 @@
          release_object( mutex );
      }
  }
-@@ -336,13 +402,39 @@
+@@ -335,13 +403,40 @@
      if ((mutex = (struct mutex *)get_handle_obj( current->process, req->handle,
                                                   MUTANT_QUERY_STATE, &mutex_ops )))
      {
@@ -172,6 +175,7 @@
 +        else
 +#endif /* __FreeBSD__ */
 +        {
++            assert( mutex->sync->ops == &mutex_sync_ops ); /* never called with inproc syncs */
 +            struct mutex_sync *sync = (struct mutex_sync *)mutex->sync;
 +            reply->count     = sync->count;
 +            reply->owned     = (sync->owner == current);
