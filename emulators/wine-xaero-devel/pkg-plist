@@ -1593,7 +1593,6 @@ include/wine/windows/xpsobjectmodel_1.h
 include/wine/windows/xpsobjectmodel_1.idl
 include/wine/windows/zmouse.h
 lib/wine/%%WINEARCH%%-unix/avicap32.so
-lib/wine/%%WINEARCH%%-unix/bcrypt.so
 lib/wine/%%WINEARCH%%-unix/crypt32.so
 lib/wine/%%WINEARCH%%-unix/ctapi32.so
 lib/wine/%%WINEARCH%%-unix/dnsapi.so
