@@ -2075,6 +2075,7 @@ lib/wine/%%WINEARCH%%-windows/drmclien.dll
 lib/wine/%%WINEARCH%%-windows/dsdmo.dll
 lib/wine/%%WINEARCH%%-windows/dsound.dll
 lib/wine/%%WINEARCH%%-windows/dsquery.dll
+lib/wine/%%WINEARCH%%-windows/dsrole.dll
 lib/wine/%%WINEARCH%%-windows/dssenh.dll
 lib/wine/%%WINEARCH%%-windows/dsuiext.dll
 lib/wine/%%WINEARCH%%-windows/dswave.dll
@@ -2664,6 +2665,7 @@ lib/wine/%%WINEARCH%%-windows/rpcss.exe
 lib/wine/%%WINEARCH%%-windows/rsabase.dll
 lib/wine/%%WINEARCH%%-windows/rsaenh.dll
 lib/wine/%%WINEARCH%%-windows/rstrtmgr.dll
+lib/wine/%%WINEARCH%%-windows/rtscom.dll
 lib/wine/%%WINEARCH%%-windows/rtutils.dll
 lib/wine/%%WINEARCH%%-windows/rtworkq.dll
 lib/wine/%%WINEARCH%%-windows/runas.exe
@@ -2743,6 +2745,7 @@ lib/wine/%%WINEARCH%%-windows/termsv.exe
 lib/wine/%%WINEARCH%%-windows/threadpoolwinrt.dll
 lib/wine/%%WINEARCH%%-windows/thumbcache.dll
 lib/wine/%%WINEARCH%%-windows/timeout.exe
+lib/wine/%%WINEARCH%%-windows/tiptsf.dll
 %%WINE32%%lib/wine/%%WINEARCH%%-windows/toolhelp.dll16
 lib/wine/%%WINEARCH%%-windows/traffic.dll
 %%WINE32%%lib/wine/%%WINEARCH%%-windows/twain.dll16
@@ -3169,6 +3172,7 @@ lib/wine/%%WINEARCH%%-windows/xpssvcs.dll
 %%WOW64%%lib/wine/i386-windows/drmclien.dll
 %%WOW64%%lib/wine/i386-windows/dsdmo.dll
 %%WOW64%%lib/wine/i386-windows/dsound.dll
+%%WOW64%%lib/wine/i386-windows/dsrole.dll
 %%WOW64%%lib/wine/i386-windows/dsquery.dll
 %%WOW64%%lib/wine/i386-windows/dssenh.dll
 %%WOW64%%lib/wine/i386-windows/dsuiext.dll
@@ -3753,6 +3757,7 @@ lib/wine/%%WINEARCH%%-windows/xpssvcs.dll
 %%WOW64%%lib/wine/i386-windows/rsabase.dll
 %%WOW64%%lib/wine/i386-windows/rsaenh.dll
 %%WOW64%%lib/wine/i386-windows/rstrtmgr.dll
+%%WOW64%%lib/wine/i386-windows/rtscom.dll
 %%WOW64%%lib/wine/i386-windows/rtutils.dll
 %%WOW64%%lib/wine/i386-windows/rtworkq.dll
 %%WOW64%%lib/wine/i386-windows/runas.exe
@@ -3828,6 +3833,7 @@ lib/wine/%%WINEARCH%%-windows/xpssvcs.dll
 %%WOW64%%lib/wine/i386-windows/tdi.sys
 %%WOW64%%lib/wine/i386-windows/threadpoolwinrt.dll
 %%WOW64%%lib/wine/i386-windows/timeout.exe
+%%WOW64%%lib/wine/i386-windows/tiptsf.dll
 %%WOW64%%lib/wine/i386-windows/toolhelp.dll16
 %%WOW64%%lib/wine/i386-windows/traffic.dll
 %%WOW64%%lib/wine/i386-windows/twain.dll16
