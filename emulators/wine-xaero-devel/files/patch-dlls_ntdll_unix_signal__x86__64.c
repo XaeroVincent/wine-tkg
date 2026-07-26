@@ -1,16 +1,16 @@
---- dlls/ntdll/unix/signal_x86_64.c.orig	2026-06-12 12:41:20.000000000 -0700
-+++ dlls/ntdll/unix/signal_x86_64.c	2026-06-18 07:31:11.444598000 -0700
-@@ -203,6 +203,9 @@ __ASM_GLOBAL_FUNC( modify_ldt,
+--- dlls/ntdll/unix/signal_x86_64.c.orig	2026-07-24 13:42:32.000000000 -0700
++++ dlls/ntdll/unix/signal_x86_64.c	2026-07-25 20:52:24.753224000 -0700
+@@ -203,7 +203,9 @@ __ASM_GLOBAL_FUNC( modify_ldt,
  
  #elif defined(__FreeBSD__) || defined (__FreeBSD_kernel__)
  
 +#include <machine/cpufunc.h>
-+#include <machine/segments.h>
+ #include <machine/segments.h>
 +#include <machine/specialreg.h>
  #include <machine/trap.h>
  
  #define RAX_sig(context)     ((context)->uc_mcontext.mc_rax)
-@@ -232,7 +235,7 @@ __ASM_GLOBAL_FUNC( modify_ldt,
+@@ -233,7 +235,7 @@ __ASM_GLOBAL_FUNC( modify_ldt,
  #define TRAP_sig(context)    ((context)->uc_mcontext.mc_trapno)
  #define ERROR_sig(context)   ((context)->uc_mcontext.mc_err)
  #define FPU_sig(context)     ((void *)((context)->uc_mcontext.mc_fpstate))
@@ -19,7 +19,7 @@
  
  #elif defined(__NetBSD__)
  
-@@ -535,6 +538,106 @@ static LONG syscall_dispatch_enabled = TRUE;
+@@ -536,6 +538,106 @@ static LONG syscall_dispatch_enabled = TRUE;
  static unsigned int xstate_size = sizeof(XSAVE_AREA_HEADER);
  static UINT64 xstate_extended_features;
  static LONG syscall_dispatch_enabled = TRUE;
@@ -126,7 +126,7 @@
  
  static inline struct thread_data *get_current_thread_data(void)
  {
-@@ -825,6 +928,18 @@ static inline void leave_handler( struct thread_data *
+@@ -826,6 +928,18 @@ static inline void leave_handler( struct thread_data *
      if (!is_inside_signal_stack( data, (void *)RSP_sig(sigcontext )) &&
          !is_inside_syscall( data, RSP_sig(sigcontext )))
          _thread_set_tsd_base( (uint64_t)data->teb );
@@ -145,7 +145,7 @@
  #endif
      if (is_16bit( sigcontext )) return;
  #ifdef DS_sig
-@@ -894,7 +1009,7 @@ static void save_context( struct thread_data *data, st
+@@ -895,7 +1009,7 @@ static void save_context( struct thread_data *data, st
          context->ContextFlags |= CONTEXT_FLOATING_POINT;
          memcpy( &context->FltSave, FPU_sig(sigcontext), sizeof(context->FltSave) );
          context->MxCsr = context->FltSave.MxCsr;
@@ -154,7 +154,7 @@
          {
              /* xcontext and sigcontext are both on the signal stack, so we can
               * just reference sigcontext without overflowing 32 bit XState.Offset */
-@@ -932,7 +1047,9 @@ static void fixup_frame_fpu_state( struct syscall_fram
+@@ -933,7 +1047,9 @@ static void fixup_frame_fpu_state( struct syscall_fram
      if (user_shared_data->XState.CompactionEnabled)
          frame->xstate.CompactionMask = 0x8000000000000000 | user_shared_data->XState.EnabledFeatures;
  
@@ -164,16 +164,7 @@
      memcpy( &xsave, FPU_sig(sigcontext), sizeof(xsave) );
      memcpy( &xsave.XmmRegisters[6], &frame->xsave.XmmRegisters[6], 10 * sizeof(*xsave.XmmRegisters) );
      xsave.MxCsr = frame->xsave.MxCsr;
-@@ -1674,7 +1791,7 @@ __ASM_GLOBAL_FUNC( call_user_mode_callback,
-                    "1:\tmovq %rdi,%rsp\n\t"    /* user_rsp */
-                    "movq 0x98(%r14),%rbp\n\t"  /* prev_frame->rbp */
-                    "ldmxcsr 0xd8(%r14)\n\t"    /* prev_frame->xsave.MxCsr */
--#ifdef __linux__
-+#if defined(__linux__) || defined(__FreeBSD__) || defined(__FreeBSD_kernel__)
-                    "movb $1,0x340(%r13)\n\t"   /* amd64_thread_data()->syscall_dispatch */
-                    "movw 0x338(%r13),%ax\n"    /* amd64_thread_data()->fs */
-                    "testw %ax,%ax\n\t"
-@@ -1709,6 +1826,9 @@ __ASM_GLOBAL_FUNC( user_mode_callback_return,
+@@ -1710,6 +1826,9 @@ __ASM_GLOBAL_FUNC( user_mode_callback_return,
  extern void DECLSPEC_NORETURN user_mode_callback_return( void *ret_ptr, ULONG ret_len,
                                                           NTSTATUS status, TEB *teb );
  __ASM_GLOBAL_FUNC( user_mode_callback_return,
@@ -183,7 +174,7 @@
                     "movq 0x378(%rcx),%r10\n\t" /* thread_data->syscall_frame */
                     "movq 0xa0(%r10),%r11\n\t"  /* frame->prev_frame */
                     "movq %r11,0x378(%rcx)\n\t" /* syscall_frame = prev_frame */
-@@ -2589,7 +2709,7 @@ static void usr1_handler( int signal, siginfo_t *sigin
+@@ -2592,7 +2711,7 @@ static void usr1_handler( int signal, siginfo_t *sigin
  }
  
  
@@ -192,7 +183,7 @@
  /**********************************************************************
   *		sigsys_handler
   *
-@@ -2602,8 +2722,34 @@ static void sigsys_handler( int signal, siginfo_t *sig
+@@ -2605,20 +2724,92 @@ static void sigsys_handler( int signal, siginfo_t *sig
      ucontext_t *sigcontext = _sigcontext;
      struct thread_data *data = init_handler( sigcontext );
      struct syscall_frame *frame = get_syscall_frame( data );
@@ -228,17 +219,18 @@
  
  #ifdef __linux__
      if (!syscall_dispatch_enabled)
-@@ -2612,10 +2758,56 @@ static void sigsys_handler( int signal, siginfo_t *sig
+     {
+         prctl( PR_SET_SYSCALL_USER_DISPATCH, PR_SYS_DISPATCH_OFF, 0, 0, 0 );
          RIP_sig(sigcontext) -= 2;  /* retry the syscall */
-         return;
-     }
++        return;
++    }
 +#elif defined(__FreeBSD__) || defined(__FreeBSD_kernel__)
 +    {
 +        struct amd64_thread_data *thread_data = amd64_thread_data( data );
 +        thread_data->syscall_dispatch = 0; /* SYSCALL_DISPATCH_FILTER_ALLOW */
 +    }
- #endif
- 
++#endif
++
 +#ifdef __FreeBSD__
 +    if (siginfo->si_code == SIGSYS_DISPATCH)
 +    {
@@ -276,37 +268,23 @@
 +    else
 +    {
 +        leave_handler( data, sigcontext );
-+        return;
-+    }
-+#endif
-+
+         return;
+     }
+ #endif
+ 
      frame->rip = RIP_sig(sigcontext) + 0xb;
 -    frame->rcx = RIP_sig(sigcontext);
 +    frame->rcx = RIP_sig(sigcontext) + 0xa; /* Windows stub: syscall insn ends at byte 10 */
      frame->eflags = EFL_sig(sigcontext);
      frame->restore_flags = 0;
      if (instrumentation_callback) frame->restore_flags |= RESTORE_FLAGS_INSTRUMENTATION;
-@@ -2651,6 +2843,16 @@ void ldt_set_entry( WORD sel, LDT_ENTRY entry )
-     if ((ret = modify_ldt( &ldt_info ))) ERR( "modify_ldt failed %d\n", ret );
- #elif defined(__APPLE__)
-     if (i386_set_ldt(sel >> 3, (union ldt_entry *)&entry, 1) < 0) perror("i386_set_ldt");
-+#elif defined(__FreeBSD__)
-+    struct i386_ldt_args p;
-+    p.start = sel >> 3;
-+    p.descs = (struct user_segment_descriptor *)&entry;
-+    p.num   = 1;
-+    if (sysarch(I386_SET_LDT, &p) == -1)
-+    {
-+        perror("i386_set_ldt");
-+        exit(1);
-+    }
- #else
-     fprintf( stderr, "No LDT support on this platform\n" );
-     exit(1);
-@@ -2768,6 +2970,94 @@ static int libc_addr_cb( struct dl_phdr_info *info, si
- }
- #endif
+@@ -2778,7 +2969,95 @@ static int libc_addr_cb( struct dl_phdr_info *info, si
+         libc_size = max( libc_size, info->dlpi_phdr[i].p_vaddr + info->dlpi_phdr[i].p_memsz );
  
+     return 1;
++}
++#endif
++
 +#ifdef __FreeBSD__
 +static __siginfohandler_t *libthr_signal_handlers[_SIG_MAXSIG];
 +
@@ -362,7 +340,7 @@
 +    }
 +
 +    libthr_signal_handlers[sig - 1](sig, info, _ucp);
-+}
+ }
 +
 +extern int __sys_sigaction(int, const struct sigaction * restrict, struct sigaction * restrict);
 +
@@ -393,24 +371,10 @@
 +
 +    return 0;
 +}
-+#endif
-+
- /**********************************************************************
-  *		signal_init_process
-  */
-@@ -2796,6 +3086,11 @@ void signal_init_process( TEB *teb )
-         fs32_sel = alloc_fs_sel( -1, wow_teb );
- #elif defined(__APPLE__)
-         cs32_sel = ldt_alloc_entry( ldt_make_cs32_entry() );
-+#elif defined(__FreeBSD__)
-+        /* GSEL(GUCODE32_SEL, SEL_UPL) = 0x23.  Per-thread LDT fs allocation is
-+         * handled by signal_alloc_thread(); fsbase detection is done inline in
-+         * the ASM dispatchers via user_shared_data->ProcessorFeatures. */
-+        cs32_sel = GSEL(GUCODE32_SEL, SEL_UPL);
  #endif
-     }
  
-@@ -2829,9 +3124,32 @@ void signal_init_process( TEB *teb )
+ /**********************************************************************
+@@ -2844,10 +3123,33 @@ void signal_init_process( TEB *teb )
      if (sigaction( SIGSEGV, &sig_act, NULL ) == -1) goto error;
      if (sigaction( SIGILL, &sig_act, NULL ) == -1) goto error;
      if (sigaction( SIGBUS, &sig_act, NULL ) == -1) goto error;
@@ -418,7 +382,7 @@
 +#if defined(__APPLE__) || defined(__linux__) || defined(__FreeBSD__) || defined(__FreeBSD_kernel__)
      sig_act.sa_sigaction = sigsys_handler;
      if (sigaction( SIGSYS, &sig_act, NULL ) == -1) goto error;
-+#endif
+ #endif
 +#ifdef __FreeBSD__
 +    if (wrap_libthr_signal_handlers() == -1) goto error;
 +
@@ -441,14 +405,14 @@
 +            }
 +        }
 +    }
- #endif
++#endif
      return;
  
-@@ -2868,6 +3186,13 @@ void init_syscall_frame( LPTHREAD_START_ROUTINE entry,
-         WARN_(seh)( "could not enable syscall user dispatch\n" );
+  error:
+@@ -2884,6 +3186,12 @@ void init_syscall_frame( LPTHREAD_START_ROUTINE entry,
  #elif defined (__FreeBSD__) || defined (__FreeBSD_kernel__)
      amd64_set_gsbase( teb );
-+    amd64_get_fsbase(&thread_data->pthread_teb);
+     amd64_get_fsbase( &thread_data->pthread_teb );
 +    {
 +        extern void __wine_syscall_dispatcher_return(void);
 +        size_t dispatcher_len = (const char *)__wine_syscall_dispatcher_return - (const char *)__wine_syscall_dispatcher;
@@ -458,7 +422,7 @@
  #elif defined(__NetBSD__)
      sysarch( X86_64_SET_GSBASE, &teb );
  #elif defined (__APPLE__)
-@@ -2990,6 +3315,9 @@ __ASM_GLOBAL_FUNC( __wine_syscall_dispatcher,
+@@ -3006,6 +3314,9 @@ __ASM_GLOBAL_FUNC( __wine_syscall_dispatcher,
                     __ASM_CFI(".cfi_adjust_cfa_offset -8\n\t")
                     "movl $0,0xb4(%rcx)\n\t"        /* frame->restore_flags */
                     __ASM_LOCAL_LABEL("__wine_syscall_dispatcher_prolog_end") ":\n\t"
@@ -468,7 +432,7 @@
                     "movq %rbx,0x08(%rcx)\n\t"
                     __ASM_CFI_REG_IS_AT1(rbx, rcx, 0x08)
                     "movq %rdx,0x18(%rcx)\n\t"
-@@ -3088,6 +3416,23 @@ __ASM_GLOBAL_FUNC( __wine_syscall_dispatcher,
+@@ -3126,6 +3437,23 @@ __ASM_GLOBAL_FUNC( __wine_syscall_dispatcher,
                     "movl $0x3000003,%eax\n\t"      /* _thread_set_tsd_base */
                     "syscall\n\t"
                     "leaq -0x98(%rbp),%rcx\n"
@@ -492,7 +456,7 @@
  #endif
                     "ldmxcsr 0x33c(%r13)\n\t"       /* amd64_thread_data()->mxcsr */
                     "movl 0xb0(%rcx),%eax\n\t"      /* frame->syscall_id */
-@@ -3144,6 +3489,21 @@ __ASM_GLOBAL_FUNC( __wine_syscall_dispatcher,
+@@ -3187,6 +3515,21 @@ __ASM_GLOBAL_FUNC( __wine_syscall_dispatcher,
                     "syscall\n\t"
                     "movq %rdx,%rcx\n\t"
                     "movq %r8,%rax\n\t"
@@ -514,7 +478,7 @@
  #endif
                     "movl 0xb4(%rcx),%edx\n\t"      /* frame->restore_flags */
                     "testl $0x48,%edx\n\t"          /* CONTEXT_FLOATING_POINT | CONTEXT_XSTATE */
-@@ -3315,6 +3675,9 @@ __ASM_GLOBAL_FUNC( __wine_unix_call_dispatcher,
+@@ -3358,6 +3701,9 @@ __ASM_GLOBAL_FUNC( __wine_unix_call_dispatcher,
                     __ASM_CFI_REG_IS_AT2(rip, rcx, 0xf0,0x00)
                     "movl $0x20000,0xb4(%rcx)\n\t"  /* frame->restore_flags <- RESTORE_FLAGS_INCOMPLETE_FRAME_CONTEXT */
                     __ASM_LOCAL_LABEL("__wine_unix_call_dispatcher_prolog_end") ":\n\t"
@@ -524,7 +488,7 @@
                     "movq %rbx,0x08(%rcx)\n\t"
                     __ASM_CFI_REG_IS_AT1(rbx, rcx, 0x08)
                     "movq %rsi,0x20(%rcx)\n\t"
-@@ -3376,7 +3739,23 @@ __ASM_GLOBAL_FUNC( __wine_unix_call_dispatcher,
+@@ -3440,7 +3786,23 @@ __ASM_GLOBAL_FUNC( __wine_unix_call_dispatcher,
                     "movq 0x320(%r13),%rdi\n\t"     /* amd64_thread_data()->pthread_teb */
                     "xorl %esi,%esi\n\t"
                     "movl $0x3000003,%eax\n\t"      /* _thread_set_tsd_base */
@@ -548,7 +512,7 @@
  #endif
                     "ldmxcsr 0x33c(%r13)\n\t"       /* amd64_thread_data()->mxcsr */
                     "movq %r8,%rdi\n\t"             /* args */
-@@ -3415,6 +3794,20 @@ __ASM_GLOBAL_FUNC( __wine_unix_call_dispatcher,
+@@ -3484,6 +3846,20 @@ __ASM_GLOBAL_FUNC( __wine_unix_call_dispatcher,
                     "movq %r14,%rcx\n\t"
                     "movq %rdx,%rax\n\t"
                     "movq 0x60(%rcx),%r14\n\t"

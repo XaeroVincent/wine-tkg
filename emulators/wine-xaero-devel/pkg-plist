@@ -323,6 +323,7 @@ include/wine/windows/bthsdpdef.h
 include/wine/windows/cderr.h
 include/wine/windows/cdosys.h
 include/wine/windows/cdosys.idl
+include/wine/windows/cfapi.h
 include/wine/windows/cfg.h
 include/wine/windows/cfgmgr32.h
 include/wine/windows/cguid.h
