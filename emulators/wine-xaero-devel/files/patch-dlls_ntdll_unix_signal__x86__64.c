@@ -1,5 +1,5 @@
---- dlls/ntdll/unix/signal_x86_64.c.orig	2026-07-24 13:42:32.000000000 -0700
-+++ dlls/ntdll/unix/signal_x86_64.c	2026-07-25 20:52:24.753224000 -0700
+--- dlls/ntdll/unix/signal_x86_64.c.orig	2026-08-08 04:48:00.000000000 -0700
++++ dlls/ntdll/unix/signal_x86_64.c	2026-08-10 05:38:54.200822000 -0700
 @@ -203,7 +203,9 @@ __ASM_GLOBAL_FUNC( modify_ldt,
  
  #elif defined(__FreeBSD__) || defined (__FreeBSD_kernel__)
@@ -19,7 +19,7 @@
  
  #elif defined(__NetBSD__)
  
-@@ -536,6 +538,106 @@ static LONG syscall_dispatch_enabled = TRUE;
+@@ -536,7 +538,107 @@ static LONG syscall_dispatch_enabled = TRUE;
  static unsigned int xstate_size = sizeof(XSAVE_AREA_HEADER);
  static UINT64 xstate_extended_features;
  static LONG syscall_dispatch_enabled = TRUE;
@@ -68,7 +68,7 @@
 +    {0x04, ~0u, NtWaitForSingleObject},
 +    {0x3c, ~0u, NtDuplicateObject},
 +    {0x05b, ~0u, NtWaitForMultipleObjects},
-+
+ 
 +    /* Pipeline Creation and Asynchronous I/O Cancellation */
 +    {0x0b5, ~0u, NtCreateNamedPipeFile},
 +    {0x0b3, ~0u, NtCreateMailslotFile},
@@ -123,9 +123,10 @@
 +
 +static int fbsd_sud_translate_syscalls = 0;
 +#endif
- 
++
  static inline struct thread_data *get_current_thread_data(void)
  {
+     unsigned long rsp;
 @@ -826,6 +928,18 @@ static inline void leave_handler( struct thread_data *
      if (!is_inside_signal_stack( data, (void *)RSP_sig(sigcontext )) &&
          !is_inside_syscall( data, RSP_sig(sigcontext )))
@@ -183,7 +184,7 @@
  /**********************************************************************
   *		sigsys_handler
   *
-@@ -2605,20 +2724,92 @@ static void sigsys_handler( int signal, siginfo_t *sig
+@@ -2605,8 +2724,34 @@ static void sigsys_handler( int signal, siginfo_t *sig
      ucontext_t *sigcontext = _sigcontext;
      struct thread_data *data = init_handler( sigcontext );
      struct syscall_frame *frame = get_syscall_frame( data );
@@ -219,18 +220,17 @@
  
  #ifdef __linux__
      if (!syscall_dispatch_enabled)
-     {
-         prctl( PR_SET_SYSCALL_USER_DISPATCH, PR_SYS_DISPATCH_OFF, 0, 0, 0 );
+@@ -2615,10 +2760,56 @@ static void sigsys_handler( int signal, siginfo_t *sig
          RIP_sig(sigcontext) -= 2;  /* retry the syscall */
-+        return;
-+    }
+         return;
+     }
 +#elif defined(__FreeBSD__) || defined(__FreeBSD_kernel__)
 +    {
 +        struct amd64_thread_data *thread_data = amd64_thread_data( data );
 +        thread_data->syscall_dispatch = 0; /* SYSCALL_DISPATCH_FILTER_ALLOW */
 +    }
-+#endif
-+
+ #endif
+ 
 +#ifdef __FreeBSD__
 +    if (siginfo->si_code == SIGSYS_DISPATCH)
 +    {
@@ -268,23 +268,20 @@
 +    else
 +    {
 +        leave_handler( data, sigcontext );
-         return;
-     }
- #endif
- 
++        return;
++    }
++#endif
++
      frame->rip = RIP_sig(sigcontext) + 0xb;
 -    frame->rcx = RIP_sig(sigcontext);
 +    frame->rcx = RIP_sig(sigcontext) + 0xa; /* Windows stub: syscall insn ends at byte 10 */
      frame->eflags = EFL_sig(sigcontext);
      frame->restore_flags = 0;
      if (instrumentation_callback) frame->restore_flags |= RESTORE_FLAGS_INSTRUMENTATION;
-@@ -2778,7 +2969,95 @@ static int libc_addr_cb( struct dl_phdr_info *info, si
-         libc_size = max( libc_size, info->dlpi_phdr[i].p_vaddr + info->dlpi_phdr[i].p_memsz );
+@@ -2778,6 +2969,94 @@ static int libc_addr_cb( struct dl_phdr_info *info, si
+ }
+ #endif
  
-     return 1;
-+}
-+#endif
-+
 +#ifdef __FreeBSD__
 +static __siginfohandler_t *libthr_signal_handlers[_SIG_MAXSIG];
 +
@@ -340,7 +337,7 @@
 +    }
 +
 +    libthr_signal_handlers[sig - 1](sig, info, _ucp);
- }
++}
 +
 +extern int __sys_sigaction(int, const struct sigaction * restrict, struct sigaction * restrict);
 +
@@ -371,10 +368,12 @@
 +
 +    return 0;
 +}
- #endif
- 
++#endif
++
  /**********************************************************************
-@@ -2844,10 +3123,33 @@ void signal_init_process( TEB *teb )
+  *		signal_init_process
+  */
+@@ -2833,7 +3112,7 @@ void signal_init_process( TEB *teb )
      if (sigaction( SIGSEGV, &sig_act, NULL ) == -1) goto error;
      if (sigaction( SIGILL, &sig_act, NULL ) == -1) goto error;
      if (sigaction( SIGBUS, &sig_act, NULL ) == -1) goto error;
@@ -383,10 +382,12 @@
      sig_act.sa_sigaction = sigsys_handler;
      if (sigaction( SIGSYS, &sig_act, NULL ) == -1) goto error;
  #endif
+@@ -2856,6 +3135,28 @@ void signal_init_process( TEB *teb )
+     }
+ #endif
+ 
 +#ifdef __FreeBSD__
 +    if (wrap_libthr_signal_handlers() == -1) goto error;
-+
-+
 +    {
 +        const char *sgi = getenv("SteamGameId");
 +        if (sgi && (!strcmp(sgi, "1174180") || !strcmp(sgi, "1404210") || !strcmp(sgi, "1418100") || !strcmp(sgi, "2767030")
@@ -406,10 +407,11 @@
 +        }
 +    }
 +#endif
++
      return;
  
   error:
-@@ -2884,6 +3186,12 @@ void init_syscall_frame( LPTHREAD_START_ROUTINE entry,
+@@ -2892,6 +3193,12 @@ void init_syscall_frame( LPTHREAD_START_ROUTINE entry,
  #elif defined (__FreeBSD__) || defined (__FreeBSD_kernel__)
      amd64_set_gsbase( teb );
      amd64_get_fsbase( &thread_data->pthread_teb );
@@ -422,7 +424,7 @@
  #elif defined(__NetBSD__)
      sysarch( X86_64_SET_GSBASE, &teb );
  #elif defined (__APPLE__)
-@@ -3006,6 +3314,9 @@ __ASM_GLOBAL_FUNC( __wine_syscall_dispatcher,
+@@ -3014,6 +3321,9 @@ __ASM_GLOBAL_FUNC( __wine_syscall_dispatcher,
                     __ASM_CFI(".cfi_adjust_cfa_offset -8\n\t")
                     "movl $0,0xb4(%rcx)\n\t"        /* frame->restore_flags */
                     __ASM_LOCAL_LABEL("__wine_syscall_dispatcher_prolog_end") ":\n\t"
@@ -432,7 +434,7 @@
                     "movq %rbx,0x08(%rcx)\n\t"
                     __ASM_CFI_REG_IS_AT1(rbx, rcx, 0x08)
                     "movq %rdx,0x18(%rcx)\n\t"
-@@ -3126,6 +3437,23 @@ __ASM_GLOBAL_FUNC( __wine_syscall_dispatcher,
+@@ -3134,6 +3444,23 @@ __ASM_GLOBAL_FUNC( __wine_syscall_dispatcher,
                     "movl $0x3000003,%eax\n\t"      /* _thread_set_tsd_base */
                     "syscall\n\t"
                     "leaq -0x98(%rbp),%rcx\n"
@@ -456,7 +458,7 @@
  #endif
                     "ldmxcsr 0x33c(%r13)\n\t"       /* amd64_thread_data()->mxcsr */
                     "movl 0xb0(%rcx),%eax\n\t"      /* frame->syscall_id */
-@@ -3187,6 +3515,21 @@ __ASM_GLOBAL_FUNC( __wine_syscall_dispatcher,
+@@ -3195,6 +3522,21 @@ __ASM_GLOBAL_FUNC( __wine_syscall_dispatcher,
                     "syscall\n\t"
                     "movq %rdx,%rcx\n\t"
                     "movq %r8,%rax\n\t"
@@ -478,7 +480,7 @@
  #endif
                     "movl 0xb4(%rcx),%edx\n\t"      /* frame->restore_flags */
                     "testl $0x48,%edx\n\t"          /* CONTEXT_FLOATING_POINT | CONTEXT_XSTATE */
-@@ -3358,6 +3701,9 @@ __ASM_GLOBAL_FUNC( __wine_unix_call_dispatcher,
+@@ -3366,6 +3708,9 @@ __ASM_GLOBAL_FUNC( __wine_unix_call_dispatcher,
                     __ASM_CFI_REG_IS_AT2(rip, rcx, 0xf0,0x00)
                     "movl $0x20000,0xb4(%rcx)\n\t"  /* frame->restore_flags <- RESTORE_FLAGS_INCOMPLETE_FRAME_CONTEXT */
                     __ASM_LOCAL_LABEL("__wine_unix_call_dispatcher_prolog_end") ":\n\t"
@@ -488,7 +490,7 @@
                     "movq %rbx,0x08(%rcx)\n\t"
                     __ASM_CFI_REG_IS_AT1(rbx, rcx, 0x08)
                     "movq %rsi,0x20(%rcx)\n\t"
-@@ -3440,7 +3786,23 @@ __ASM_GLOBAL_FUNC( __wine_unix_call_dispatcher,
+@@ -3448,7 +3793,23 @@ __ASM_GLOBAL_FUNC( __wine_unix_call_dispatcher,
                     "movq 0x320(%r13),%rdi\n\t"     /* amd64_thread_data()->pthread_teb */
                     "xorl %esi,%esi\n\t"
                     "movl $0x3000003,%eax\n\t"      /* _thread_set_tsd_base */
@@ -512,7 +514,7 @@
  #endif
                     "ldmxcsr 0x33c(%r13)\n\t"       /* amd64_thread_data()->mxcsr */
                     "movq %r8,%rdi\n\t"             /* args */
-@@ -3484,6 +3846,20 @@ __ASM_GLOBAL_FUNC( __wine_unix_call_dispatcher,
+@@ -3492,6 +3853,20 @@ __ASM_GLOBAL_FUNC( __wine_unix_call_dispatcher,
                     "movq %r14,%rcx\n\t"
                     "movq %rdx,%rax\n\t"
                     "movq 0x60(%rcx),%r14\n\t"

@@ -1,5 +1,5 @@
 PORTNAME=	wine
-DISTVERSION=	11.14
+DISTVERSION=	11.15
 CATEGORIES=	emulators
 MASTER_SITES=	https://dl.winehq.org/wine/source/11.x/
 PKGNAMESUFFIX=	-xaero-devel${FLAVOR:N${FLAVORS:[1]}:C/.+/-${FLAVOR}/}
@@ -14,8 +14,7 @@ LICENSE_FILE=	${WRKSRC}/LICENSE
 
 ONLY_FOR_ARCHS=	amd64 i386
 
-BUILD_DEPENDS= ${LOCALBASE}/bin/flex:textproc/flex \
-               ${LOCALBASE}/include/linux/ntsync.h:emulators/ntsync-kmod
+BUILD_DEPENDS= ${LOCALBASE}/bin/flex:textproc/flex
 LIB_DEPENDS=	libhwloc.so:devel/hwloc2
 
 FLAVORS=	default allaudio

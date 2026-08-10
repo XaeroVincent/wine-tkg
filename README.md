@@ -12,7 +12,7 @@ FreeBSD Wine Devel with paches to workaround the Windows Steam client not displa
 Based on code mainly written by: Alex (shkhln), Thibault Payet (monwarez), and Gerald Pfeifer (gerald)
 
 NTSync support requires a kernel driver:
-https://github.com/XaeroVincent/FreeBSD-NTSync
+https://github.com/XaeroVincent/FreeBSD-NTSync/tree/upstream
 
 Syscall User Dispatch requires a patched kernel:
 https://github.com/XaeroVincent/FreeBSD-Gaming-Kernel
