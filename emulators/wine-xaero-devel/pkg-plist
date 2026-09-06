@@ -2445,6 +2445,7 @@ lib/wine/%%WINEARCH%%-windows/loadperf.dll
 lib/wine/%%WINEARCH%%-windows/localspl.dll
 lib/wine/%%WINEARCH%%-windows/localui.dll
 lib/wine/%%WINEARCH%%-windows/lodctr.exe
+lib/wine/%%WINEARCH%%-windows/lsass.exe
 lib/wine/%%WINEARCH%%-windows/lz32.dll
 %%WINE32%%lib/wine/%%WINEARCH%%-windows/lzexpand.dll16
 lib/wine/%%WINEARCH%%-windows/magnification.dll
