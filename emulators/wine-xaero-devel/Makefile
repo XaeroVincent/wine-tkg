@@ -1,5 +1,5 @@
 PORTNAME=	wine
-DISTVERSION=	11.17
+DISTVERSION=	11.18
 CATEGORIES=	emulators
 MASTER_SITES=	https://dl.winehq.org/wine/source/11.x/
 PKGNAMESUFFIX=	-xaero-devel${FLAVOR:N${FLAVORS:[1]}:C/.+/-${FLAVOR}/}
@@ -14,7 +14,15 @@ LICENSE_FILE=	${WRKSRC}/LICENSE
 
 ONLY_FOR_ARCHS=	amd64 i386
 
-BUILD_DEPENDS= ${LOCALBASE}/bin/flex:textproc/flex
+BUILD_DEPENDS=	${LOCALBASE}/bin/flex:textproc/flex
+
+.if exists(/usr/include/dev/ntsync/ntsync.h)
+HAS_NTSYNC=	yes
+.endif
+
+.if defined(HAS_NTSYNC)
+BUILD_DEPENDS+=	${LOCALBASE}/include/linuxapi/linux/ntsync.h:devel/linuxapi
+.endif
 LIB_DEPENDS=	libhwloc.so:devel/hwloc2
 
 FLAVORS=	default allaudio
@@ -57,6 +65,10 @@ CONFIGURE_ARGS=	--verbose \
 		--with-usb
 CONFIGURE_ENV=	CPPBIN="${CPP}" FLEX="${LOCALBASE}/bin/flex"
 
+.if defined(HAS_NTSYNC)
+CFLAGS+=	-I${WRKDIR}/include/linuxapi
+CXXFLAGS+=	-I${WRKDIR}/include/linuxapi
+.endif
 PIE_UNSAFE=	yes
 
 CONFLICTS_INSTALL=	wine wine-devel
@@ -177,6 +189,14 @@ post-patch:
 .else
 EXTRA_PATCHES+=		${PATCHDIR}/extra-patch-tools-winebuild-res32
 PLIST_SUB+=		WINE32="" WINE64="@comment " WINEARCH="i386"
+.endif
+
+.if defined(HAS_NTSYNC)
+pre-configure:
+	@${MKDIR} ${WRKDIR}/include/linuxapi/linux
+	@${CP} ${LOCALBASE}/include/linuxapi/linux/ntsync.h ${WRKDIR}/include/linuxapi/linux/
+	@${CP} ${LOCALBASE}/include/linuxapi/linux/types.h ${WRKDIR}/include/linuxapi/linux/
+	@${CP} ${LOCALBASE}/include/linuxapi/linux/stddef.h ${WRKDIR}/include/linuxapi/linux/
 .endif
 
 pre-build:

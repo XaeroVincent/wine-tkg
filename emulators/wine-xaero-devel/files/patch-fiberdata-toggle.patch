@@ -1,8 +1,8 @@
---- dlls/ntdll/unix/virtual.c.orig	2026-07-03 15:09:35.380377300 +0000
-+++ dlls/ntdll/unix/virtual.c	2026-07-03 15:10:15.258481618 +0000
-@@ -3989,19 +3989,35 @@
+--- dlls/ntdll/unix/virtual.c.orig	2026-09-21 17:38:57.590648000 -0700
++++ dlls/ntdll/unix/virtual.c	2026-09-21 18:05:29.805931000 -0700
+@@ -3992,11 +3992,26 @@ NTSTATUS virtual_relocate_module( void *module )
+     return STATUS_SUCCESS;
  }
- 
  
 +/* runtime toggle for the 0x1e00 FiberData sentinel (see commit 5f47658c5ca488a518cf0fcd9623d3e4234b1602)
 + * some titles' anti-tamper/DRM layers read FS:[0x10] directly and behave differently once this
@@ -18,45 +18,39 @@
 +    }
 +    return cached;
 +}
-+
+ 
  /* set some initial values in a new TEB */
- static TEB *init_teb( void *ptr, BOOL is_wow )
+ static void init_teb( struct thread_data *data, void *ptr )
  {
-     TEB *teb;
-     TEB64 *teb64 = ptr;
-     TEB32 *teb32 = (TEB32 *)((char *)ptr + teb_offset);
+     TEB *teb = ptr;
 +    ULONG_PTR fiber_data = use_legacy_fiberdata() ? 0 : 0x1e00;
  
  #ifdef _WIN64
-     teb = (TEB *)teb64;
-     teb32->Peb = PtrToUlong( (char *)peb + page_size );
-     teb32->Tib.Self = PtrToUlong( teb32 );
-     teb32->Tib.ExceptionList = ~0u;
--    teb32->Tib.FiberData = 0x1e00;
-+    teb32->Tib.FiberData = fiber_data;
-     teb32->ActivationContextStackPointer = PtrToUlong( &teb32->ActivationContextStack );
-     teb32->ActivationContextStack.FrameListCache.Flink =
-         teb32->ActivationContextStack.FrameListCache.Blink =
-@@ -4014,11 +4030,11 @@
- #else
-     teb = (TEB *)teb32;
-     teb32->Tib.ExceptionList = ~0u;
--    teb32->Tib.FiberData = 0x1e00;
-+    teb32->Tib.FiberData = fiber_data;
-     teb64->Peb = PtrToUlong( (char *)peb - page_size );
-     teb64->Tib.Self = PtrToUlong( teb64 );
-     teb64->Tib.ExceptionList = PtrToUlong( teb32 );
--    teb64->Tib.FiberData = 0x1e00;
-+    teb64->Tib.FiberData = fiber_data;
-     teb64->ActivationContextStackPointer = PtrToUlong( &teb64->ActivationContextStack );
-     teb64->ActivationContextStack.FrameListCache.Flink =
-         teb64->ActivationContextStack.FrameListCache.Blink =
-@@ -4035,7 +4051,7 @@
+     if (wow_peb)
+@@ -4006,7 +4021,7 @@ static void init_teb( struct thread_data *data, void *
+         teb32->Peb = PtrToUlong( wow_peb );
+         teb32->Tib.Self = PtrToUlong( teb32 );
+         teb32->Tib.ExceptionList = ~0u;
+-        teb32->Tib.FiberData = 0x1e00;
++        teb32->Tib.FiberData = fiber_data;
+         teb32->ClientId.UniqueProcess = pid;
+         teb32->ClientId.UniqueThread  = data->tid;
+         teb32->ActivationContextStackPointer = PtrToUlong( &teb32->ActivationContextStack );
+@@ -4030,7 +4045,7 @@ static void init_teb( struct thread_data *data, void *
+         teb64->Peb = PtrToUlong( wow_peb );
+         teb64->Tib.Self = PtrToUlong( teb64 );
+         teb64->Tib.ExceptionList = PtrToUlong( teb );
+-        teb64->Tib.FiberData = 0x1e00;
++        teb64->Tib.FiberData = fiber_data;
+         teb64->ClientId.UniqueProcess = pid;
+         teb64->ClientId.UniqueThread  = data->tid;
+         teb64->ActivationContextStackPointer = PtrToUlong( &teb64->ActivationContextStack );
+@@ -4050,7 +4065,7 @@ static void init_teb( struct thread_data *data, void *
      teb->Peb = peb;
      teb->Tib.Self = &teb->Tib;
      teb->Tib.StackBase = (void *)~0ul;
 -    teb->Tib.FiberData = (void *)0x1e00;
 +    teb->Tib.FiberData = (void *)fiber_data;
+     teb->ClientId = make_client_id( pid, data->tid );
      teb->ActivationContextStackPointer = &teb->ActivationContextStack;
      InitializeListHead( &teb->ActivationContextStack.FrameListCache );
-     teb->StaticUnicodeString.Buffer = teb->StaticUnicodeBuffer;
