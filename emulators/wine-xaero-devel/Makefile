@@ -1,5 +1,5 @@
 PORTNAME=	wine
-DISTVERSION=	11.18
+DISTVERSION=	11.19
 CATEGORIES=	emulators
 MASTER_SITES=	https://dl.winehq.org/wine/source/11.x/
 PKGNAMESUFFIX=	-xaero-devel${FLAVOR:N${FLAVORS:[1]}:C/.+/-${FLAVOR}/}
