@@ -5,25 +5,19 @@ Subject: [PATCH] ntdll: Add support for hiding wine version information from
  applications.
 
 ---
- dlls/ntdll/loader.c     | 99 ++++++++++++++++++++++++++++++++++++++++-
- dlls/ntdll/ntdll_misc.h |  5 +++
- 2 files changed, 103 insertions(+), 1 deletion(-)
-
-diff --git dlls/ntdll/loader.c dlls/ntdll/loader.c
-index fbb6a5f3d2a..9b30a86e1ac 100644
---- dlls/ntdll/loader.c
-+++ dlls/ntdll/loader.c
-@@ -87,6 +87,9 @@ static const WCHAR system_dir[] = L"C:\\windows\\system32\\";
+--- dlls/ntdll/loader.c	2026-10-16 12:08:59.000000000 -0700
++++ dlls/ntdll/loader.c	2026-10-18 14:54:27.142703000 -0700
+@@ -86,6 +86,9 @@ static const WCHAR system_path[] = L"C:\\windows\\syst
+ 
  /* system search path */
  static const WCHAR system_path[] = L"C:\\windows\\system32;C:\\windows\\system;C:\\windows";
- 
++
 +#define IS_OPTION_TRUE(ch) ((ch) == 'y' || (ch) == 'Y' || (ch) == 't' || (ch) == 'T' || (ch) == '1')
 +
-+
+ 
  static BOOL is_prefix_bootstrap;  /* are we bootstrapping the prefix? */
  static BOOL imports_fixup_done = FALSE;  /* set once the imports have been fixed up, before attaching them */
- static BOOL process_detaching = FALSE;  /* set on process detach to avoid deadlocks with thread detach */
-@@ -107,6 +110,8 @@ struct dll_dir_entry
+@@ -107,6 +110,8 @@ static struct list dll_dir_list = LIST_INIT( dll_dir_l
  
  static struct list dll_dir_list = LIST_INIT( dll_dir_list );  /* extra dirs from LdrAddDllDirectory */
  
@@ -32,9 +26,11 @@ index fbb6a5f3d2a..9b30a86e1ac 100644
  struct ldr_notification
  {
      struct list                    entry;
-@@ -2052,6 +2057,96 @@ NTSTATUS WINAPI LdrUnlockLoaderLock( ULONG flags, ULONG_PTR magic )
+@@ -2058,8 +2063,98 @@ NTSTATUS WINAPI LdrUnlockLoaderLock( ULONG flags, ULON
+     }
+     return STATUS_SUCCESS;
  }
- 
++
  
 +/***********************************************************************
 + *           hidden_exports_init
@@ -52,7 +48,7 @@ index fbb6a5f3d2a..9b30a86e1ac 100644
 +    BOOL got_hide_wine_exports = FALSE;
 +    char tmp[80];
 +    DWORD dummy;
-+
+ 
 +    RtlOpenCurrentUser( KEY_ALL_ACCESS, &root );
 +    attr.Length = sizeof(attr);
 +    attr.RootDirectory = root;
@@ -129,7 +125,7 @@ index fbb6a5f3d2a..9b30a86e1ac 100644
  /******************************************************************
   *		LdrGetProcedureAddress  (NTDLL.@)
   */
-@@ -2072,7 +2167,7 @@ NTSTATUS WINAPI LdrGetProcedureAddress(HMODULE module, const ANSI_STRING *name,
+@@ -2080,7 +2175,7 @@ NTSTATUS WINAPI LdrGetProcedureAddress(HMODULE module,
      {
          void *proc = name ? find_named_export( module, exports, exp_size, name->Buffer, -1, NULL, wm, TRUE )
                            : find_ordinal_export( module, exports, exp_size, ord - exports->Base, NULL, wm, TRUE );
@@ -138,15 +134,16 @@ index fbb6a5f3d2a..9b30a86e1ac 100644
          {
              *address = proc;
              ret = STATUS_SUCCESS;
-@@ -2344,6 +2439,8 @@ static void build_ntdll_module(void)
+@@ -2367,6 +2462,8 @@ static void *build_ntdll_module(void)
+     wm->ldr.Flags &= ~LDR_DONT_RESOLVE_REFS;
      node_ntdll = wm->ldr.DdagNode;
-     if (TRACE_ON(relay)) RELAY_SetupDLL( module );
      TRACE_(loaddll)( "Loaded %s at %p: builtin\n", debugstr_w(wm->ldr.FullDllName.Buffer), module);
 +
 +    hidden_exports_init( wm->ldr.FullDllName.Buffer );
+     return module;
  }
  
- 
+
 diff --git dlls/ntdll/ntdll_misc.h dlls/ntdll/ntdll_misc.h
 index 99e0aceeef3..d392518d4f3 100644
 --- dlls/ntdll/ntdll_misc.h

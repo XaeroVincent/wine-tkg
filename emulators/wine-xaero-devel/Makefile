@@ -1,6 +1,5 @@
 PORTNAME=	wine
-DISTVERSION=	11.19
-PORTREVISION=	1
+DISTVERSION=	11.20
 CATEGORIES=	emulators
 MASTER_SITES=	https://dl.winehq.org/wine/source/11.x/
 PKGNAMESUFFIX=	-xaero-devel${FLAVOR:N${FLAVORS:[1]}:C/.+/-${FLAVOR}/}
@@ -62,7 +61,6 @@ CONFIGURE_ARGS=	--verbose \
 		--without-sane \
 		--with-sdl \
 		--with-udev \
-		--without-unwind \
 		--with-usb
 CONFIGURE_ENV=	CPPBIN="${CPP}" FLEX="${LOCALBASE}/bin/flex"
 
