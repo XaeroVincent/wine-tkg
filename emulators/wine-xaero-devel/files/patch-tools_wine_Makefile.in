@@ -1,0 +1,9 @@
+--- tools/wine/Makefile.in.orig
++++ tools/wine/Makefile.in
+@@ -8,5 +8,6 @@
+ 	wine.pl.UTF-8.man.in
+ 
+ wine_EXTRADEFS = -DBINDIR="\"${bindir}\"" -DLIBDIR="\"${libdir}\""
++wine_LDFLAGS = -Wl,--export-dynamic
+ 
+ INSTALL_LIB = $(PROGRAMS)
