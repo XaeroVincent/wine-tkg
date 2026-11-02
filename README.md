@@ -8,7 +8,7 @@ FreeBSD Wine Devel with paches to workaround the Windows Steam client not displa
 * Wine NTSync (requires FreeBSD NTSync kernel driver)
 * Syscall User Dispatch (requires FreeBSD Gaming kernel)
 * Both new & old WoW64 modes ("make config" build option) 
-* Supports Vulkan+DXVK Sarek under the new WoW64 mode on \
+* Supports Vulkan and DXVK under the new WoW64 mode on \
 legacy 470.x Nvidia drivers (wow64-legacy_drivers branch)
 
 Based on code mainly written by: Alex (shkhln), Thibault Payet (monwarez), and Gerald Pfeifer (gerald)
