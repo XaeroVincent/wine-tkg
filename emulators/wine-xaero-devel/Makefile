@@ -1,5 +1,5 @@
 PORTNAME=	wine
-DISTVERSION=	11.21
+DISTVERSION=	11.22
 CATEGORIES=	emulators
 MASTER_SITES=	https://dl.winehq.org/wine/source/11.x/
 PKGNAMESUFFIX=	-xaero-devel${FLAVOR:N${FLAVORS:[1]}:C/.+/-${FLAVOR}/}
@@ -29,40 +29,44 @@ FLAVORS=	default allaudio
 FLAVOR?=	default
 
 # Only devel/llvm17 and later come with necessary include files - PR274542
-USES=		autoreconf bison cpe desktop-file-utils gmake llvm:min=17,build,noexport \
-		localbase pkgconfig sdl shebangfix tar:xz
+USES=		autoreconf bison cpe desktop-file-utils gmake \
+		llvm:min=17,build,noexport localbase pkgconfig sdl shebangfix \
+		tar:xz
 CPE_VENDOR=	winehq
 USE_GCC=	yes
 USE_LDCONFIG=	${PREFIX}/lib ${PREFIX}/lib/wine
 USE_SDL=	sdl2
 
-SHEBANG_FILES=	tools/make_requests tools/winemaker/winemaker \
-		tools/winedump/function_grep.pl
+SHEBANG_FILES=	tools/make_requests tools/winedump/function_grep.pl \
+		tools/winemaker/winemaker
 
 GNU_CONFIGURE=	yes
-CONFIGURE_ARGS=	--verbose \
-		--disable-kerberos \
+CONFIGURE_ARGS=	--disable-kerberos \
 		--disable-tests \
+		--verbose \
+		--with-hwloc \
+		--with-mingw \
+		--with-pthread \
+		--with-sdl \
+		--with-udev \
+		--with-usb \
 		--without-capi \
 		--without-coreaudio \
 		--without-dbus \
-		--without-gettext --without-gettextpo \
+		--without-gettext \
+		--without-gettextpo \
 		--without-gphoto \
 		--without-gssapi \
-		--with-hwloc \
 		--without-inotify \
 		--without-krb5 \
-		--with-mingw CROSSCC="clang" \
 		--without-netapi \
 		--without-opencl \
 		--without-pcap \
 		--without-pcsclite \
-		--with-pthread \
 		--without-sane \
-		--with-sdl \
-		--with-udev \
-		--with-usb
-CONFIGURE_ENV=	CPPBIN="${CPP}" FLEX="${LOCALBASE}/bin/flex"
+		CROSSCC="clang"
+CONFIGURE_ENV=	CPPBIN="${CPP}" \
+		FLEX="${LOCALBASE}/bin/flex"
 
 .if defined(HAS_NTSYNC)
 CFLAGS+=	-I${WRKDIR}/include/linuxapi
@@ -81,20 +85,23 @@ PORTDATA=	wine.inf
 
 # GECKO and MONO are intentionally kept at the end since they are just
 # used to depends at runtime on wine-gecko-devel and wine-mono-devel
-OPTIONS_DEFINE=		CUPS DOCS DOSBOX FFMPEG GNUTLS V4L WAYLAND X11 GECKO MONO WOW64
-OPTIONS_DEFAULT=	ALSA FFMPEG GNUTLS OSS WAYLAND X11 WOW64
+OPTIONS_DEFINE=		CUPS DOCS DOSBOX FFMPEG GECKO GNUTLS MMAP32 MONO V4L \
+			WAYLAND WOW64 X11
+OPTIONS_DEFAULT=	ALSA FFMPEG GNUTLS OSS WAYLAND WOW64 X11
 .if ${FLAVOR} == allaudio
 OPTIONS_DEFAULT+=	PULSEAUDIO
 .endif
 OPTIONS_GROUP=		AUDIO
 OPTIONS_GROUP_AUDIO=	ALSA OSS PULSEAUDIO
+OPTIONS_EXCLUDE_i386=	WOW64
 OPTIONS_SUB=		yes
 
 DOSBOX_DESC=	Use DOSBox to run MS-DOS programs
 GECKO_DESC=	Bundle Gecko MSI package for Wine
+MMAP32_DESC=	Legacy 470.x Nvidia driver support for the new WoW64
 MONO_DESC=	Bundle Mono MSI package for Wine
-WOW64_DESC=	Pure 64-bit WoW64 mode
 WAYLAND_DESC=	Wayland Support
+WOW64_DESC=	Pure 64-bit WoW64 mode
 
 ALSA_LIB_DEPENDS=	libasound.so:audio/alsa-lib
 ALSA_RUN_DEPENDS=	alsa-plugins>0:audio/alsa-plugins
@@ -114,6 +121,8 @@ GECKO_RUN_DEPENDS=	wine-gecko-devel>0:emulators/wine-gecko-devel
 
 GNUTLS_LIB_DEPENDS=	libgnutls.so:security/gnutls
 GNUTLS_CONFIGURE_WITH=	gnutls
+
+MMAP32_EXTRA_PATCHES=	${FILESDIR}/extra-patch-wow64-legacy_drivers.patch
 
 MONO_RUN_DEPENDS=	wine-mono-devel>0:emulators/wine-mono-devel
 
@@ -139,14 +148,12 @@ X11_LIB_DEPENDS=	libfontconfig.so:x11-fonts/fontconfig \
 			libfreetype.so:print/freetype2 \
 			libvulkan.so:graphics/vulkan-loader
 X11_USES=		gl xorg
-X11_USE=		GL=glu XORG=x11,xcomposite,xcursor,xext,xi,xinerama,xrandr,xrender
-X11_CONFIGURE_WITH=	fontconfig freetype opengl x xinerama xinput2 xrandr xrender
+X11_USE=		GL=glu \
+			XORG=x11,xcomposite,xcursor,xext,xi,xinerama,xrandr,xrender
+X11_CONFIGURE_WITH=	fontconfig freetype opengl x xinerama xinput2 xrandr \
+			xrender
 
 .include <bsd.port.pre.mk>
-
-.if ${ARCH} == i386
-OPTIONS_EXCLUDE+=	WOW64
-.endif
 
 .if ${PORT_OPTIONS:MALSA} || ${PORT_OPTIONS:MOSS} || ${PORT_OPTIONS:MPULSEAUDIO}
 CONFIGURE_ARGS+=	--with-gstreamer
@@ -158,10 +165,12 @@ PLIST_SUB+=		GSTREAMER="@comment "
 
 .if ${PORT_OPTIONS:MWOW64}
 CONFIGURE_ARGS+=	--enable-archs=i386,x86_64
-PLIST_SUB+=		WOW64="" NOWOW64="@comment "
+PLIST_SUB+=		NOWOW64="@comment " \
+			WOW64=""
 .else
 EXTRA_PATCHES+=		${PATCHDIR}/extra-patch-dlls_ntdll_unix_loader.c
-PLIST_SUB+=		WOW64="@comment " NOWOW64=""
+PLIST_SUB+=		NOWOW64="" \
+			WOW64="@comment "
 .endif
 
 .if ${ARCH} == amd64
@@ -174,20 +183,25 @@ PLIST_SUB+=		WOW64="@comment " NOWOW64=""
 #       64-bit component [wine64] that runs 32-bit programs on FreeBSD/amd64.
 
 # --libdir is required since Wine defaults to "${PREFIX}/lib64" on amd64.
-CONFIGURE_ARGS+=	--enable-win64 --libdir=${PREFIX}/lib
-PLIST_SUB+=		WINE32="@comment " WINE64="" WINEARCH="x86_64"
+CONFIGURE_ARGS+=	--enable-win64 \
+			--libdir=${PREFIX}/lib
+PLIST_SUB+=		WINE32="@comment " \
+			WINE64="" \
+			WINEARCH="x86_64"
 
 # Wine assumes a WoW64 package is available, which is not the case on
 # FreeBSD yet. Skip the desktop rewrite in WOW64 mode since the binary
 # stays named "wine" and not "wine64".
 post-patch:
-.if ! ${PORT_OPTIONS:MWOW64}
+.if !${PORT_OPTIONS:MWOW64}
 	${REINPLACE_CMD} '/Exec/s|wine|wine64|g' ${WRKSRC}/loader/wine.desktop
 .endif
 
 .else
-EXTRA_PATCHES+=		${PATCHDIR}/extra-patch-tools-winebuild-res32
-PLIST_SUB+=		WINE32="" WINE64="@comment " WINEARCH="i386"
+EXTRA_PATCHES+=	${PATCHDIR}/extra-patch-tools-winebuild-res32
+PLIST_SUB+=	WINE32="" \
+		WINE64="@comment " \
+		WINEARCH="i386"
 .endif
 
 .if defined(HAS_NTSYNC)
@@ -207,7 +221,7 @@ post-install:
 	${MV} ${STAGEDIR}${PREFIX}/bin/wine ${STAGEDIR}${PREFIX}/bin/wine.bin
 	-${ELFCTL} -e +noaslr,wxneeded ${STAGEDIR}${PREFIX}/bin/wine.bin
 	${INSTALL_SCRIPT} ${FILESDIR}/wine.sh ${STAGEDIR}${PREFIX}/bin/wine
-.elif !${PORT_OPTIONS:MWOW64}  # since ${ARCH} == amd64
+.elif !${PORT_OPTIONS:MWOW64} # since ${ARCH} == amd64
 	${MV} ${STAGEDIR}${PREFIX}/bin/wine ${STAGEDIR}${PREFIX}/bin/wine64.bin
 	-${ELFCTL} -e +noaslr,wxneeded ${STAGEDIR}${PREFIX}/bin/wine64.bin
 	${INSTALL_SCRIPT} ${FILESDIR}/wine.sh ${STAGEDIR}${PREFIX}/bin/wine64

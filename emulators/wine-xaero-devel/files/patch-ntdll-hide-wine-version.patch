@@ -1,23 +1,29 @@
-From bbbd7c18f96f8bbaf7caf6d43fea894113150739 Mon Sep 17 00:00:00 2001
+From d2ff360e994c52491ba8e38a7a45ceccf70e8eab Mon Sep 17 00:00:00 2001
 From: Sebastian Lackner <sebastian@fds-team.de>
 Date: Sat, 30 May 2015 02:23:15 +0200
 Subject: [PATCH] ntdll: Add support for hiding wine version information from
  applications.
 
 ---
---- dlls/ntdll/loader.c	2026-10-16 12:08:59.000000000 -0700
-+++ dlls/ntdll/loader.c	2026-10-18 14:54:27.142703000 -0700
-@@ -86,6 +86,9 @@ static const WCHAR system_path[] = L"C:\\windows\\syst
- 
+ dlls/ntdll/loader.c     | 104 ++++++++++++++++++++++++++++++++++++++++
+ dlls/ntdll/ntdll_misc.h |   5 ++
+ 2 files changed, 109 insertions(+)
+
+diff --git dlls/ntdll/loader.c dlls/ntdll/loader.c
+index 720691b8d21..a25c5c73c32 100644
+--- dlls/ntdll/loader.c
++++ dlls/ntdll/loader.c
+@@ -88,6 +88,9 @@ static const WCHAR system_dir[] = L"C:\\windows\\system32\\";
  /* system search path */
  static const WCHAR system_path[] = L"C:\\windows\\system32;C:\\windows\\system;C:\\windows";
-+
+ 
 +#define IS_OPTION_TRUE(ch) ((ch) == 'y' || (ch) == 'Y' || (ch) == 't' || (ch) == 'T' || (ch) == '1')
 +
- 
++
  static BOOL is_prefix_bootstrap;  /* are we bootstrapping the prefix? */
  static BOOL imports_fixup_done = FALSE;  /* set once the imports have been fixed up, before attaching them */
-@@ -107,6 +110,8 @@ static struct list dll_dir_list = LIST_INIT( dll_dir_l
+ static BOOL process_detaching = FALSE;  /* set on process detach to avoid deadlocks with thread detach */
+@@ -108,6 +111,8 @@ struct dll_dir_entry
  
  static struct list dll_dir_list = LIST_INIT( dll_dir_list );  /* extra dirs from LdrAddDllDirectory */
  
@@ -26,11 +32,9 @@ Subject: [PATCH] ntdll: Add support for hiding wine version information from
  struct ldr_notification
  {
      struct list                    entry;
-@@ -2058,8 +2063,98 @@ NTSTATUS WINAPI LdrUnlockLoaderLock( ULONG flags, ULON
-     }
-     return STATUS_SUCCESS;
+@@ -2053,6 +2058,96 @@ NTSTATUS WINAPI LdrUnlockLoaderLock( ULONG flags, ULONG_PTR magic )
  }
-+
+ 
  
 +/***********************************************************************
 + *           hidden_exports_init
@@ -48,7 +52,7 @@ Subject: [PATCH] ntdll: Add support for hiding wine version information from
 +    BOOL got_hide_wine_exports = FALSE;
 +    char tmp[80];
 +    DWORD dummy;
- 
++
 +    RtlOpenCurrentUser( KEY_ALL_ACCESS, &root );
 +    attr.Length = sizeof(attr);
 +    attr.RootDirectory = root;
@@ -125,30 +129,34 @@ Subject: [PATCH] ntdll: Add support for hiding wine version information from
  /******************************************************************
   *		LdrGetProcedureAddress  (NTDLL.@)
   */
-@@ -2080,7 +2175,7 @@ NTSTATUS WINAPI LdrGetProcedureAddress(HMODULE module,
-     {
-         void *proc = name ? find_named_export( module, exports, exp_size, name->Buffer, -1, NULL, wm, TRUE )
-                           : find_ordinal_export( module, exports, exp_size, ord - exports->Base, NULL, wm, TRUE );
--        if (proc)
-+        if (proc && !is_hidden_export( proc ))
-         {
-             *address = proc;
-             ret = STATUS_SUCCESS;
-@@ -2367,6 +2462,8 @@ static void *build_ntdll_module(void)
+@@ -2074,6 +2169,12 @@ NTSTATUS WINAPI LdrGetProcedureAddress(HMODULE module, const ANSI_STRING *name,
+         else
+             ret = find_ordinal_export( &context, ord - context.exports->Base, (FARPROC *)address );
+ 
++        if (address && is_hidden_export( address ))
++        {
++            *address = NULL;
++            ret = STATUS_PROCEDURE_NOT_FOUND;
++        }
++
+         if (ret) WARN( "%s (ordinal %lu) not found in %s\n", debugstr_a(name ? name->Buffer : NULL),
+                        ord, debugstr_us(&context.importer->ldr.FullDllName) );
+     }
+@@ -2353,6 +2454,9 @@ static void *build_ntdll_module(void)
      wm->ldr.Flags &= ~LDR_DONT_RESOLVE_REFS;
      node_ntdll = wm->ldr.DdagNode;
      TRACE_(loaddll)( "Loaded %s at %p: builtin\n", debugstr_w(wm->ldr.FullDllName.Buffer), module);
 +
 +    hidden_exports_init( wm->ldr.FullDllName.Buffer );
++
      return module;
  }
  
-
 diff --git dlls/ntdll/ntdll_misc.h dlls/ntdll/ntdll_misc.h
-index 99e0aceeef3..d392518d4f3 100644
+index a235288c24c..5f97df05bcb 100644
 --- dlls/ntdll/ntdll_misc.h
 +++ dlls/ntdll/ntdll_misc.h
-@@ -114,6 +114,11 @@ static inline void *get_rva( HMODULE module, DWORD va )
+@@ -112,6 +112,11 @@ static inline void *get_rva( HMODULE module, DWORD va )
      return (void *)((char *)module + va);
  }
  
@@ -161,5 +169,5 @@ index 99e0aceeef3..d392518d4f3 100644
  static inline void ascii_to_unicode( WCHAR *dst, const char *src, size_t len )
  {
 -- 
-2.50.1
+2.53.0
 
