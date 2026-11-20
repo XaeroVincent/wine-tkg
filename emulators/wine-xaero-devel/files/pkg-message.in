@@ -16,6 +16,11 @@ Windows Registry Editor Version 5.00
 "Graphics"="x11,wayland"
 EOF
 $ wine64 regedit wayland.reg
+
+WoW64 legacy driver support (low-address device mappings) is available when
+building with the new WoW64 mode, but it is disabled by default.  Set
+WINE_MMAP32=1 to enable it at runtime, or WINE_MMAP32_DEBUG=1 to log its
+activity.
 EOM
 }
 { type: upgrade
