@@ -85,7 +85,7 @@ PORTDATA=	wine.inf
 
 # GECKO and MONO are intentionally kept at the end since they are just
 # used to depends at runtime on wine-gecko-devel and wine-mono-devel
-OPTIONS_DEFINE=		CUPS DOCS DOSBOX FFMPEG GECKO GNUTLS MMAP32 MONO V4L \
+OPTIONS_DEFINE=		CUPS DOCS DOSBOX FFMPEG GECKO GNUTLS MONO V4L \
 			WAYLAND WOW64 X11
 OPTIONS_DEFAULT=	ALSA FFMPEG GNUTLS OSS WAYLAND WOW64 X11
 .if ${FLAVOR} == allaudio
@@ -98,7 +98,6 @@ OPTIONS_SUB=		yes
 
 DOSBOX_DESC=	Use DOSBox to run MS-DOS programs
 GECKO_DESC=	Bundle Gecko MSI package for Wine
-MMAP32_DESC=	Legacy 470.x Nvidia driver support for the new WoW64
 MONO_DESC=	Bundle Mono MSI package for Wine
 WAYLAND_DESC=	Wayland Support
 WOW64_DESC=	Pure 64-bit WoW64 mode
@@ -121,8 +120,6 @@ GECKO_RUN_DEPENDS=	wine-gecko-devel>0:emulators/wine-gecko-devel
 
 GNUTLS_LIB_DEPENDS=	libgnutls.so:security/gnutls
 GNUTLS_CONFIGURE_WITH=	gnutls
-
-MMAP32_EXTRA_PATCHES=	${FILESDIR}/extra-patch-wow64-legacy_drivers.patch
 
 MONO_RUN_DEPENDS=	wine-mono-devel>0:emulators/wine-mono-devel
 
@@ -165,6 +162,10 @@ PLIST_SUB+=		GSTREAMER="@comment "
 
 .if ${PORT_OPTIONS:MWOW64}
 CONFIGURE_ARGS+=	--enable-archs=i386,x86_64
+# Low-address device mappings are only needed in the new WoW64 mode (legacy
+# 470.x Nvidia driver support).  They are off by default; WINE_MMAP32=1
+# enables them at runtime.
+EXTRA_PATCHES+=		${PATCHDIR}/extra-patch-wow64-legacy_drivers.patch
 PLIST_SUB+=		NOWOW64="@comment " \
 			WOW64=""
 .else
