@@ -1,6 +1,6 @@
---- dlls/ntdll/unix/signal_x86_64.c.orig	2026-08-08 04:48:00.000000000 -0700
-+++ dlls/ntdll/unix/signal_x86_64.c	2026-08-10 05:38:54.200822000 -0700
-@@ -203,7 +203,9 @@ __ASM_GLOBAL_FUNC( modify_ldt,
+--- dlls/ntdll/unix/signal_x86_64.c.orig
++++ dlls/ntdll/unix/signal_x86_64.c
+@@ -203,7 +203,9 @@
  
  #elif defined(__FreeBSD__) || defined (__FreeBSD_kernel__)
  
@@ -10,7 +10,7 @@
  #include <machine/trap.h>
  
  #define RAX_sig(context)     ((context)->uc_mcontext.mc_rax)
-@@ -233,7 +235,7 @@ __ASM_GLOBAL_FUNC( modify_ldt,
+@@ -233,7 +235,7 @@
  #define TRAP_sig(context)    ((context)->uc_mcontext.mc_trapno)
  #define ERROR_sig(context)   ((context)->uc_mcontext.mc_err)
  #define FPU_sig(context)     ((void *)((context)->uc_mcontext.mc_fpstate))
@@ -19,11 +19,10 @@
  
  #elif defined(__NetBSD__)
  
-@@ -536,7 +538,107 @@ static LONG syscall_dispatch_enabled = TRUE;
- static unsigned int xstate_size = sizeof(XSAVE_AREA_HEADER);
+@@ -497,6 +499,106 @@
  static UINT64 xstate_extended_features;
  static LONG syscall_dispatch_enabled = TRUE;
-+
+ 
 +#ifdef __FreeBSD__
 +#ifndef SIGSYS_DISPATCH
 +#define SIGSYS_DISPATCH 1
@@ -68,7 +67,7 @@
 +    {0x04, ~0u, NtWaitForSingleObject},
 +    {0x3c, ~0u, NtDuplicateObject},
 +    {0x05b, ~0u, NtWaitForMultipleObjects},
- 
++
 +    /* Pipeline Creation and Asynchronous I/O Cancellation */
 +    {0x0b5, ~0u, NtCreateNamedPipeFile},
 +    {0x0b3, ~0u, NtCreateMailslotFile},
@@ -127,26 +126,7 @@
  static inline struct thread_data *get_current_thread_data(void)
  {
      unsigned long rsp;
-@@ -826,6 +928,18 @@ static inline void leave_handler( struct thread_data *
-     if (!is_inside_signal_stack( data, (void *)RSP_sig(sigcontext )) &&
-         !is_inside_syscall( data, RSP_sig(sigcontext )))
-         _thread_set_tsd_base( (uint64_t)data->teb );
-+#elif defined(__FreeBSD__) || defined(__FreeBSD_kernel__)
-+    if (!is_inside_signal_stack( data, (void *)RSP_sig(sigcontext )) &&
-+        !is_inside_syscall( data, RSP_sig(sigcontext )))
-+    {
-+        struct amd64_thread_data *thread_data = amd64_thread_data( data );
-+
-+        /* Restore FS selector if needed (FreeBSD does not use arch_prctl like Linux) */
-+        if (thread_data->fs)
-+        {
-+            __asm__ volatile( "movw %w0,%%fs" :: "r" ((USHORT)thread_data->fs) );
-+        }
-+    }
- #endif
-     if (is_16bit( sigcontext )) return;
- #ifdef DS_sig
-@@ -895,7 +1009,7 @@ static void save_context( struct thread_data *data, st
+@@ -855,7 +957,7 @@
          context->ContextFlags |= CONTEXT_FLOATING_POINT;
          memcpy( &context->FltSave, FPU_sig(sigcontext), sizeof(context->FltSave) );
          context->MxCsr = context->FltSave.MxCsr;
@@ -155,7 +135,7 @@
          {
              /* xcontext and sigcontext are both on the signal stack, so we can
               * just reference sigcontext without overflowing 32 bit XState.Offset */
-@@ -933,7 +1047,9 @@ static void fixup_frame_fpu_state( struct syscall_fram
+@@ -893,7 +995,9 @@
      if (user_shared_data->XState.CompactionEnabled)
          frame->xstate.CompactionMask = 0x8000000000000000 | user_shared_data->XState.EnabledFeatures;
  
@@ -165,7 +145,7 @@
      memcpy( &xsave, FPU_sig(sigcontext), sizeof(xsave) );
      memcpy( &xsave.XmmRegisters[6], &frame->xsave.XmmRegisters[6], 10 * sizeof(*xsave.XmmRegisters) );
      xsave.MxCsr = frame->xsave.MxCsr;
-@@ -1710,6 +1826,9 @@ __ASM_GLOBAL_FUNC( user_mode_callback_return,
+@@ -1670,6 +1774,9 @@
  extern void DECLSPEC_NORETURN user_mode_callback_return( void *ret_ptr, ULONG ret_len,
                                                           NTSTATUS status, TEB *teb );
  __ASM_GLOBAL_FUNC( user_mode_callback_return,
@@ -175,7 +155,7 @@
                     "movq 0x378(%rcx),%r10\n\t" /* thread_data->syscall_frame */
                     "movq 0xa0(%r10),%r11\n\t"  /* frame->prev_frame */
                     "movq %r11,0x378(%rcx)\n\t" /* syscall_frame = prev_frame */
-@@ -2592,7 +2711,7 @@ static void usr1_handler( int signal, siginfo_t *sigin
+@@ -2570,7 +2677,7 @@
  }
  
  
@@ -184,7 +164,7 @@
  /**********************************************************************
   *		sigsys_handler
   *
-@@ -2605,8 +2724,34 @@ static void sigsys_handler( int signal, siginfo_t *sig
+@@ -2583,8 +2690,34 @@
      ucontext_t *sigcontext = _sigcontext;
      struct thread_data *data = init_handler( sigcontext );
      struct syscall_frame *frame = get_syscall_frame( data );
@@ -220,7 +200,7 @@
  
  #ifdef __linux__
      if (!syscall_dispatch_enabled)
-@@ -2615,10 +2760,56 @@ static void sigsys_handler( int signal, siginfo_t *sig
+@@ -2593,10 +2726,56 @@
          RIP_sig(sigcontext) -= 2;  /* retry the syscall */
          return;
      }
@@ -229,8 +209,8 @@
 +        struct amd64_thread_data *thread_data = amd64_thread_data( data );
 +        thread_data->syscall_dispatch = 0; /* SYSCALL_DISPATCH_FILTER_ALLOW */
 +    }
- #endif
- 
++#endif
++
 +#ifdef __FreeBSD__
 +    if (siginfo->si_code == SIGSYS_DISPATCH)
 +    {
@@ -270,15 +250,15 @@
 +        leave_handler( data, sigcontext );
 +        return;
 +    }
-+#endif
-+
+ #endif
+ 
      frame->rip = RIP_sig(sigcontext) + 0xb;
 -    frame->rcx = RIP_sig(sigcontext);
 +    frame->rcx = RIP_sig(sigcontext) + 0xa; /* Windows stub: syscall insn ends at byte 10 */
      frame->eflags = EFL_sig(sigcontext);
      frame->restore_flags = 0;
      if (instrumentation_callback) frame->restore_flags |= RESTORE_FLAGS_INSTRUMENTATION;
-@@ -2778,6 +2969,94 @@ static int libc_addr_cb( struct dl_phdr_info *info, si
+@@ -2756,6 +2935,98 @@
  }
  #endif
  
@@ -329,14 +309,18 @@
 +            );
 +            thread_data->syscall_dispatch = saved_dispatch; /* restore BLOCK/ALLOW */
 +        }
-+
-+        /* Also fix mc_fsbase in the saved signal context.  Without this, the kernel
-+         * restores the stale (broken) fsbase on sigreturn, undoing our fix above and
-+         * leaving the thread with a corrupt fsbase until the next syscall entry. */
-+        uc->uc_mcontext.mc_fsbase = (register_t)pthread_teb;
 +    }
 +
 +    libthr_signal_handlers[sig - 1](sig, info, _ucp);
++
++    /* Also fix mc_fsbase in the saved signal context.  Without this, the kernel
++     * restores the stale (broken) fsbase on sigreturn, undoing our fix above and
++     * leaving the thread with a corrupt fsbase until the next syscall entry.
++     * Do it after the handler ran, and only if we resume in 64-bit code: a WOW64
++     * thread resuming in 32-bit code uses an LDT %fs for its TEB32, and forcing
++     * pthread_teb into its saved fsbase would make %fs:[x] read libthr's TLS. */
++    if (pthread_teb && uc->uc_mcontext.mc_cs == GSEL( GUCODE_SEL, SEL_UPL ))
++        uc->uc_mcontext.mc_fsbase = (register_t)pthread_teb;
 +}
 +
 +extern int __sys_sigaction(int, const struct sigaction * restrict, struct sigaction * restrict);
@@ -373,7 +357,7 @@
  /**********************************************************************
   *		signal_init_process
   */
-@@ -2833,7 +3112,7 @@ void signal_init_process( TEB *teb )
+@@ -2811,7 +3082,7 @@
      if (sigaction( SIGSEGV, &sig_act, NULL ) == -1) goto error;
      if (sigaction( SIGILL, &sig_act, NULL ) == -1) goto error;
      if (sigaction( SIGBUS, &sig_act, NULL ) == -1) goto error;
@@ -382,7 +366,7 @@
      sig_act.sa_sigaction = sigsys_handler;
      if (sigaction( SIGSYS, &sig_act, NULL ) == -1) goto error;
  #endif
-@@ -2856,6 +3135,28 @@ void signal_init_process( TEB *teb )
+@@ -2834,6 +3105,28 @@
      }
  #endif
  
@@ -411,7 +395,7 @@
      return;
  
   error:
-@@ -2892,6 +3193,12 @@ void init_syscall_frame( LPTHREAD_START_ROUTINE entry,
+@@ -2870,6 +3163,12 @@
  #elif defined (__FreeBSD__) || defined (__FreeBSD_kernel__)
      amd64_set_gsbase( teb );
      amd64_get_fsbase( &thread_data->pthread_teb );
@@ -424,7 +408,7 @@
  #elif defined(__NetBSD__)
      sysarch( X86_64_SET_GSBASE, &teb );
  #elif defined (__APPLE__)
-@@ -3014,6 +3321,9 @@ __ASM_GLOBAL_FUNC( __wine_syscall_dispatcher,
+@@ -2992,6 +3291,9 @@
                     __ASM_CFI(".cfi_adjust_cfa_offset -8\n\t")
                     "movl $0,0xb4(%rcx)\n\t"        /* frame->restore_flags */
                     __ASM_LOCAL_LABEL("__wine_syscall_dispatcher_prolog_end") ":\n\t"
@@ -434,53 +418,7 @@
                     "movq %rbx,0x08(%rcx)\n\t"
                     __ASM_CFI_REG_IS_AT1(rbx, rcx, 0x08)
                     "movq %rdx,0x18(%rcx)\n\t"
-@@ -3134,6 +3444,23 @@ __ASM_GLOBAL_FUNC( __wine_syscall_dispatcher,
-                    "movl $0x3000003,%eax\n\t"      /* _thread_set_tsd_base */
-                    "syscall\n\t"
-                    "leaq -0x98(%rbp),%rcx\n"
-+#elif defined(__FreeBSD__)
-+                   /* Restore pthread fsbase and WOW32 %%fs selector on syscall entry. */
-+                   "movw 0x338(%r13),%ax\n\t"      /* amd64_thread_data()->fs */
-+                   "testw %ax,%ax\n\t"
-+                   "jz 2f\n\t"
-+                   "movq 0x320(%r13),%rsi\n\t"     /* amd64_thread_data()->pthread_teb */
-+                   "cmpb $0,0x7ffe028a\n\t"        /* user_shared_data->ProcessorFeatures[PF_RDWRFSGSBASE_AVAILABLE] */
-+                   "jz 1f\n\t"
-+                   "wrfsbase %rsi\n\t"
-+                   "jmp 2f\n"
-+                   "1:\n\t"
-+                   "leaq 0x320(%r13),%rsi\n\t"     /* sysarch requires a pointer to the value */
-+                   "movq $0xa5,%rax\n\t"           /* sysarch */
-+                   "movq $0x81,%rdi\n\t"           /* AMD64_SET_FSBASE */
-+                   "syscall\n\t"
-+                   "leaq -0x98(%rbp),%rcx\n"
-+                   "2:\n\t"
- #endif
-                    "ldmxcsr 0x33c(%r13)\n\t"       /* amd64_thread_data()->mxcsr */
-                    "movl 0xb0(%rcx),%eax\n\t"      /* frame->syscall_id */
-@@ -3195,6 +3522,21 @@ __ASM_GLOBAL_FUNC( __wine_syscall_dispatcher,
-                    "syscall\n\t"
-                    "movq %rdx,%rcx\n\t"
-                    "movq %r8,%rax\n\t"
-+#elif defined(__FreeBSD__)
-+                   /* Restore WOW32 %%fs on syscall return and fix %%ss after sysret.
-+                    * AMD CPUs leave %%ss in a speculative state after sysret that
-+                    * causes a #GP on the next stack access if not corrected here.
-+                    * %%edx is reloaded from frame->restore_flags immediately after. */
-+                   "movq %gs:0x30,%r11\n\t"        /* 1. Fetch TEB safely into r11 */
-+                   "movb $1,0x340(%r11)\n\t"       /* 2. SUD: BLOCK (1) Windows syscalls */
-+                   "movw 0x338(%r11),%dx\n\t"      /* 3. amd64_thread_data()->fs */
-+                   "testw %dx,%dx\n\t"
-+                   "jz 1f\n\t"
-+                   "movw %dx,%fs\n\t"
-+                   "1:\n\t"
-+                   "movw $0x3b,%dx\n\t"            /* GSEL(GUDATA_SEL, SEL_UPL) */
-+                   "movw %dx,%ss\n"
-+                   "movw %dx,0x90(%rcx)\n\t"       /* Fix frame->ss for iretq */
- #endif
-                    "movl 0xb4(%rcx),%edx\n\t"      /* frame->restore_flags */
-                    "testl $0x48,%edx\n\t"          /* CONTEXT_FLOATING_POINT | CONTEXT_XSTATE */
-@@ -3366,6 +3708,9 @@ __ASM_GLOBAL_FUNC( __wine_unix_call_dispatcher,
+@@ -3344,6 +3646,9 @@
                     __ASM_CFI_REG_IS_AT2(rip, rcx, 0xf0,0x00)
                     "movl $0x20000,0xb4(%rcx)\n\t"  /* frame->restore_flags <- RESTORE_FLAGS_INCOMPLETE_FRAME_CONTEXT */
                     __ASM_LOCAL_LABEL("__wine_unix_call_dispatcher_prolog_end") ":\n\t"
@@ -490,48 +428,3 @@
                     "movq %rbx,0x08(%rcx)\n\t"
                     __ASM_CFI_REG_IS_AT1(rbx, rcx, 0x08)
                     "movq %rsi,0x20(%rcx)\n\t"
-@@ -3448,7 +3793,23 @@ __ASM_GLOBAL_FUNC( __wine_unix_call_dispatcher,
-                    "movq 0x320(%r13),%rdi\n\t"     /* amd64_thread_data()->pthread_teb */
-                    "xorl %esi,%esi\n\t"
-                    "movl $0x3000003,%eax\n\t"      /* _thread_set_tsd_base */
-+                   "syscall\n\t"
-+#elif defined(__FreeBSD__)
-+                   /* unix call dispatcher entry: restore pthread fsbase and WOW32 %%fs. */
-+                   "movw 0x338(%r13),%ax\n\t"      /* amd64_thread_data()->fs */
-+                   "testw %ax,%ax\n\t"
-+                   "jz 2f\n\t"
-+                   "movq 0x320(%r13),%rsi\n\t"     /* amd64_thread_data()->pthread_teb */
-+                   "cmpb $0,0x7ffe028a\n\t"        /* user_shared_data->ProcessorFeatures[PF_RDWRFSGSBASE_AVAILABLE] */
-+                   "jz 1f\n\t"
-+                   "wrfsbase %rsi\n\t"
-+                   "jmp 2f\n"
-+                   "1:\n\t"
-+                   "leaq 0x320(%r13),%rsi\n\t"     /* sysarch requires a pointer to the value */
-+                   "movq $0xa5,%rax\n\t"           /* sysarch */
-+                   "movq $0x81,%rdi\n\t"           /* AMD64_SET_FSBASE */
-                    "syscall\n\t"
-+                   "2:\n\t"
- #endif
-                    "ldmxcsr 0x33c(%r13)\n\t"       /* amd64_thread_data()->mxcsr */
-                    "movq %r8,%rdi\n\t"             /* args */
-@@ -3492,6 +3853,20 @@ __ASM_GLOBAL_FUNC( __wine_unix_call_dispatcher,
-                    "movq %r14,%rcx\n\t"
-                    "movq %rdx,%rax\n\t"
-                    "movq 0x60(%rcx),%r14\n\t"
-+#elif defined(__FreeBSD__)
-+                   /* unix call dispatcher return: restore WOW32 %%fs and fix %%ss after
-+                    * sysret. %%rdx is volatile across Unix calls in the Windows ABI,
-+                    * so it is 100% safe to use %%dx as a scratch register here. */
-+                   "movq %gs:0x30,%r11\n\t"        /* 1. Fetch TEB safely into r11 */
-+                   "movb $1,0x340(%r11)\n\t"       /* 2. SUD: BLOCK (1) Windows syscalls */
-+                   "movw 0x338(%r11),%dx\n\t"      /* 3. amd64_thread_data()->fs */
-+                   "testw %dx,%dx\n\t"
-+                   "jz 1f\n\t"
-+                   "movw %dx,%fs\n\t"
-+                   "1:\n\t"
-+                   "movw $0x3b,%dx\n\t"            /* GSEL(GUDATA_SEL, SEL_UPL) */
-+                   "movw %dx,%ss\n"
-+                   "movw %dx,0x90(%rcx)\n\t"       /* Fix frame->ss for iretq */
- #endif
-                    "movq 0x58(%rcx),%r13\n\t"
-                    "movq 0x28(%rcx),%rdi\n\t"
